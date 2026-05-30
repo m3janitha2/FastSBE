@@ -5,7 +5,11 @@
 #   Variables      lower_case
 #   Members        lower_case_ (trailing underscore)
 #   Constants      kCamelCase
-#   Enum values    kCamelCase
+#
+# Enum constants are intentionally NOT checked: they reproduce the SBE
+# schema's enumerator names verbatim (e.g. Buy, BIC, nanosecond, nullValue),
+# which follow no single C++ convention. Like the strings returned by name(),
+# these identifiers are the schema's, not ours, so they are left as-is.
 Checks: >-
   -*,
   readability-identifier-naming
@@ -48,7 +52,4 @@ CheckOptions:
     value: CamelCase
   - key: readability-identifier-naming.ConstexprVariablePrefix
     value: k
-  - key: readability-identifier-naming.EnumConstantCase
-    value: CamelCase
-  - key: readability-identifier-naming.EnumConstantPrefix
-    value: k
+  # EnumConstant* deliberately omitted - see header note (schema-owned names).
