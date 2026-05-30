@@ -15,8 +15,8 @@
 #include<QtyEncoding.h>
 #include<GroupSizeEncoding.h>
 #include<GroupSizeEncoding.h>
-#include<DATA.h>
-#include<DATA.h>
+#include<Data.h>
+#include<Data.h>
 
 namespace fastsbe
 {
@@ -584,7 +584,7 @@ class NewOrderSingle
     {
     	friend NewOrderSingle;
         
-        class Data
+        class Entry
         {
             
             private:
@@ -762,20 +762,20 @@ class NewOrderSingle
     public:
     	PartiesGrp() = default;
     	PartiesGrp(std::uint16_t count)
-    		:header_(sizeof(PartiesGrp::Data), count) {}
+    		:header_(sizeof(PartiesGrp::Entry), count) {}
     
-    	Data& get(std::size_t group_id) noexcept
+    	Entry& get(std::size_t group_id) noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<Data*>(buffer);
+    		return *reinterpret_cast<Entry*>(buffer);
     	}
     
-    	const Data& get(std::size_t group_id) const noexcept
+    	const Entry& get(std::size_t group_id) const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<const Data*>(buffer);
+    		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
     	const auto block_length() const noexcept
@@ -798,7 +798,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t parties_grp_size() noexcept
     	{
-    		return sizeof(PartiesGrp::Data);
+    		return sizeof(PartiesGrp::Entry);
     	}
     
     	static constexpr std::size_t parties_grp_id() noexcept
@@ -838,7 +838,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + parties_grp_offset();
     		auto& group = *reinterpret_cast<PartiesGrp*>(buf);
-    		group.header_.set_block_length(sizeof(PartiesGrp::Data));
+    		group.header_.set_block_length(sizeof(PartiesGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -849,7 +849,7 @@ class NewOrderSingle
     {
     	friend NewOrderSingle;
         
-        class Data
+        class Entry
         {
             
             private:
@@ -983,20 +983,20 @@ class NewOrderSingle
     public:
     	AllocsGrp() = default;
     	AllocsGrp(std::uint16_t count)
-    		:header_(sizeof(AllocsGrp::Data), count) {}
+    		:header_(sizeof(AllocsGrp::Entry), count) {}
     
-    	Data& get(std::size_t group_id) noexcept
+    	Entry& get(std::size_t group_id) noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<Data*>(buffer);
+    		return *reinterpret_cast<Entry*>(buffer);
     	}
     
-    	const Data& get(std::size_t group_id) const noexcept
+    	const Entry& get(std::size_t group_id) const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<const Data*>(buffer);
+    		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
     	const auto block_length() const noexcept
@@ -1019,7 +1019,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t allocs_grp_size() noexcept
     	{
-    		return sizeof(AllocsGrp::Data);
+    		return sizeof(AllocsGrp::Entry);
     	}
     
     	static constexpr std::size_t allocs_grp_id() noexcept
@@ -1059,7 +1059,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + allocs_grp_offset();
     		auto& group = *reinterpret_cast<AllocsGrp*>(buf);
-    		group.header_.set_block_length(sizeof(AllocsGrp::Data));
+    		group.header_.set_block_length(sizeof(AllocsGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -1070,7 +1070,7 @@ class NewOrderSingle
     {
     	friend NewOrderSingle;
         
-        class Data
+        class Entry
         {
             
             private:
@@ -1162,20 +1162,20 @@ class NewOrderSingle
     public:
     	TradingSessionsGrp() = default;
     	TradingSessionsGrp(std::uint16_t count)
-    		:header_(sizeof(TradingSessionsGrp::Data), count) {}
+    		:header_(sizeof(TradingSessionsGrp::Entry), count) {}
     
-    	Data& get(std::size_t group_id) noexcept
+    	Entry& get(std::size_t group_id) noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<Data*>(buffer);
+    		return *reinterpret_cast<Entry*>(buffer);
     	}
     
-    	const Data& get(std::size_t group_id) const noexcept
+    	const Entry& get(std::size_t group_id) const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<const Data*>(buffer);
+    		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
     	const auto block_length() const noexcept
@@ -1198,7 +1198,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t trading_sessions_grp_size() noexcept
     	{
-    		return sizeof(TradingSessionsGrp::Data);
+    		return sizeof(TradingSessionsGrp::Entry);
     	}
     
     	static constexpr std::size_t trading_sessions_grp_id() noexcept
@@ -1238,7 +1238,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + trading_sessions_grp_offset();
     		auto& group = *reinterpret_cast<TradingSessionsGrp*>(buf);
-    		group.header_.set_block_length(sizeof(TradingSessionsGrp::Data));
+    		group.header_.set_block_length(sizeof(TradingSessionsGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -1251,7 +1251,7 @@ class NewOrderSingle
     
     private:
     #pragma pack(push, 1)
-    	DATA header_{};
+    	Data header_{};
     #pragma pack(pop)
     
     public:
@@ -1259,25 +1259,25 @@ class NewOrderSingle
     
     	std::basic_string_view<char> get_str() noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(Data);
     		return {reinterpret_cast<char*>(buffer), this->header_.length()};
     	}
     
     	const std::basic_string_view<char> get_str() const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(Data);
     		return {reinterpret_cast<const char*>(buffer), this->header_.length()};
     	}
     
     	char* get() noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(Data);
     		return reinterpret_cast<char*>(buffer);
     	}
     
     	const char* get() const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(Data);
     		return reinterpret_cast<const char*>(buffer);
     	}
     
@@ -1358,7 +1358,7 @@ class NewOrderSingle
     
     private:
     #pragma pack(push, 1)
-    	DATA header_{};
+    	Data header_{};
     #pragma pack(pop)
     
     public:
@@ -1366,25 +1366,25 @@ class NewOrderSingle
     
     	std::basic_string_view<char> get_str() noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(Data);
     		return {reinterpret_cast<char*>(buffer), this->header_.length()};
     	}
     
     	const std::basic_string_view<char> get_str() const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(Data);
     		return {reinterpret_cast<const char*>(buffer), this->header_.length()};
     	}
     
     	char* get() noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(Data);
     		return reinterpret_cast<char*>(buffer);
     	}
     
     	const char* get() const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(Data);
     		return reinterpret_cast<const char*>(buffer);
     	}
     

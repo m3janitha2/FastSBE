@@ -5,7 +5,7 @@
 #include<ostream>
 #include<cstring>
 #include<BusinessRejectReasonEnum.h>
-#include<DATA.h>
+#include<Data.h>
 
 namespace fastsbe
 {
@@ -186,7 +186,7 @@ class BusinessMessageReject
     
     private:
     #pragma pack(push, 1)
-    	DATA header_{};
+    	Data header_{};
     #pragma pack(pop)
     
     public:
@@ -194,25 +194,25 @@ class BusinessMessageReject
     
     	std::basic_string_view<char> get_str() noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(Data);
     		return {reinterpret_cast<char*>(buffer), this->header_.length()};
     	}
     
     	const std::basic_string_view<char> get_str() const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(Data);
     		return {reinterpret_cast<const char*>(buffer), this->header_.length()};
     	}
     
     	char* get() noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(Data);
     		return reinterpret_cast<char*>(buffer);
     	}
     
     	const char* get() const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(Data);
     		return reinterpret_cast<const char*>(buffer);
     	}
     

@@ -6,7 +6,7 @@
 #include<cstring>
 #include<ExecTypeEnum.h>
 #include<OrdStatusEnum.h>
-#include<MONTHYEAR.h>
+#include<MonthYear.h>
 #include<SideEnum.h>
 #include<QtyEncoding.h>
 #include<QtyEncoding.h>
@@ -375,13 +375,13 @@ class ExecutionReport
     
     private:
     	#pragma pack(push, 1)
-    	MONTHYEAR maturity_month_year_{};
+    	MonthYear maturity_month_year_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t maturity_month_year_size() noexcept
     	{
-    		return sizeof(MONTHYEAR);
+    		return sizeof(MonthYear);
     	}
     
     	static constexpr std::size_t maturity_month_year_offset() noexcept
@@ -399,16 +399,16 @@ class ExecutionReport
     		return "MaturityMonthYear";
     	}
     
-    	constexpr const MONTHYEAR &maturity_month_year() const noexcept
+    	constexpr const MonthYear &maturity_month_year() const noexcept
     	{
     		return maturity_month_year_;
     	}
     
-    	constexpr MONTHYEAR &maturity_month_year() noexcept
+    	constexpr MonthYear &maturity_month_year() noexcept
     	{
     		return maturity_month_year_;
     	}
-    	constexpr auto &set_maturity_month_year(MONTHYEAR &value) noexcept
+    	constexpr auto &set_maturity_month_year(MonthYear &value) noexcept
     	{
     		maturity_month_year_ = value;
     		return *this;
@@ -623,7 +623,7 @@ class ExecutionReport
     {
     	friend ExecutionReport;
         
-        class Data
+        class Entry
         {
             
             private:
@@ -719,20 +719,20 @@ class ExecutionReport
     public:
     	FillsGrp() = default;
     	FillsGrp(std::uint16_t count)
-    		:header_(sizeof(FillsGrp::Data), count) {}
+    		:header_(sizeof(FillsGrp::Entry), count) {}
     
-    	Data& get(std::size_t group_id) noexcept
+    	Entry& get(std::size_t group_id) noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<Data*>(buffer);
+    		return *reinterpret_cast<Entry*>(buffer);
     	}
     
-    	const Data& get(std::size_t group_id) const noexcept
+    	const Entry& get(std::size_t group_id) const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.block_length() * group_id);
-    		return *reinterpret_cast<const Data*>(buffer);
+    		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
     	const auto block_length() const noexcept
@@ -755,7 +755,7 @@ class ExecutionReport
     public:
     	static constexpr std::size_t fills_grp_size() noexcept
     	{
-    		return sizeof(FillsGrp::Data);
+    		return sizeof(FillsGrp::Entry);
     	}
     
     	static constexpr std::size_t fills_grp_id() noexcept
@@ -795,7 +795,7 @@ class ExecutionReport
     	{
     		auto* buf = buffer() + fills_grp_offset();
     		auto& group = *reinterpret_cast<FillsGrp*>(buf);
-    		group.header_.set_block_length(sizeof(FillsGrp::Data));
+    		group.header_.set_block_length(sizeof(FillsGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}

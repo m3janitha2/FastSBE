@@ -8,13 +8,13 @@
 namespace fastsbe
 {
 
-class MONTHYEAR
+class MonthYear
 {
     
     public:
     	static constexpr const char* name() noexcept
     	{ 
-    		return "MONTHYEAR"; 
+    		return "MonthYear"; 
     	}
     
     	static constexpr std::size_t template_id() noexcept
@@ -86,7 +86,7 @@ class MONTHYEAR
     		return year_;
     	}
     	
-    	constexpr MONTHYEAR& set_year(std::uint16_t value) noexcept
+    	constexpr MonthYear& set_year(std::uint16_t value) noexcept
     	{
     		year_ = value;
     		return *this;
@@ -141,7 +141,7 @@ class MONTHYEAR
     		return month_;
     	}
     	
-    	constexpr MONTHYEAR& set_month(std::uint8_t value) noexcept
+    	constexpr MonthYear& set_month(std::uint8_t value) noexcept
     	{
     		month_ = value;
     		return *this;
@@ -196,7 +196,7 @@ class MONTHYEAR
     		return day_;
     	}
     	
-    	constexpr MONTHYEAR& set_day(std::uint8_t value) noexcept
+    	constexpr MonthYear& set_day(std::uint8_t value) noexcept
     	{
     		day_ = value;
     		return *this;
@@ -251,7 +251,7 @@ class MONTHYEAR
     		return week_;
     	}
     	
-    	constexpr MONTHYEAR& set_week(std::uint8_t value) noexcept
+    	constexpr MonthYear& set_week(std::uint8_t value) noexcept
     	{
     		week_ = value;
     		return *this;
@@ -259,10 +259,10 @@ class MONTHYEAR
     
     
     public:
-    	MONTHYEAR() = default;
+    	MonthYear() = default;
     
     	/*constexpr */
-    	MONTHYEAR(std::uint16_t year, std::uint8_t month, std::uint8_t day, std::uint8_t week) noexcept
+    	MonthYear(std::uint16_t year, std::uint8_t month, std::uint8_t day, std::uint8_t week) noexcept
     		:year_(year), month_(month), day_(day), week_(week)
     	{
     		
@@ -271,7 +271,7 @@ class MONTHYEAR
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MONTHYEAR &msg)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MonthYear &msg)
 {
 	os << msg.year_name() << ": " << msg.year() << " ";
 	os << msg.month_name() << ": " << msg.month() << " ";

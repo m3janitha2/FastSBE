@@ -8,22 +8,22 @@ class GroupGen:
 	group_qulifiyer_def_ct = open('metadata/c++/message/group_qulifiyer_def.h', 'r').read()
 	group_class_qulifiyer_def_ct = 'public:'
 
-	class GroupDataGen:
+	class GroupEntryGen:
 		def __init__(self, handler, indentation, namespace):
 			self.handler = handler
 			self.indentation = indentation
 			
-			logging.debug('create GroupDataGen')
+			logging.debug('create GroupEntryGen')
 			self.indentation.increment()
 
-			self.group_data_gen = ClassGen(handler = self.handler, indentation = self.indentation\
-				, class_name = "Data")
+			self.group_entry_gen = ClassGen(handler = self.handler, indentation = self.indentation\
+				, class_name = "Entry")
 			self.field_gen = FieldGen(handler = self.handler, indentation = indentation\
-				, message_name = "Data", class_gen = self.group_data_gen, namespace = namespace)
+				, message_name = "Entry", class_gen = self.group_entry_gen, namespace = namespace)
 
 		def __del__(self):
 			self.indentation.decrement()
-			logging.debug('delete GroupDataGen')
+			logging.debug('delete GroupEntryGen')
 
 	def gen_group_qulifiyer_def(self, message_name):
 			field_def = self.group_qulifiyer_def_ct\

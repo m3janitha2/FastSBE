@@ -15,8 +15,18 @@ def to_pascal_case(name):
 	# Canonicalise a schema type name to PascalCase for use as a C++ type
 	# identifier. Only type names (enums, composites, messages) are converted;
 	# field and enum-value names are left as the schema defines them.
-	parts = name.split('_')
-	return ''.join(part[:1].upper() + part[1:] for part in parts if part)
+	# All-caps parts are title-cased (DATA -> Data, MONTH_YEAR -> MonthYear);
+	# camelCase parts keep their internal capitals (groupSizeEncoding ->
+	# GroupSizeEncoding).
+	out = []
+	for part in name.split('_'):
+		if not part:
+			continue
+		if part.isupper():
+			out.append(part[:1] + part[1:].lower())
+		else:
+			out.append(part[:1].upper() + part[1:])
+	return ''.join(out)
 
 
 class Parser:
@@ -407,17 +417,17 @@ class Parser:
 
 	def generate_group_fields(self, msg_gen, handler, group_gen, group, message_name):
 
-		data_gen = group_gen.GroupDataGen(handler = handler, indentation = msg_gen.indentation
+		entry_gen = group_gen.GroupEntryGen(handler = handler, indentation = msg_gen.indentation
 									, namespace = self.namespace)
 		group_name = group.attrib['name']
 
-		data_gen.field_gen.gen_ostream_group_begin(group_name, message_name)
+		entry_gen.field_gen.gen_ostream_group_begin(group_name, message_name)
 		prvious_field_name = ""
 		for field in group:
 			if (field.tag == 'field'):
-				prvious_field_name = self.generate_message_field(data_gen.field_gen\
+				prvious_field_name = self.generate_message_field(entry_gen.field_gen\
 					, group_name, field, prvious_field_name, is_group = True, group_name = group_name)
-		data_gen.field_gen.gen_ostream_group_end()
+		entry_gen.field_gen.gen_ostream_group_end()
 
 
 	def update_group_size_encoding_types(group_size_encoding_type_entry, composite, index):

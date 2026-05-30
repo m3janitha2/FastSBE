@@ -8,13 +8,13 @@
 namespace fastsbe
 {
 
-class DATA
+class Data
 {
     
     public:
     	static constexpr const char* name() noexcept
     	{ 
-    		return "DATA"; 
+    		return "Data"; 
     	}
     
     	static constexpr std::size_t template_id() noexcept
@@ -86,7 +86,7 @@ class DATA
     		return length_;
     	}
     	
-    	constexpr DATA& set_length(std::uint16_t value) noexcept
+    	constexpr Data& set_length(std::uint16_t value) noexcept
     	{
     		length_ = value;
     		return *this;
@@ -172,10 +172,10 @@ class DATA
     
     
     public:
-    	DATA() = default;
+    	Data() = default;
     
     	/*constexpr */
-    	DATA(std::uint16_t length, std::string_view var_data) noexcept
+    	Data(std::uint16_t length, std::string_view var_data) noexcept
     		:length_(length)
     	{
     		var_data.copy(var_data_,var_data_size());
@@ -184,7 +184,7 @@ class DATA
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::DATA &msg)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::Data &msg)
 {
 	os << msg.length_name() << ": " << msg.length() << " ";
 	os << msg.var_data_name() << ": " << msg.var_data() << " ";
