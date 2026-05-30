@@ -81,7 +81,7 @@ class MONTHYEAR
     	#endif
     	}
     
-    	constexpr std::uint16_t get_year() const noexcept
+    	constexpr std::uint16_t year() const noexcept
     	{ 
     		return year_;
     	}
@@ -136,7 +136,7 @@ class MONTHYEAR
     	#endif
     	}
     
-    	constexpr std::uint8_t get_month() const noexcept
+    	constexpr std::uint8_t month() const noexcept
     	{ 
     		return month_;
     	}
@@ -191,7 +191,7 @@ class MONTHYEAR
     	#endif
     	}
     
-    	constexpr std::uint8_t get_day() const noexcept
+    	constexpr std::uint8_t day() const noexcept
     	{ 
     		return day_;
     	}
@@ -246,7 +246,7 @@ class MONTHYEAR
     	#endif
     	}
     
-    	constexpr std::uint8_t get_week() const noexcept
+    	constexpr std::uint8_t week() const noexcept
     	{ 
     		return week_;
     	}
@@ -273,10 +273,10 @@ class MONTHYEAR
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MONTHYEAR &msg)
 {
-	os << msg.year_name() << ": " << msg.get_year() << " ";
-	os << msg.month_name() << ": " << msg.get_month() << " ";
-	os << msg.day_name() << ": " << msg.get_day() << " ";
-	os << msg.week_name() << ": " << msg.get_week() << " ";
+	os << msg.year_name() << ": " << msg.year() << " ";
+	os << msg.month_name() << ": " << msg.month() << " ";
+	os << msg.day_name() << ": " << msg.day() << " ";
+	os << msg.week_name() << ": " << msg.week() << " ";
 	return os;
 }
 }

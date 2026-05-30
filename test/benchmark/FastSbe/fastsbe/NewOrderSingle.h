@@ -53,78 +53,78 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	char ClOrdId_[8]{};
+    	char cl_ord_id_[8]{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t ClOrdId_size() noexcept
+    	static constexpr std::size_t cl_ord_id_size() noexcept
     	{
     		return 8;
     	}
     
-    	static constexpr std::size_t ClOrdId_offset() noexcept
+    	static constexpr std::size_t cl_ord_id_offset() noexcept
     	{
     		return 0;
     	}
     
-    	static constexpr std::size_t ClOrdId_id() noexcept
+    	static constexpr std::size_t cl_ord_id_id() noexcept
     	{
     		return 11;
     	}
     
-    	static constexpr const char *ClOrdId_name() noexcept
+    	static constexpr const char *cl_ord_id_name() noexcept
     	{
     		return "ClOrdId";
     	}
     
-    	constexpr char *get_ClOrdId() noexcept
+    	constexpr char *cl_ord_id() noexcept
     	{
-    		return ClOrdId_;
+    		return cl_ord_id_;
     	}
     
-    	constexpr const char *get_ClOrdId() const noexcept
+    	constexpr const char *cl_ord_id() const noexcept
     	{
-    		return ClOrdId_;
+    		return cl_ord_id_;
     	}
     
-    	constexpr std::string_view get_ClOrdId_view() noexcept
+    	constexpr std::string_view cl_ord_id_view() noexcept
     	{
-    		return std::string_view(ClOrdId_, 8);
+    		return std::string_view(cl_ord_id_, 8);
     	}
     
-    	constexpr const std::string_view get_ClOrdId_view() const noexcept
+    	constexpr const std::string_view cl_ord_id_view() const noexcept
     	{
-    		return std::string_view(ClOrdId_, 8);
+    		return std::string_view(cl_ord_id_, 8);
     	}
     
-    	const std::string get_ClOrdId_string() const noexcept
+    	const std::string cl_ord_id_string() const noexcept
     	{
     		auto length = 0ULL;
-    		for (; length < 8 && *(ClOrdId_ + length) != '\0'; ++length);
-    		return std::string(ClOrdId_, length);
+    		for (; length < 8 && *(cl_ord_id_ + length) != '\0'; ++length);
+    		return std::string(cl_ord_id_, length);
     	}
     
-    	constexpr auto &set_ClOrdId(const char *value) noexcept
+    	constexpr auto &set_cl_ord_id(const char *value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		std::memcpy(ClOrdId_, value, ClOrdId_size());
+    		std::memcpy(cl_ord_id_, value, cl_ord_id_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
     	#endif
     	}
     
-    	auto &set_ClOrdId(std::string_view value) noexcept
+    	auto &set_cl_ord_id(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		// auto size = std::min(ClOrdId_size(), value.size());
-    		std::memcpy(ClOrdId_, value.data(), ClOrdId_size());
+    		// auto size = std::min(cl_ord_id_size(), value.size());
+    		std::memcpy(cl_ord_id_, value.data(), cl_ord_id_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
@@ -133,78 +133,78 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	char Account_[8]{};
+    	char account_[8]{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t Account_size() noexcept
+    	static constexpr std::size_t account_size() noexcept
     	{
     		return 8;
     	}
     
-    	static constexpr std::size_t Account_offset() noexcept
+    	static constexpr std::size_t account_offset() noexcept
     	{
-    		return ClOrdId_offset() + ClOrdId_size();
+    		return cl_ord_id_offset() + cl_ord_id_size();
     	}
     
-    	static constexpr std::size_t Account_id() noexcept
+    	static constexpr std::size_t account_id() noexcept
     	{
     		return 1;
     	}
     
-    	static constexpr const char *Account_name() noexcept
+    	static constexpr const char *account_name() noexcept
     	{
     		return "Account";
     	}
     
-    	constexpr char *get_Account() noexcept
+    	constexpr char *account() noexcept
     	{
-    		return Account_;
+    		return account_;
     	}
     
-    	constexpr const char *get_Account() const noexcept
+    	constexpr const char *account() const noexcept
     	{
-    		return Account_;
+    		return account_;
     	}
     
-    	constexpr std::string_view get_Account_view() noexcept
+    	constexpr std::string_view account_view() noexcept
     	{
-    		return std::string_view(Account_, 8);
+    		return std::string_view(account_, 8);
     	}
     
-    	constexpr const std::string_view get_Account_view() const noexcept
+    	constexpr const std::string_view account_view() const noexcept
     	{
-    		return std::string_view(Account_, 8);
+    		return std::string_view(account_, 8);
     	}
     
-    	const std::string get_Account_string() const noexcept
+    	const std::string account_string() const noexcept
     	{
     		auto length = 0ULL;
-    		for (; length < 8 && *(Account_ + length) != '\0'; ++length);
-    		return std::string(Account_, length);
+    		for (; length < 8 && *(account_ + length) != '\0'; ++length);
+    		return std::string(account_, length);
     	}
     
-    	constexpr auto &set_Account(const char *value) noexcept
+    	constexpr auto &set_account(const char *value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		std::memcpy(Account_, value, Account_size());
+    		std::memcpy(account_, value, account_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
     	#endif
     	}
     
-    	auto &set_Account(std::string_view value) noexcept
+    	auto &set_account(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		// auto size = std::min(Account_size(), value.size());
-    		std::memcpy(Account_, value.data(), Account_size());
+    		// auto size = std::min(account_size(), value.size());
+    		std::memcpy(account_, value.data(), account_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
@@ -213,78 +213,78 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	char Symbol_[8]{};
+    	char symbol_[8]{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t Symbol_size() noexcept
+    	static constexpr std::size_t symbol_size() noexcept
     	{
     		return 8;
     	}
     
-    	static constexpr std::size_t Symbol_offset() noexcept
+    	static constexpr std::size_t symbol_offset() noexcept
     	{
-    		return Account_offset() + Account_size();
+    		return account_offset() + account_size();
     	}
     
-    	static constexpr std::size_t Symbol_id() noexcept
+    	static constexpr std::size_t symbol_id() noexcept
     	{
     		return 55;
     	}
     
-    	static constexpr const char *Symbol_name() noexcept
+    	static constexpr const char *symbol_name() noexcept
     	{
     		return "Symbol";
     	}
     
-    	constexpr char *get_Symbol() noexcept
+    	constexpr char *symbol() noexcept
     	{
-    		return Symbol_;
+    		return symbol_;
     	}
     
-    	constexpr const char *get_Symbol() const noexcept
+    	constexpr const char *symbol() const noexcept
     	{
-    		return Symbol_;
+    		return symbol_;
     	}
     
-    	constexpr std::string_view get_Symbol_view() noexcept
+    	constexpr std::string_view symbol_view() noexcept
     	{
-    		return std::string_view(Symbol_, 8);
+    		return std::string_view(symbol_, 8);
     	}
     
-    	constexpr const std::string_view get_Symbol_view() const noexcept
+    	constexpr const std::string_view symbol_view() const noexcept
     	{
-    		return std::string_view(Symbol_, 8);
+    		return std::string_view(symbol_, 8);
     	}
     
-    	const std::string get_Symbol_string() const noexcept
+    	const std::string symbol_string() const noexcept
     	{
     		auto length = 0ULL;
-    		for (; length < 8 && *(Symbol_ + length) != '\0'; ++length);
-    		return std::string(Symbol_, length);
+    		for (; length < 8 && *(symbol_ + length) != '\0'; ++length);
+    		return std::string(symbol_, length);
     	}
     
-    	constexpr auto &set_Symbol(const char *value) noexcept
+    	constexpr auto &set_symbol(const char *value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		std::memcpy(Symbol_, value, Symbol_size());
+    		std::memcpy(symbol_, value, symbol_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
     	#endif
     	}
     
-    	auto &set_Symbol(std::string_view value) noexcept
+    	auto &set_symbol(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		// auto size = std::min(Symbol_size(), value.size());
-    		std::memcpy(Symbol_, value.data(), Symbol_size());
+    		// auto size = std::min(symbol_size(), value.size());
+    		std::memcpy(symbol_, value.data(), symbol_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
@@ -293,84 +293,84 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	SideEnum::Value Side_{};
+    	SideEnum::Value side_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t Side_size() noexcept
+    	static constexpr std::size_t side_size() noexcept
     	{
     		return sizeof(SideEnum);
     	}
     
-    	static constexpr std::size_t Side_offset() noexcept
+    	static constexpr std::size_t side_offset() noexcept
     	{ 
-    		return Symbol_offset() + Symbol_size(); 
+    		return symbol_offset() + symbol_size(); 
     	}
     
-    	static constexpr std::size_t Side_id() noexcept
+    	static constexpr std::size_t side_id() noexcept
     	{ 
     		return 54; 
     	}
     
-    	static constexpr const char* Side_name() noexcept
+    	static constexpr const char* side_name() noexcept
     	{ 
     		return "Side"; 
     	}
     
-    	static constexpr SideEnum::Value Side_null_value() noexcept
+    	static constexpr SideEnum::Value side_null_value() noexcept
     	{
     		return SideEnum::Value::nullValue;
     	}
     
-    	constexpr SideEnum::Value get_Side() const noexcept
+    	constexpr SideEnum::Value side() const noexcept
     	{ 
-    		return Side_;
+    		return side_;
     	}
     	
-    	constexpr auto& set_Side(SideEnum::Value value) noexcept
+    	constexpr auto& set_side(SideEnum::Value value) noexcept
     	{
-    		Side_ = value;
+    		side_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	std::uint64_t TransactTime_{};
+    	std::uint64_t transact_time_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t TransactTime_size() noexcept
+    	static constexpr std::size_t transact_time_size() noexcept
     	{
     		return sizeof(std::uint64_t);
     	}
     
-    	static constexpr std::size_t TransactTime_offset() noexcept
+    	static constexpr std::size_t transact_time_offset() noexcept
     	{ 
-    		return Side_offset() + Side_size(); 
+    		return side_offset() + side_size(); 
     	}
     
-    	static constexpr std::size_t TransactTime_id() noexcept
+    	static constexpr std::size_t transact_time_id() noexcept
     	{ 
     		return 60; 
     	}
     	
-    	static constexpr const char* TransactTime_name() noexcept
+    	static constexpr const char* transact_time_name() noexcept
     	{ 
     		return "TransactTime"; 
     	}
     	
-    	static constexpr std::uint64_t TransactTime_min_value() noexcept
+    	static constexpr std::uint64_t transact_time_min_value() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr std::uint64_t TransactTime_max_value() noexcept
+    	static constexpr std::uint64_t transact_time_max_value() noexcept
     	{
     		return 18446744073709551614;
     	}
     	
-    	static constexpr std::uint64_t TransactTime_null_value() noexcept
+    	static constexpr std::uint64_t transact_time_null_value() noexcept
     	{ 
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
@@ -382,183 +382,183 @@ class NewOrderSingle
     	#endif
     	}
     
-    	constexpr std::uint64_t get_TransactTime() const noexcept
+    	constexpr std::uint64_t transact_time() const noexcept
     	{ 
-    		return TransactTime_;
+    		return transact_time_;
     	}
     	
-    	constexpr auto& set_TransactTime(std::uint64_t value) noexcept
+    	constexpr auto& set_transact_time(std::uint64_t value) noexcept
     	{
-    		TransactTime_ = value;
+    		transact_time_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	QtyEncoding OrderQty_{};
+    	QtyEncoding order_qty_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t OrderQty_size() noexcept
+    	static constexpr std::size_t order_qty_size() noexcept
     	{
     		return sizeof(QtyEncoding);
     	}
     
-    	static constexpr std::size_t OrderQty_offset() noexcept
+    	static constexpr std::size_t order_qty_offset() noexcept
     	{
-    		return TransactTime_offset() + TransactTime_size();
+    		return transact_time_offset() + transact_time_size();
     	}
     
-    	static constexpr std::size_t OrderQty_id() noexcept
+    	static constexpr std::size_t order_qty_id() noexcept
     	{
     		return 38;
     	}
     
-    	static constexpr const char *OrderQty_name() noexcept
+    	static constexpr const char *order_qty_name() noexcept
     	{
     		return "OrderQty";
     	}
     
-    	constexpr const QtyEncoding &get_OrderQty() const noexcept
+    	constexpr const QtyEncoding &order_qty() const noexcept
     	{
-    		return OrderQty_;
+    		return order_qty_;
     	}
     
-    	constexpr QtyEncoding &get_OrderQty() noexcept
+    	constexpr QtyEncoding &order_qty() noexcept
     	{
-    		return OrderQty_;
+    		return order_qty_;
     	}
-    	constexpr auto &set_OrderQty(QtyEncoding &value) noexcept
+    	constexpr auto &set_order_qty(QtyEncoding &value) noexcept
     	{
-    		OrderQty_ = value;
+    		order_qty_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	OrdTypeEnum::Value OrdType_{};
+    	OrdTypeEnum::Value ord_type_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t OrdType_size() noexcept
+    	static constexpr std::size_t ord_type_size() noexcept
     	{
     		return sizeof(OrdTypeEnum);
     	}
     
-    	static constexpr std::size_t OrdType_offset() noexcept
+    	static constexpr std::size_t ord_type_offset() noexcept
     	{ 
-    		return OrderQty_offset() + OrderQty_size(); 
+    		return order_qty_offset() + order_qty_size(); 
     	}
     
-    	static constexpr std::size_t OrdType_id() noexcept
+    	static constexpr std::size_t ord_type_id() noexcept
     	{ 
     		return 40; 
     	}
     
-    	static constexpr const char* OrdType_name() noexcept
+    	static constexpr const char* ord_type_name() noexcept
     	{ 
     		return "OrdType"; 
     	}
     
-    	static constexpr OrdTypeEnum::Value OrdType_null_value() noexcept
+    	static constexpr OrdTypeEnum::Value ord_type_null_value() noexcept
     	{
     		return OrdTypeEnum::Value::nullValue;
     	}
     
-    	constexpr OrdTypeEnum::Value get_OrdType() const noexcept
+    	constexpr OrdTypeEnum::Value ord_type() const noexcept
     	{ 
-    		return OrdType_;
+    		return ord_type_;
     	}
     	
-    	constexpr auto& set_OrdType(OrdTypeEnum::Value value) noexcept
+    	constexpr auto& set_ord_type(OrdTypeEnum::Value value) noexcept
     	{
-    		OrdType_ = value;
+    		ord_type_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	OptionalDecimalEncoding Price_{};
+    	OptionalDecimalEncoding price_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t Price_size() noexcept
+    	static constexpr std::size_t price_size() noexcept
     	{
     		return sizeof(OptionalDecimalEncoding);
     	}
     
-    	static constexpr std::size_t Price_offset() noexcept
+    	static constexpr std::size_t price_offset() noexcept
     	{
-    		return OrdType_offset() + OrdType_size();
+    		return ord_type_offset() + ord_type_size();
     	}
     
-    	static constexpr std::size_t Price_id() noexcept
+    	static constexpr std::size_t price_id() noexcept
     	{
     		return 44;
     	}
     
-    	static constexpr const char *Price_name() noexcept
+    	static constexpr const char *price_name() noexcept
     	{
     		return "Price";
     	}
     
-    	constexpr const OptionalDecimalEncoding &get_Price() const noexcept
+    	constexpr const OptionalDecimalEncoding &price() const noexcept
     	{
-    		return Price_;
+    		return price_;
     	}
     
-    	constexpr OptionalDecimalEncoding &get_Price() noexcept
+    	constexpr OptionalDecimalEncoding &price() noexcept
     	{
-    		return Price_;
+    		return price_;
     	}
-    	constexpr auto &set_Price(OptionalDecimalEncoding &value) noexcept
+    	constexpr auto &set_price(OptionalDecimalEncoding &value) noexcept
     	{
-    		Price_ = value;
+    		price_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	OptionalDecimalEncoding StopPx_{};
+    	OptionalDecimalEncoding stop_px_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t StopPx_size() noexcept
+    	static constexpr std::size_t stop_px_size() noexcept
     	{
     		return sizeof(OptionalDecimalEncoding);
     	}
     
-    	static constexpr std::size_t StopPx_offset() noexcept
+    	static constexpr std::size_t stop_px_offset() noexcept
     	{
-    		return Price_offset() + Price_size();
+    		return price_offset() + price_size();
     	}
     
-    	static constexpr std::size_t StopPx_id() noexcept
+    	static constexpr std::size_t stop_px_id() noexcept
     	{
     		return 99;
     	}
     
-    	static constexpr const char *StopPx_name() noexcept
+    	static constexpr const char *stop_px_name() noexcept
     	{
     		return "StopPx";
     	}
     
-    	constexpr const OptionalDecimalEncoding &get_StopPx() const noexcept
+    	constexpr const OptionalDecimalEncoding &stop_px() const noexcept
     	{
-    		return StopPx_;
+    		return stop_px_;
     	}
     
-    	constexpr OptionalDecimalEncoding &get_StopPx() noexcept
+    	constexpr OptionalDecimalEncoding &stop_px() noexcept
     	{
-    		return StopPx_;
+    		return stop_px_;
     	}
-    	constexpr auto &set_StopPx(OptionalDecimalEncoding &value) noexcept
+    	constexpr auto &set_stop_px(OptionalDecimalEncoding &value) noexcept
     	{
-    		StopPx_ = value;
+    		stop_px_ = value;
     		return *this;
     	}
     
@@ -589,78 +589,78 @@ class NewOrderSingle
             
             private:
             	#pragma pack(push, 1)
-            	char PartyID_[8]{};
+            	char party_id_[8]{};
             	#pragma pack(pop)
             
             public:
-            	static constexpr std::size_t PartyID_size() noexcept
+            	static constexpr std::size_t party_id_size() noexcept
             	{
             		return 8;
             	}
             
-            	static constexpr std::size_t PartyID_offset() noexcept
+            	static constexpr std::size_t party_id_offset() noexcept
             	{
             		return 0;
             	}
             
-            	static constexpr std::size_t PartyID_id() noexcept
+            	static constexpr std::size_t party_id_id() noexcept
             	{
             		return 448;
             	}
             
-            	static constexpr const char *PartyID_name() noexcept
+            	static constexpr const char *party_id_name() noexcept
             	{
             		return "PartyID";
             	}
             
-            	constexpr char *get_PartyID() noexcept
+            	constexpr char *party_id() noexcept
             	{
-            		return PartyID_;
+            		return party_id_;
             	}
             
-            	constexpr const char *get_PartyID() const noexcept
+            	constexpr const char *party_id() const noexcept
             	{
-            		return PartyID_;
+            		return party_id_;
             	}
             
-            	constexpr std::string_view get_PartyID_view() noexcept
+            	constexpr std::string_view party_id_view() noexcept
             	{
-            		return std::string_view(PartyID_, 8);
+            		return std::string_view(party_id_, 8);
             	}
             
-            	constexpr const std::string_view get_PartyID_view() const noexcept
+            	constexpr const std::string_view party_id_view() const noexcept
             	{
-            		return std::string_view(PartyID_, 8);
+            		return std::string_view(party_id_, 8);
             	}
             
-            	const std::string get_PartyID_string() const noexcept
+            	const std::string party_id_string() const noexcept
             	{
             		auto length = 0ULL;
-            		for (; length < 8 && *(PartyID_ + length) != '\0'; ++length);
-            		return std::string(PartyID_, length);
+            		for (; length < 8 && *(party_id_ + length) != '\0'; ++length);
+            		return std::string(party_id_, length);
             	}
             
-            	constexpr auto &set_PartyID(const char *value) noexcept
+            	constexpr auto &set_party_id(const char *value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
             	#endif
-            		std::memcpy(PartyID_, value, PartyID_size());
+            		std::memcpy(party_id_, value, party_id_size());
             		return *this;
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic pop
             	#endif
             	}
             
-            	auto &set_PartyID(std::string_view value) noexcept
+            	auto &set_party_id(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
             	#endif
-            		// auto size = std::min(PartyID_size(), value.size());
-            		std::memcpy(PartyID_, value.data(), PartyID_size());
+            		// auto size = std::min(party_id_size(), value.size());
+            		std::memcpy(party_id_, value.data(), party_id_size());
             		return *this;
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic pop
@@ -669,86 +669,86 @@ class NewOrderSingle
             
             private:
             	#pragma pack(push, 1)
-            	PartyIDSourceEnum::Value PartyIDSource_{};
+            	PartyIDSourceEnum::Value party_id_source_{};
             	#pragma pack(pop)
             
             public:
-            	static constexpr std::size_t PartyIDSource_size() noexcept
+            	static constexpr std::size_t party_id_source_size() noexcept
             	{
             		return sizeof(PartyIDSourceEnum);
             	}
             
-            	static constexpr std::size_t PartyIDSource_offset() noexcept
+            	static constexpr std::size_t party_id_source_offset() noexcept
             	{ 
-            		return PartyID_offset() + PartyID_size(); 
+            		return party_id_offset() + party_id_size(); 
             	}
             
-            	static constexpr std::size_t PartyIDSource_id() noexcept
+            	static constexpr std::size_t party_id_source_id() noexcept
             	{ 
             		return 447; 
             	}
             
-            	static constexpr const char* PartyIDSource_name() noexcept
+            	static constexpr const char* party_id_source_name() noexcept
             	{ 
             		return "PartyIDSource"; 
             	}
             
-            	static constexpr PartyIDSourceEnum::Value PartyIDSource_null_value() noexcept
+            	static constexpr PartyIDSourceEnum::Value party_id_source_null_value() noexcept
             	{
             		return PartyIDSourceEnum::Value::nullValue;
             	}
             
-            	constexpr PartyIDSourceEnum::Value get_PartyIDSource() const noexcept
+            	constexpr PartyIDSourceEnum::Value party_id_source() const noexcept
             	{ 
-            		return PartyIDSource_;
+            		return party_id_source_;
             	}
             	
-            	constexpr auto& set_PartyIDSource(PartyIDSourceEnum::Value value) noexcept
+            	constexpr auto& set_party_id_source(PartyIDSourceEnum::Value value) noexcept
             	{
-            		PartyIDSource_ = value;
+            		party_id_source_ = value;
             		return *this;
             	}
             
             
             private:
             	#pragma pack(push, 1)
-            	PartyRoleEnum::Value PartyRole_{};
+            	PartyRoleEnum::Value party_role_{};
             	#pragma pack(pop)
             
             public:
-            	static constexpr std::size_t PartyRole_size() noexcept
+            	static constexpr std::size_t party_role_size() noexcept
             	{
             		return sizeof(PartyRoleEnum);
             	}
             
-            	static constexpr std::size_t PartyRole_offset() noexcept
+            	static constexpr std::size_t party_role_offset() noexcept
             	{ 
-            		return PartyIDSource_offset() + PartyIDSource_size(); 
+            		return party_id_source_offset() + party_id_source_size(); 
             	}
             
-            	static constexpr std::size_t PartyRole_id() noexcept
+            	static constexpr std::size_t party_role_id() noexcept
             	{ 
             		return 452; 
             	}
             
-            	static constexpr const char* PartyRole_name() noexcept
+            	static constexpr const char* party_role_name() noexcept
             	{ 
             		return "PartyRole"; 
             	}
             
-            	static constexpr PartyRoleEnum::Value PartyRole_null_value() noexcept
+            	static constexpr PartyRoleEnum::Value party_role_null_value() noexcept
             	{
             		return PartyRoleEnum::Value::nullValue;
             	}
             
-            	constexpr PartyRoleEnum::Value get_PartyRole() const noexcept
+            	constexpr PartyRoleEnum::Value party_role() const noexcept
             	{ 
-            		return PartyRole_;
+            		return party_role_;
             	}
             	
-            	constexpr auto& set_PartyRole(PartyRoleEnum::Value value) noexcept
+            	constexpr auto& set_party_role(PartyRoleEnum::Value value) noexcept
             	{
-            		PartyRole_ = value;
+            		party_role_ = value;
             		return *this;
             	}
             
@@ -767,79 +767,79 @@ class NewOrderSingle
     	Data& get(std::size_t group_id) noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
-    			+ (this->header_.get_blockLength() * group_id);
+    			+ (this->header_.block_length() * group_id);
     		return *reinterpret_cast<Data*>(buffer);
     	}
     
     	const Data& get(std::size_t group_id) const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
-    			+ (this->header_.get_blockLength() * group_id);
+    			+ (this->header_.block_length() * group_id);
     		return *reinterpret_cast<const Data*>(buffer);
     	}
     
-    	const auto get_blockLength() const noexcept
+    	const auto block_length() const noexcept
     	{
-    		return header_.get_blockLength();
+    		return header_.block_length();
     	}
     
-    	const auto get_numInGroup() const noexcept
+    	const auto num_in_group() const noexcept
     	{
-    		return header_.get_numInGroup();
+    		return header_.num_in_group();
     	}
     
     };
     
     private:
     	#pragma pack(push, 1)
-    	PartiesGrp PartiesGrp_{};
+    	PartiesGrp parties_grp_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t PartiesGrp_size() noexcept
+    	static constexpr std::size_t parties_grp_size() noexcept
     	{
     		return sizeof(PartiesGrp::Data);
     	}
     
-    	static constexpr std::size_t PartiesGrp_id() noexcept
+    	static constexpr std::size_t parties_grp_id() noexcept
     	{ 
     		return 583; 
     	}
     	
-    	static constexpr const char* PartiesGrp_name() noexcept
+    	static constexpr const char* parties_grp_name() noexcept
     	{ 
     		return "PartiesGrp"; 
     	}
     
-    	std::size_t PartiesGrp_offset() const noexcept
+    	std::size_t parties_grp_offset() const noexcept
     	{
     		return 0;
     	}
     
-    	std::size_t PartiesGrp_data_length() const noexcept
+    	std::size_t parties_grp_data_length() const noexcept
     	{
-    		auto& group = get_PartiesGrp();
-    		return group.header_.get_blockLength() * group.header_.get_numInGroup();
+    		auto& group = parties_grp();
+    		return group.header_.block_length() * group.header_.num_in_group();
     	}
     	
-    	const PartiesGrp& get_PartiesGrp() const noexcept
+    	const PartiesGrp& parties_grp() const noexcept
     	{ 
-    		const auto* buf = buffer() + PartiesGrp_offset();
+    		const auto* buf = buffer() + parties_grp_offset();
     		return *reinterpret_cast<const PartiesGrp*>(buf);
     	}
     	
-    	PartiesGrp& get_PartiesGrp() noexcept
+    	PartiesGrp& parties_grp() noexcept
     	{
-    		auto* buf = buffer() + PartiesGrp_offset();
+    		auto* buf = buffer() + parties_grp_offset();
     		return *reinterpret_cast<PartiesGrp*>(buf);
     	}
     
-    	PartiesGrp& append_PartiesGrp(std::uint16_t count) noexcept
+    	PartiesGrp& AppendPartiesGrp(std::uint16_t count) noexcept
     	{
-    		auto* buf = buffer() + PartiesGrp_offset();
+    		auto* buf = buffer() + parties_grp_offset();
     		auto& group = *reinterpret_cast<PartiesGrp*>(buf);
-    		group.header_.set_blockLength(sizeof(PartiesGrp::Data));
-    		group.header_.set_numInGroup(count);
+    		group.header_.set_block_length(sizeof(PartiesGrp::Data));
+    		group.header_.set_num_in_group(count);
     		return group;	
     	}
     
@@ -854,78 +854,78 @@ class NewOrderSingle
             
             private:
             	#pragma pack(push, 1)
-            	char AllocAccount_[16]{};
+            	char alloc_account_[16]{};
             	#pragma pack(pop)
             
             public:
-            	static constexpr std::size_t AllocAccount_size() noexcept
+            	static constexpr std::size_t alloc_account_size() noexcept
             	{
             		return 16;
             	}
             
-            	static constexpr std::size_t AllocAccount_offset() noexcept
+            	static constexpr std::size_t alloc_account_offset() noexcept
             	{
             		return 0;
             	}
             
-            	static constexpr std::size_t AllocAccount_id() noexcept
+            	static constexpr std::size_t alloc_account_id() noexcept
             	{
             		return 79;
             	}
             
-            	static constexpr const char *AllocAccount_name() noexcept
+            	static constexpr const char *alloc_account_name() noexcept
             	{
             		return "AllocAccount";
             	}
             
-            	constexpr char *get_AllocAccount() noexcept
+            	constexpr char *alloc_account() noexcept
             	{
-            		return AllocAccount_;
+            		return alloc_account_;
             	}
             
-            	constexpr const char *get_AllocAccount() const noexcept
+            	constexpr const char *alloc_account() const noexcept
             	{
-            		return AllocAccount_;
+            		return alloc_account_;
             	}
             
-            	constexpr std::string_view get_AllocAccount_view() noexcept
+            	constexpr std::string_view alloc_account_view() noexcept
             	{
-            		return std::string_view(AllocAccount_, 16);
+            		return std::string_view(alloc_account_, 16);
             	}
             
-            	constexpr const std::string_view get_AllocAccount_view() const noexcept
+            	constexpr const std::string_view alloc_account_view() const noexcept
             	{
-            		return std::string_view(AllocAccount_, 16);
+            		return std::string_view(alloc_account_, 16);
             	}
             
-            	const std::string get_AllocAccount_string() const noexcept
+            	const std::string alloc_account_string() const noexcept
             	{
             		auto length = 0ULL;
-            		for (; length < 16 && *(AllocAccount_ + length) != '\0'; ++length);
-            		return std::string(AllocAccount_, length);
+            		for (; length < 16 && *(alloc_account_ + length) != '\0'; ++length);
+            		return std::string(alloc_account_, length);
             	}
             
-            	constexpr auto &set_AllocAccount(const char *value) noexcept
+            	constexpr auto &set_alloc_account(const char *value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
             	#endif
-            		std::memcpy(AllocAccount_, value, AllocAccount_size());
+            		std::memcpy(alloc_account_, value, alloc_account_size());
             		return *this;
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic pop
             	#endif
             	}
             
-            	auto &set_AllocAccount(std::string_view value) noexcept
+            	auto &set_alloc_account(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
             	#endif
-            		// auto size = std::min(AllocAccount_size(), value.size());
-            		std::memcpy(AllocAccount_, value.data(), AllocAccount_size());
+            		// auto size = std::min(alloc_account_size(), value.size());
+            		std::memcpy(alloc_account_, value.data(), alloc_account_size());
             		return *this;
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic pop
@@ -934,42 +934,42 @@ class NewOrderSingle
             
             private:
             	#pragma pack(push, 1)
-            	QtyEncoding AllocShares_{};
+            	QtyEncoding alloc_shares_{};
             	#pragma pack(pop)
             
             public:
-            	static constexpr std::size_t AllocShares_size() noexcept
+            	static constexpr std::size_t alloc_shares_size() noexcept
             	{
             		return sizeof(QtyEncoding);
             	}
             
-            	static constexpr std::size_t AllocShares_offset() noexcept
+            	static constexpr std::size_t alloc_shares_offset() noexcept
             	{
-            		return AllocAccount_offset() + AllocAccount_size();
+            		return alloc_account_offset() + alloc_account_size();
             	}
             
-            	static constexpr std::size_t AllocShares_id() noexcept
+            	static constexpr std::size_t alloc_shares_id() noexcept
             	{
             		return 80;
             	}
             
-            	static constexpr const char *AllocShares_name() noexcept
+            	static constexpr const char *alloc_shares_name() noexcept
             	{
             		return "AllocShares";
             	}
             
-            	constexpr const QtyEncoding &get_AllocShares() const noexcept
+            	constexpr const QtyEncoding &alloc_shares() const noexcept
             	{
-            		return AllocShares_;
+            		return alloc_shares_;
             	}
             
-            	constexpr QtyEncoding &get_AllocShares() noexcept
+            	constexpr QtyEncoding &alloc_shares() noexcept
             	{
-            		return AllocShares_;
+            		return alloc_shares_;
             	}
-            	constexpr auto &set_AllocShares(QtyEncoding &value) noexcept
+            	constexpr auto &set_alloc_shares(QtyEncoding &value) noexcept
             	{
-            		AllocShares_ = value;
+            		alloc_shares_ = value;
             		return *this;
             	}
             
@@ -988,79 +988,79 @@ class NewOrderSingle
     	Data& get(std::size_t group_id) noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
-    			+ (this->header_.get_blockLength() * group_id);
+    			+ (this->header_.block_length() * group_id);
     		return *reinterpret_cast<Data*>(buffer);
     	}
     
     	const Data& get(std::size_t group_id) const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
-    			+ (this->header_.get_blockLength() * group_id);
+    			+ (this->header_.block_length() * group_id);
     		return *reinterpret_cast<const Data*>(buffer);
     	}
     
-    	const auto get_blockLength() const noexcept
+    	const auto block_length() const noexcept
     	{
-    		return header_.get_blockLength();
+    		return header_.block_length();
     	}
     
-    	const auto get_numInGroup() const noexcept
+    	const auto num_in_group() const noexcept
     	{
-    		return header_.get_numInGroup();
+    		return header_.num_in_group();
     	}
     
     };
     
     private:
     	#pragma pack(push, 1)
-    	AllocsGrp AllocsGrp_{};
+    	AllocsGrp allocs_grp_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t AllocsGrp_size() noexcept
+    	static constexpr std::size_t allocs_grp_size() noexcept
     	{
     		return sizeof(AllocsGrp::Data);
     	}
     
-    	static constexpr std::size_t AllocsGrp_id() noexcept
+    	static constexpr std::size_t allocs_grp_id() noexcept
     	{ 
     		return 78; 
     	}
     	
-    	static constexpr const char* AllocsGrp_name() noexcept
+    	static constexpr const char* allocs_grp_name() noexcept
     	{ 
     		return "AllocsGrp"; 
     	}
     
-    	std::size_t AllocsGrp_offset() const noexcept
+    	std::size_t allocs_grp_offset() const noexcept
     	{
-    		return PartiesGrp_offset() + sizeof(PartiesGrp::header_) + PartiesGrp_data_length();
+    		return parties_grp_offset() + sizeof(PartiesGrp::header_) + parties_grp_data_length();
     	}
     
-    	std::size_t AllocsGrp_data_length() const noexcept
+    	std::size_t allocs_grp_data_length() const noexcept
     	{
-    		auto& group = get_AllocsGrp();
-    		return group.header_.get_blockLength() * group.header_.get_numInGroup();
+    		auto& group = allocs_grp();
+    		return group.header_.block_length() * group.header_.num_in_group();
     	}
     	
-    	const AllocsGrp& get_AllocsGrp() const noexcept
+    	const AllocsGrp& allocs_grp() const noexcept
     	{ 
-    		const auto* buf = buffer() + AllocsGrp_offset();
+    		const auto* buf = buffer() + allocs_grp_offset();
     		return *reinterpret_cast<const AllocsGrp*>(buf);
     	}
     	
-    	AllocsGrp& get_AllocsGrp() noexcept
+    	AllocsGrp& allocs_grp() noexcept
     	{
-    		auto* buf = buffer() + AllocsGrp_offset();
+    		auto* buf = buffer() + allocs_grp_offset();
     		return *reinterpret_cast<AllocsGrp*>(buf);
     	}
     
-    	AllocsGrp& append_AllocsGrp(std::uint16_t count) noexcept
+    	AllocsGrp& AppendAllocsGrp(std::uint16_t count) noexcept
     	{
-    		auto* buf = buffer() + AllocsGrp_offset();
+    		auto* buf = buffer() + allocs_grp_offset();
     		auto& group = *reinterpret_cast<AllocsGrp*>(buf);
-    		group.header_.set_blockLength(sizeof(AllocsGrp::Data));
-    		group.header_.set_numInGroup(count);
+    		group.header_.set_block_length(sizeof(AllocsGrp::Data));
+    		group.header_.set_num_in_group(count);
     		return group;	
     	}
     
@@ -1075,78 +1075,78 @@ class NewOrderSingle
             
             private:
             	#pragma pack(push, 1)
-            	char TradingSessionID_[8]{};
+            	char trading_session_id_[8]{};
             	#pragma pack(pop)
             
             public:
-            	static constexpr std::size_t TradingSessionID_size() noexcept
+            	static constexpr std::size_t trading_session_id_size() noexcept
             	{
             		return 8;
             	}
             
-            	static constexpr std::size_t TradingSessionID_offset() noexcept
+            	static constexpr std::size_t trading_session_id_offset() noexcept
             	{
             		return 0;
             	}
             
-            	static constexpr std::size_t TradingSessionID_id() noexcept
+            	static constexpr std::size_t trading_session_id_id() noexcept
             	{
             		return 336;
             	}
             
-            	static constexpr const char *TradingSessionID_name() noexcept
+            	static constexpr const char *trading_session_id_name() noexcept
             	{
             		return "TradingSessionID";
             	}
             
-            	constexpr char *get_TradingSessionID() noexcept
+            	constexpr char *trading_session_id() noexcept
             	{
-            		return TradingSessionID_;
+            		return trading_session_id_;
             	}
             
-            	constexpr const char *get_TradingSessionID() const noexcept
+            	constexpr const char *trading_session_id() const noexcept
             	{
-            		return TradingSessionID_;
+            		return trading_session_id_;
             	}
             
-            	constexpr std::string_view get_TradingSessionID_view() noexcept
+            	constexpr std::string_view trading_session_id_view() noexcept
             	{
-            		return std::string_view(TradingSessionID_, 8);
+            		return std::string_view(trading_session_id_, 8);
             	}
             
-            	constexpr const std::string_view get_TradingSessionID_view() const noexcept
+            	constexpr const std::string_view trading_session_id_view() const noexcept
             	{
-            		return std::string_view(TradingSessionID_, 8);
+            		return std::string_view(trading_session_id_, 8);
             	}
             
-            	const std::string get_TradingSessionID_string() const noexcept
+            	const std::string trading_session_id_string() const noexcept
             	{
             		auto length = 0ULL;
-            		for (; length < 8 && *(TradingSessionID_ + length) != '\0'; ++length);
-            		return std::string(TradingSessionID_, length);
+            		for (; length < 8 && *(trading_session_id_ + length) != '\0'; ++length);
+            		return std::string(trading_session_id_, length);
             	}
             
-            	constexpr auto &set_TradingSessionID(const char *value) noexcept
+            	constexpr auto &set_trading_session_id(const char *value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
             	#endif
-            		std::memcpy(TradingSessionID_, value, TradingSessionID_size());
+            		std::memcpy(trading_session_id_, value, trading_session_id_size());
             		return *this;
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic pop
             	#endif
             	}
             
-            	auto &set_TradingSessionID(std::string_view value) noexcept
+            	auto &set_trading_session_id(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
             	#endif
-            		// auto size = std::min(TradingSessionID_size(), value.size());
-            		std::memcpy(TradingSessionID_, value.data(), TradingSessionID_size());
+            		// auto size = std::min(trading_session_id_size(), value.size());
+            		std::memcpy(trading_session_id_, value.data(), trading_session_id_size());
             		return *this;
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic pop
@@ -1167,79 +1167,79 @@ class NewOrderSingle
     	Data& get(std::size_t group_id) noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
-    			+ (this->header_.get_blockLength() * group_id);
+    			+ (this->header_.block_length() * group_id);
     		return *reinterpret_cast<Data*>(buffer);
     	}
     
     	const Data& get(std::size_t group_id) const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
-    			+ (this->header_.get_blockLength() * group_id);
+    			+ (this->header_.block_length() * group_id);
     		return *reinterpret_cast<const Data*>(buffer);
     	}
     
-    	const auto get_blockLength() const noexcept
+    	const auto block_length() const noexcept
     	{
-    		return header_.get_blockLength();
+    		return header_.block_length();
     	}
     
-    	const auto get_numInGroup() const noexcept
+    	const auto num_in_group() const noexcept
     	{
-    		return header_.get_numInGroup();
+    		return header_.num_in_group();
     	}
     
     };
     
     private:
     	#pragma pack(push, 1)
-    	TradingSessionsGrp TradingSessionsGrp_{};
+    	TradingSessionsGrp trading_sessions_grp_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t TradingSessionsGrp_size() noexcept
+    	static constexpr std::size_t trading_sessions_grp_size() noexcept
     	{
     		return sizeof(TradingSessionsGrp::Data);
     	}
     
-    	static constexpr std::size_t TradingSessionsGrp_id() noexcept
+    	static constexpr std::size_t trading_sessions_grp_id() noexcept
     	{ 
     		return 386; 
     	}
     	
-    	static constexpr const char* TradingSessionsGrp_name() noexcept
+    	static constexpr const char* trading_sessions_grp_name() noexcept
     	{ 
     		return "TradingSessionsGrp"; 
     	}
     
-    	std::size_t TradingSessionsGrp_offset() const noexcept
+    	std::size_t trading_sessions_grp_offset() const noexcept
     	{
-    		return AllocsGrp_offset() + sizeof(AllocsGrp::header_) + AllocsGrp_data_length();
+    		return allocs_grp_offset() + sizeof(AllocsGrp::header_) + allocs_grp_data_length();
     	}
     
-    	std::size_t TradingSessionsGrp_data_length() const noexcept
+    	std::size_t trading_sessions_grp_data_length() const noexcept
     	{
-    		auto& group = get_TradingSessionsGrp();
-    		return group.header_.get_blockLength() * group.header_.get_numInGroup();
+    		auto& group = trading_sessions_grp();
+    		return group.header_.block_length() * group.header_.num_in_group();
     	}
     	
-    	const TradingSessionsGrp& get_TradingSessionsGrp() const noexcept
+    	const TradingSessionsGrp& trading_sessions_grp() const noexcept
     	{ 
-    		const auto* buf = buffer() + TradingSessionsGrp_offset();
+    		const auto* buf = buffer() + trading_sessions_grp_offset();
     		return *reinterpret_cast<const TradingSessionsGrp*>(buf);
     	}
     	
-    	TradingSessionsGrp& get_TradingSessionsGrp() noexcept
+    	TradingSessionsGrp& trading_sessions_grp() noexcept
     	{
-    		auto* buf = buffer() + TradingSessionsGrp_offset();
+    		auto* buf = buffer() + trading_sessions_grp_offset();
     		return *reinterpret_cast<TradingSessionsGrp*>(buf);
     	}
     
-    	TradingSessionsGrp& append_TradingSessionsGrp(std::uint16_t count) noexcept
+    	TradingSessionsGrp& AppendTradingSessionsGrp(std::uint16_t count) noexcept
     	{
-    		auto* buf = buffer() + TradingSessionsGrp_offset();
+    		auto* buf = buffer() + trading_sessions_grp_offset();
     		auto& group = *reinterpret_cast<TradingSessionsGrp*>(buf);
-    		group.header_.set_blockLength(sizeof(TradingSessionsGrp::Data));
-    		group.header_.set_numInGroup(count);
+    		group.header_.set_block_length(sizeof(TradingSessionsGrp::Data));
+    		group.header_.set_num_in_group(count);
     		return group;	
     	}
     
@@ -1260,13 +1260,13 @@ class NewOrderSingle
     	std::basic_string_view<char> get_str() noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
-    		return {reinterpret_cast<char*>(buffer), this->header_.get_length()};
+    		return {reinterpret_cast<char*>(buffer), this->header_.length()};
     	}
     
     	const std::basic_string_view<char> get_str() const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
-    		return {reinterpret_cast<const char*>(buffer), this->header_.get_length()};
+    		return {reinterpret_cast<const char*>(buffer), this->header_.length()};
     	}
     
     	char* get() noexcept
@@ -1281,69 +1281,69 @@ class NewOrderSingle
     		return reinterpret_cast<const char*>(buffer);
     	}
     
-    	const auto get_length() const noexcept
+    	const auto length() const noexcept
     	{
-    		return header_.get_length();
+    		return header_.length();
     	}
     
     };
     
     private:
     	#pragma pack(push, 1)
-    	Text Text_{};
+    	Text text_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t Text_size() noexcept
+    	static constexpr std::size_t text_size() noexcept
     	{
     		return 0;
     	}
     
-    	static constexpr std::size_t Text_id() noexcept
+    	static constexpr std::size_t text_id() noexcept
     	{ 
     		return 58; 
     	}
     	
-    	static constexpr const char* Text_name() noexcept
+    	static constexpr const char* text_name() noexcept
     	{ 
     		return "Text"; 
     	}
     
-    	std::size_t Text_offset() const noexcept
+    	std::size_t text_offset() const noexcept
     	{
-    		return TradingSessionsGrp_offset() + sizeof(TradingSessionsGrp::header_) + TradingSessionsGrp_data_length();
+    		return trading_sessions_grp_offset() + sizeof(TradingSessionsGrp::header_) + trading_sessions_grp_data_length();
     	}
     
-    	std::size_t Text_data_length() const noexcept
+    	std::size_t text_data_length() const noexcept
     	{
-    		auto& data = get_Text();
-    		return data.header_.get_length();
+    		auto& data = text();
+    		return data.header_.length();
     	}
     	
-    	const Text& get_Text() const noexcept
+    	const Text& text() const noexcept
     	{ 
-    		const auto* buf = buffer() + Text_offset();
+    		const auto* buf = buffer() + text_offset();
     		return *reinterpret_cast<const Text*>(buf);
     	}
     	
-    	Text& get_Text() noexcept
+    	Text& text() noexcept
     	{
-    		auto* buf = buffer() + Text_offset();
+    		auto* buf = buffer() + text_offset();
     		return *reinterpret_cast<Text*>(buf);
     	}
     
-    	Text& append_Text(const char* value, std::uint16_t length) noexcept
+    	Text& AppendText(const char* value, std::uint16_t length) noexcept
     	{
-    		auto* buf = buffer() + Text_offset();
+    		auto* buf = buffer() + text_offset();
     		auto& data = *reinterpret_cast<Text*>(buf);
     		data.header_.set_length(length);
     		std::memcpy(data.get(), value, length);
     		return data;
     	}
     
-    	Text& append_Text(std::basic_string_view<char> value) noexcept
+    	Text& AppendText(std::basic_string_view<char> value) noexcept
     	{
-    		auto* buf = buffer() + Text_offset();
+    		auto* buf = buffer() + text_offset();
     		auto& data = *reinterpret_cast<Text*>(buf);
     		data.header_.set_length(value.size());
     		std::memcpy(data.get(), value.data(), value.size());
@@ -1367,13 +1367,13 @@ class NewOrderSingle
     	std::basic_string_view<char> get_str() noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
-    		return {reinterpret_cast<char*>(buffer), this->header_.get_length()};
+    		return {reinterpret_cast<char*>(buffer), this->header_.length()};
     	}
     
     	const std::basic_string_view<char> get_str() const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
-    		return {reinterpret_cast<const char*>(buffer), this->header_.get_length()};
+    		return {reinterpret_cast<const char*>(buffer), this->header_.length()};
     	}
     
     	char* get() noexcept
@@ -1388,69 +1388,69 @@ class NewOrderSingle
     		return reinterpret_cast<const char*>(buffer);
     	}
     
-    	const auto get_length() const noexcept
+    	const auto length() const noexcept
     	{
-    		return header_.get_length();
+    		return header_.length();
     	}
     
     };
     
     private:
     	#pragma pack(push, 1)
-    	ClearingFirm ClearingFirm_{};
+    	ClearingFirm clearing_firm_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t ClearingFirm_size() noexcept
+    	static constexpr std::size_t clearing_firm_size() noexcept
     	{
     		return 0;
     	}
     
-    	static constexpr std::size_t ClearingFirm_id() noexcept
+    	static constexpr std::size_t clearing_firm_id() noexcept
     	{ 
     		return 439; 
     	}
     	
-    	static constexpr const char* ClearingFirm_name() noexcept
+    	static constexpr const char* clearing_firm_name() noexcept
     	{ 
     		return "ClearingFirm"; 
     	}
     
-    	std::size_t ClearingFirm_offset() const noexcept
+    	std::size_t clearing_firm_offset() const noexcept
     	{
-    		return Text_offset() + sizeof(Text::header_) + Text_data_length();
+    		return text_offset() + sizeof(Text::header_) + text_data_length();
     	}
     
-    	std::size_t ClearingFirm_data_length() const noexcept
+    	std::size_t clearing_firm_data_length() const noexcept
     	{
-    		auto& data = get_ClearingFirm();
-    		return data.header_.get_length();
+    		auto& data = clearing_firm();
+    		return data.header_.length();
     	}
     	
-    	const ClearingFirm& get_ClearingFirm() const noexcept
+    	const ClearingFirm& clearing_firm() const noexcept
     	{ 
-    		const auto* buf = buffer() + ClearingFirm_offset();
+    		const auto* buf = buffer() + clearing_firm_offset();
     		return *reinterpret_cast<const ClearingFirm*>(buf);
     	}
     	
-    	ClearingFirm& get_ClearingFirm() noexcept
+    	ClearingFirm& clearing_firm() noexcept
     	{
-    		auto* buf = buffer() + ClearingFirm_offset();
+    		auto* buf = buffer() + clearing_firm_offset();
     		return *reinterpret_cast<ClearingFirm*>(buf);
     	}
     
-    	ClearingFirm& append_ClearingFirm(const char* value, std::uint16_t length) noexcept
+    	ClearingFirm& AppendClearingFirm(const char* value, std::uint16_t length) noexcept
     	{
-    		auto* buf = buffer() + ClearingFirm_offset();
+    		auto* buf = buffer() + clearing_firm_offset();
     		auto& data = *reinterpret_cast<ClearingFirm*>(buf);
     		data.header_.set_length(length);
     		std::memcpy(data.get(), value, length);
     		return data;
     	}
     
-    	ClearingFirm& append_ClearingFirm(std::basic_string_view<char> value) noexcept
+    	ClearingFirm& AppendClearingFirm(std::basic_string_view<char> value) noexcept
     	{
-    		auto* buf = buffer() + ClearingFirm_offset();
+    		auto* buf = buffer() + clearing_firm_offset();
     		auto& data = *reinterpret_cast<ClearingFirm*>(buf);
     		data.header_.set_length(value.size());
     		std::memcpy(data.get(), value.data(), value.size());
@@ -1462,12 +1462,12 @@ class NewOrderSingle
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::PartiesGrp &group)
 {
-	for (auto i = 0; i < group.get_numInGroup(); i++)
+	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.PartyID_name() << ": " << g.get_PartyID() << " ";
-		os << g.PartyIDSource_name() << ": " << g.get_PartyIDSource() << " ";
-		os << g.PartyRole_name() << ": " << g.get_PartyRole() << " ";
+		os << g.party_id_name() << ": " << g.party_id() << " ";
+		os << g.party_id_source_name() << ": " << g.party_id_source() << " ";
+		os << g.party_role_name() << ": " << g.party_role() << " ";
 	}
 	return os;
 }
@@ -1475,11 +1475,11 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::AllocsGrp &group)
 {
-	for (auto i = 0; i < group.get_numInGroup(); i++)
+	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.AllocAccount_name() << ": " << g.get_AllocAccount() << " ";
-		os << g.AllocShares_name() << ": " << g.get_AllocShares() << " ";
+		os << g.alloc_account_name() << ": " << g.alloc_account() << " ";
+		os << g.alloc_shares_name() << ": " << g.alloc_shares() << " ";
 	}
 	return os;
 }
@@ -1487,10 +1487,10 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::TradingSessionsGrp &group)
 {
-	for (auto i = 0; i < group.get_numInGroup(); i++)
+	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.TradingSessionID_name() << ": " << g.get_TradingSessionID() << " ";
+		os << g.trading_session_id_name() << ": " << g.trading_session_id() << " ";
 	}
 	return os;
 }
@@ -1498,20 +1498,20 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle &msg)
 {
-	os << msg.ClOrdId_name() << ": " << msg.get_ClOrdId() << " ";
-	os << msg.Account_name() << ": " << msg.get_Account() << " ";
-	os << msg.Symbol_name() << ": " << msg.get_Symbol() << " ";
-	os << msg.Side_name() << ": " << msg.get_Side() << " ";
-	os << msg.TransactTime_name() << ": " << msg.get_TransactTime() << " ";
-	os << msg.OrderQty_name() << ": " << msg.get_OrderQty() << " ";
-	os << msg.OrdType_name() << ": " << msg.get_OrdType() << " ";
-	os << msg.Price_name() << ": " << msg.get_Price() << " ";
-	os << msg.StopPx_name() << ": " << msg.get_StopPx() << " ";
-	os << msg.PartiesGrp_name() << ": " << msg.get_PartiesGrp() << " ";
-	os << msg.AllocsGrp_name() << ": " << msg.get_AllocsGrp() << " ";
-	os << msg.TradingSessionsGrp_name() << ": " << msg.get_TradingSessionsGrp() << " ";
-	os << msg.Text_name() << ": " << msg.get_Text().get_str() << " ";
-	os << msg.ClearingFirm_name() << ": " << msg.get_ClearingFirm().get_str() << " ";
+	os << msg.cl_ord_id_name() << ": " << msg.cl_ord_id() << " ";
+	os << msg.account_name() << ": " << msg.account() << " ";
+	os << msg.symbol_name() << ": " << msg.symbol() << " ";
+	os << msg.side_name() << ": " << msg.side() << " ";
+	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
+	os << msg.order_qty_name() << ": " << msg.order_qty() << " ";
+	os << msg.ord_type_name() << ": " << msg.ord_type() << " ";
+	os << msg.price_name() << ": " << msg.price() << " ";
+	os << msg.stop_px_name() << ": " << msg.stop_px() << " ";
+	os << msg.parties_grp_name() << ": " << msg.parties_grp() << " ";
+	os << msg.allocs_grp_name() << ": " << msg.allocs_grp() << " ";
+	os << msg.trading_sessions_grp_name() << ": " << msg.trading_sessions_grp() << " ";
+	os << msg.text_name() << ": " << msg.text().get_str() << " ";
+	os << msg.clearing_firm_name() << ": " << msg.clearing_firm().get_str() << " ";
 	return os;
 }
 }

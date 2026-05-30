@@ -1,0 +1,3 @@
+# Google C++ style: 2-space indent, 80-col, attached braces, no tabs.
+# Picked up automatically by `clang-format -style=file`.
+BasedOnStyle: Google

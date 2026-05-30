@@ -20,44 +20,44 @@ namespace fastsbe
     {
         auto &msg = *reinterpret_cast<fastsbe::NewOrderSingle *>(buffer);
 
-        msg.set_ClOrdId(values.ClOrdId.c_str())
-            .set_Account(values.Account.c_str())
-            .set_Symbol(values.Symbol.c_str())
-            .set_Side(static_cast<SideEnum::Value>(values.Side))
-            .set_TransactTime(values.TransactTime);
-        msg.get_OrderQty().set_mantissa(values.OrderQty.mantissa);
-        msg.set_OrdType(static_cast<OrdTypeEnum::Value>(values.OrdType));
-        msg.get_Price().set_mantissa(values.Price.mantissa);
-        msg.get_StopPx().set_mantissa(values.StopPx.mantissa);
+        msg.set_cl_ord_id(values.ClOrdId.c_str())
+            .set_account(values.Account.c_str())
+            .set_symbol(values.Symbol.c_str())
+            .set_side(static_cast<SideEnum::Value>(values.Side))
+            .set_transact_time(values.TransactTime);
+        msg.order_qty().set_mantissa(values.OrderQty.mantissa);
+        msg.set_ord_type(static_cast<OrdTypeEnum::Value>(values.OrdType));
+        msg.price().set_mantissa(values.Price.mantissa);
+        msg.stop_px().set_mantissa(values.StopPx.mantissa);
 
-        auto &PartiesGrp = msg.append_PartiesGrp(values.PartiesGrps.size());
+        auto &PartiesGrp = msg.AppendPartiesGrp(values.PartiesGrps.size());
         for (auto i = 0u; i < values.PartiesGrps.size(); i++)
         {
             auto &party = values.PartiesGrps[i];
             PartiesGrp.get(i)
-                .set_PartyID(party.PartyID.c_str())
-                .set_PartyIDSource(static_cast<fastsbe::PartyIDSourceEnum::Value>(party.PartyIDSource))
-                .set_PartyRole(static_cast<fastsbe::PartyRoleEnum::Value>(party.PartyRole));
+                .set_party_id(party.PartyID.c_str())
+                .set_party_id_source(static_cast<fastsbe::PartyIDSourceEnum::Value>(party.PartyIDSource))
+                .set_party_role(static_cast<fastsbe::PartyRoleEnum::Value>(party.PartyRole));
         }
 
-        auto &AllocsGrp = msg.append_AllocsGrp(values.AllocsGrps.size());
+        auto &AllocsGrp = msg.AppendAllocsGrp(values.AllocsGrps.size());
         for (auto i = 0u; i < values.AllocsGrps.size(); i++)
         {
             auto &alloc = values.AllocsGrps[i];
             AllocsGrp.get(i)
-                .set_AllocAccount(alloc.AllocAccount.c_str())
-                .get_AllocShares().set_mantissa(alloc.AllocShares.mantissa);
+                .set_alloc_account(alloc.AllocAccount.c_str())
+                .alloc_shares().set_mantissa(alloc.AllocShares.mantissa);
         }
 
-        auto &TradingSessionsGrp = msg.append_TradingSessionsGrp(values.TradingSessionsGrps.size());
+        auto &TradingSessionsGrp = msg.AppendTradingSessionsGrp(values.TradingSessionsGrps.size());
         for (auto i = 0u; i < values.TradingSessionsGrps.size(); i++)
         {
             auto &tradingSession = values.TradingSessionsGrps[i];
             TradingSessionsGrp.get(i)
-                .set_TradingSessionID(tradingSession.TradingSessionID.c_str());
+                .set_trading_session_id(tradingSession.TradingSessionID.c_str());
         }
-        msg.append_Text(values.Text.c_str(), values.Text.length());
-        msg.append_ClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
+        msg.AppendText(values.Text.c_str(), values.Text.length());
+        msg.AppendClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
 
         // benchmark::DoNotOptimize(msg);
 
@@ -69,75 +69,75 @@ namespace fastsbe
     {
         auto &msg = *reinterpret_cast<fastsbe::NewOrderSingle *>(buffer);
 
-        auto clodr_id = msg.get_ClOrdId();
+        auto clodr_id = msg.cl_ord_id();
         benchmark::DoNotOptimize(clodr_id);
-        auto Account = msg.get_Account();
+        auto Account = msg.account();
         benchmark::DoNotOptimize(clodr_id);
-        auto Symbol = msg.get_Symbol();
+        auto Symbol = msg.symbol();
         benchmark::DoNotOptimize(Symbol);
-        auto Side = msg.get_Side();
+        auto Side = msg.side();
         benchmark::DoNotOptimize(Symbol);
-        auto TransactTime = msg.get_TransactTime();
+        auto TransactTime = msg.transact_time();
         benchmark::DoNotOptimize(TransactTime);
 
-        auto &OrderQty = msg.get_OrderQty();
-        auto oq_mantissa = OrderQty.get_mantissa();
+        auto &OrderQty = msg.order_qty();
+        auto oq_mantissa = OrderQty.mantissa();
         benchmark::DoNotOptimize(oq_mantissa);
-        auto oq_exponent = OrderQty.get_exponent();
+        auto oq_exponent = OrderQty.exponent();
         benchmark::DoNotOptimize(oq_exponent);
 
-        auto &Price = msg.get_Price();
-        auto p_mantissa = Price.get_mantissa();
+        auto &Price = msg.price();
+        auto p_mantissa = Price.mantissa();
         benchmark::DoNotOptimize(p_mantissa);
-        auto p_exponent = Price.get_exponent();
+        auto p_exponent = Price.exponent();
         benchmark::DoNotOptimize(p_exponent);
 
-        auto &StopPx = msg.get_StopPx();
-        auto sp_mantissa = StopPx.get_mantissa();
+        auto &StopPx = msg.stop_px();
+        auto sp_mantissa = StopPx.mantissa();
         benchmark::DoNotOptimize(sp_mantissa);
-        auto sp_exponent = StopPx.get_exponent();
+        auto sp_exponent = StopPx.exponent();
         benchmark::DoNotOptimize(sp_exponent);
 
-        auto &PartiesGrp = msg.get_PartiesGrp();
-        for (auto i = 0u; i < PartiesGrp.get_numInGroup(); i++)
+        auto &PartiesGrp = msg.parties_grp();
+        for (auto i = 0u; i < PartiesGrp.num_in_group(); i++)
         {
             auto &party = PartiesGrp.get(i);
 
-            auto PartyID = party.get_PartyID();
+            auto PartyID = party.party_id();
             benchmark::DoNotOptimize(PartyID);
-            auto PartyIDSource = party.get_PartyIDSource();
+            auto PartyIDSource = party.party_id_source();
             benchmark::DoNotOptimize(PartyIDSource);
-            auto PartyRole = party.get_PartyRole();
+            auto PartyRole = party.party_role();
             benchmark::DoNotOptimize(PartyRole);
         }
 
-        auto &AllocsGrp = msg.get_AllocsGrp();
-        for (auto i = 0u; i < AllocsGrp.get_numInGroup(); i++)
+        auto &AllocsGrp = msg.allocs_grp();
+        for (auto i = 0u; i < AllocsGrp.num_in_group(); i++)
         {
             auto &alloc = AllocsGrp.get(i);
 
-            auto AllocAccount = alloc.get_AllocAccount();
+            auto AllocAccount = alloc.alloc_account();
             benchmark::DoNotOptimize(AllocAccount);
-            auto &AllocShares = alloc.get_AllocShares();
-            auto mantissa = AllocShares.get_mantissa();
+            auto &AllocShares = alloc.alloc_shares();
+            auto mantissa = AllocShares.mantissa();
             benchmark::DoNotOptimize(mantissa);
-            auto exponent = AllocShares.get_exponent();
+            auto exponent = AllocShares.exponent();
             benchmark::DoNotOptimize(exponent);
         }
 
-        auto &TradingSessionsGrp = msg.get_TradingSessionsGrp();
-        for (auto i = 0u; i < TradingSessionsGrp.get_numInGroup(); i++)
+        auto &TradingSessionsGrp = msg.trading_sessions_grp();
+        for (auto i = 0u; i < TradingSessionsGrp.num_in_group(); i++)
         {
             auto &tradingSession = TradingSessionsGrp.get(i);
 
-            auto TradingSessionID = tradingSession.get_TradingSessionID();
+            auto TradingSessionID = tradingSession.trading_session_id();
             benchmark::DoNotOptimize(TradingSessionID);
         }
 
-        auto Text = msg.get_Text().get_str();
+        auto Text = msg.text().get_str();
         benchmark::DoNotOptimize(Text);
 
-        auto ClearingFirm = msg.get_ClearingFirm().get_str();
+        auto ClearingFirm = msg.clearing_firm().get_str();
         benchmark::DoNotOptimize(ClearingFirm);
 
         if (display)

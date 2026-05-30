@@ -40,36 +40,36 @@ class MessageHeader
     
     private:
     	#pragma pack(push, 1)
-    	std::uint16_t blockLength_{};
+    	std::uint16_t block_length_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t blockLength_size() noexcept
+    	static constexpr std::size_t block_length_size() noexcept
     	{
     		return sizeof(std::uint16_t);
     	}
     
-    	static constexpr std::size_t blockLength_offset() noexcept
+    	static constexpr std::size_t block_length_offset() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr const char* blockLength_name() noexcept
+    	static constexpr const char* block_length_name() noexcept
     	{ 
     		return "blockLength"; 
     	}
     	
-    	static constexpr std::uint16_t blockLength_min_value() noexcept
+    	static constexpr std::uint16_t block_length_min_value() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr std::uint16_t blockLength_max_value() noexcept
+    	static constexpr std::uint16_t block_length_max_value() noexcept
     	{
     		return 65534;
     	}
     	
-    	static constexpr std::uint16_t blockLength_null_value() noexcept
+    	static constexpr std::uint16_t block_length_null_value() noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
@@ -81,50 +81,50 @@ class MessageHeader
     	#endif
     	}
     
-    	constexpr std::uint16_t get_blockLength() const noexcept
+    	constexpr std::uint16_t block_length() const noexcept
     	{ 
-    		return blockLength_;
+    		return block_length_;
     	}
     	
-    	constexpr MessageHeader& set_blockLength(std::uint16_t value) noexcept
+    	constexpr MessageHeader& set_block_length(std::uint16_t value) noexcept
     	{
-    		blockLength_ = value;
+    		block_length_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	std::uint16_t templateId_{};
+    	std::uint16_t template_id_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t templateId_size() noexcept
+    	static constexpr std::size_t template_id_size() noexcept
     	{
     		return sizeof(std::uint16_t);
     	}
     
-    	static constexpr std::size_t templateId_offset() noexcept
+    	static constexpr std::size_t template_id_offset() noexcept
     	{ 
-    		return blockLength_offset() + blockLength_size(); 
+    		return block_length_offset() + block_length_size(); 
     	}
     	
-    	static constexpr const char* templateId_name() noexcept
+    	static constexpr const char* template_id_name() noexcept
     	{ 
     		return "templateId"; 
     	}
     	
-    	static constexpr std::uint16_t templateId_min_value() noexcept
+    	static constexpr std::uint16_t template_id_min_value() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr std::uint16_t templateId_max_value() noexcept
+    	static constexpr std::uint16_t template_id_max_value() noexcept
     	{
     		return 65534;
     	}
     	
-    	static constexpr std::uint16_t templateId_null_value() noexcept
+    	static constexpr std::uint16_t template_id_null_value() noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
@@ -136,50 +136,50 @@ class MessageHeader
     	#endif
     	}
     
-    	constexpr std::uint16_t get_templateId() const noexcept
+    	constexpr std::uint16_t template_id() const noexcept
     	{ 
-    		return templateId_;
+    		return template_id_;
     	}
     	
-    	constexpr MessageHeader& set_templateId(std::uint16_t value) noexcept
+    	constexpr MessageHeader& set_template_id(std::uint16_t value) noexcept
     	{
-    		templateId_ = value;
+    		template_id_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	std::uint16_t schemaId_{};
+    	std::uint16_t schema_id_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t schemaId_size() noexcept
+    	static constexpr std::size_t schema_id_size() noexcept
     	{
     		return sizeof(std::uint16_t);
     	}
     
-    	static constexpr std::size_t schemaId_offset() noexcept
+    	static constexpr std::size_t schema_id_offset() noexcept
     	{ 
-    		return templateId_offset() + templateId_size(); 
+    		return template_id_offset() + template_id_size(); 
     	}
     	
-    	static constexpr const char* schemaId_name() noexcept
+    	static constexpr const char* schema_id_name() noexcept
     	{ 
     		return "schemaId"; 
     	}
     	
-    	static constexpr std::uint16_t schemaId_min_value() noexcept
+    	static constexpr std::uint16_t schema_id_min_value() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr std::uint16_t schemaId_max_value() noexcept
+    	static constexpr std::uint16_t schema_id_max_value() noexcept
     	{
     		return 65534;
     	}
     	
-    	static constexpr std::uint16_t schemaId_null_value() noexcept
+    	static constexpr std::uint16_t schema_id_null_value() noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
@@ -191,14 +191,14 @@ class MessageHeader
     	#endif
     	}
     
-    	constexpr std::uint16_t get_schemaId() const noexcept
+    	constexpr std::uint16_t schema_id() const noexcept
     	{ 
-    		return schemaId_;
+    		return schema_id_;
     	}
     	
-    	constexpr MessageHeader& set_schemaId(std::uint16_t value) noexcept
+    	constexpr MessageHeader& set_schema_id(std::uint16_t value) noexcept
     	{
-    		schemaId_ = value;
+    		schema_id_ = value;
     		return *this;
     	}
     
@@ -216,7 +216,7 @@ class MessageHeader
     
     	static constexpr std::size_t version_offset() noexcept
     	{ 
-    		return schemaId_offset() + schemaId_size(); 
+    		return schema_id_offset() + schema_id_size(); 
     	}
     	
     	static constexpr const char* version_name() noexcept
@@ -246,7 +246,7 @@ class MessageHeader
     	#endif
     	}
     
-    	constexpr std::uint16_t get_version() const noexcept
+    	constexpr std::uint16_t version() const noexcept
     	{ 
     		return version_;
     	}
@@ -262,8 +262,8 @@ class MessageHeader
     	MessageHeader() = default;
     
     	/*constexpr */
-    	MessageHeader(std::uint16_t blockLength, std::uint16_t templateId, std::uint16_t schemaId, std::uint16_t version) noexcept
-    		:blockLength_(blockLength), templateId_(templateId), schemaId_(schemaId), version_(version)
+    	MessageHeader(std::uint16_t block_length, std::uint16_t template_id, std::uint16_t schema_id, std::uint16_t version) noexcept
+    		:block_length_(block_length), template_id_(template_id), schema_id_(schema_id), version_(version)
     	{
     		
     	}
@@ -273,10 +273,10 @@ class MessageHeader
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MessageHeader &msg)
 {
-	os << msg.blockLength_name() << ": " << msg.get_blockLength() << " ";
-	os << msg.templateId_name() << ": " << msg.get_templateId() << " ";
-	os << msg.schemaId_name() << ": " << msg.get_schemaId() << " ";
-	os << msg.version_name() << ": " << msg.get_version() << " ";
+	os << msg.block_length_name() << ": " << msg.block_length() << " ";
+	os << msg.template_id_name() << ": " << msg.template_id() << " ";
+	os << msg.schema_id_name() << ": " << msg.schema_id() << " ";
+	os << msg.version_name() << ": " << msg.version() << " ";
 	return os;
 }
 }

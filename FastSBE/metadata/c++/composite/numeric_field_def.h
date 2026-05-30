@@ -17,7 +17,7 @@ public:
 	
 	static constexpr const char* S_FIELD_NAME_name() noexcept
 	{ 
-		return "S_FIELD_NAME"; 
+		return "S_FIELD_SCHEMA"; 
 	}
 	
 	static constexpr S_FIELD_TYPE S_FIELD_NAME_min_value() noexcept
@@ -42,7 +42,7 @@ public:
 	#endif
 	}
 
-	constexpr S_FIELD_TYPE get_S_FIELD_NAME() const noexcept
+	constexpr S_FIELD_TYPE S_FIELD_NAME() const noexcept
 	{ 
 		return S_FIELD_NAME_;
 	}

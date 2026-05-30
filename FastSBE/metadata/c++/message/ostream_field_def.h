@@ -1,1 +1,1 @@
-	os << msg.S_FIELD_NAME_name() << ": " << msg.get_S_FIELD_NAME() << " ";
+	os << msg.S_FIELD_NAME_name() << ": " << msg.S_FIELD_NAME() << " ";

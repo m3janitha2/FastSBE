@@ -73,45 +73,45 @@ namespace sbetool
     {
         auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
 
-        msg.set_ClOrdId(values.ClOrdId)
-            .set_Account(values.Account)
-            .set_Symbol(values.Symbol)
-            .set_Side(values.Side);
-        msg.get_TransactTime().set_time(values.TransactTime.time);
-        msg.get_OrderQty().set_mantissa(values.OrderQty.mantissa);
-        msg.set_OrdType(values.OrdType);
-        msg.get_Price().set_mantissa(values.Price.mantissa);
-        msg.get_StopPx().set_mantissa(values.StopPx.mantissa);
+        msg.set_cl_ord_id(values.ClOrdId)
+            .set_account(values.Account)
+            .set_symbol(values.Symbol)
+            .set_side(values.Side);
+        msg.transact_time().set_time(values.TransactTime.time);
+        msg.order_qty().set_mantissa(values.OrderQty.mantissa);
+        msg.set_ord_type(values.OrdType);
+        msg.price().set_mantissa(values.Price.mantissa);
+        msg.stop_px().set_mantissa(values.StopPx.mantissa);
 
-        auto &PartiesGrp = msg.append_PartiesGrp(values.PartiesGrps.size());
+        auto &PartiesGrp = msg.AppendPartiesGrp(values.PartiesGrps.size());
         for (auto i = 0u; i < values.PartiesGrps.size(); i++)
         {
             auto &party = values.PartiesGrps[i];
             PartiesGrp.get(i)
-                .set_PartyID(party.PartyID)
-                .set_PartyIDSource(party.PartyIDSource)
-                .set_PartyRole(party.PartyRole);
+                .set_party_id(party.PartyID)
+                .set_party_id_source(party.PartyIDSource)
+                .set_party_role(party.PartyRole);
         }
 
-        auto &AllocsGrp = msg.append_AllocsGrp(values.AllocsGrps.size());
+        auto &AllocsGrp = msg.AppendAllocsGrp(values.AllocsGrps.size());
         for (auto i = 0u; i < values.AllocsGrps.size(); i++)
         {
             auto &alloc = values.AllocsGrps[i];
             AllocsGrp.get(i)
-                .set_AllocAccount(alloc.AllocAccount)
-                .get_AllocShares()
+                .set_alloc_account(alloc.AllocAccount)
+                .alloc_shares()
                 .set_mantissa(alloc.AllocShares.mantissa);
         }
 
-        auto &TradingSessionsGrp = msg.append_TradingSessionsGrp(values.TradingSessionsGrps.size());
+        auto &TradingSessionsGrp = msg.AppendTradingSessionsGrp(values.TradingSessionsGrps.size());
         for (auto i = 0u; i < values.TradingSessionsGrps.size(); i++)
         {
             auto &tradingSession = values.TradingSessionsGrps[i];
             TradingSessionsGrp.get(i)
-                .set_TradingSessionID(tradingSession.TradingSessionID);
+                .set_trading_session_id(tradingSession.TradingSessionID);
         }
-        msg.append_Text(values.Text.c_str(), values.Text.length());
-        msg.append_ClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
+        msg.AppendText(values.Text.c_str(), values.Text.length());
+        msg.AppendClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
 
         print_message(msg);
     }
@@ -120,63 +120,63 @@ namespace sbetool
     {
         auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
 
-        EXPECT_EQ(msg.get_ClOrdId(), values.ClOrdId);
-        EXPECT_EQ(msg.get_Account(), values.Account);
-        EXPECT_EQ(msg.get_Symbol(), values.Symbol);
-        /*EXPECT_EQ(msg.get_Side(), values.Side);*/
+        EXPECT_EQ(msg.cl_ord_id(), values.ClOrdId);
+        EXPECT_EQ(msg.account(), values.Account);
+        EXPECT_EQ(msg.symbol(), values.Symbol);
+        /*EXPECT_EQ(msg.side(), values.Side);*/
 
-        auto &TransactTime = msg.get_TransactTime();
-        EXPECT_EQ(TransactTime.get_time(), values.TransactTime.time);
-        /*EXPECT_EQ(TransactTime.get_unit(), TimeUnit::Value::nanosecond);*/
+        auto &TransactTime = msg.transact_time();
+        EXPECT_EQ(TransactTime.time(), values.TransactTime.time);
+        /*EXPECT_EQ(TransactTime.unit(), TimeUnit::Value::nanosecond);*/
 
-        auto &OrderQty = msg.get_OrderQty();
-        EXPECT_EQ(OrderQty.get_mantissa(), values.OrderQty.mantissa);
-        EXPECT_EQ(OrderQty.get_exponent(), static_cast<std::int8_t>(0));
+        auto &OrderQty = msg.order_qty();
+        EXPECT_EQ(OrderQty.mantissa(), values.OrderQty.mantissa);
+        EXPECT_EQ(OrderQty.exponent(), static_cast<std::int8_t>(0));
 
-        auto &Price = msg.get_Price();
-        EXPECT_EQ(Price.get_mantissa(), values.Price.mantissa);
-        EXPECT_EQ(Price.get_exponent(), static_cast<std::int8_t>(-3));
+        auto &Price = msg.price();
+        EXPECT_EQ(Price.mantissa(), values.Price.mantissa);
+        EXPECT_EQ(Price.exponent(), static_cast<std::int8_t>(-3));
 
-        auto &StopPx = msg.get_StopPx();
-        EXPECT_EQ(StopPx.get_mantissa(), values.StopPx.mantissa);
-        EXPECT_EQ(StopPx.get_exponent(), static_cast<std::int8_t>(-3));
+        auto &StopPx = msg.stop_px();
+        EXPECT_EQ(StopPx.mantissa(), values.StopPx.mantissa);
+        EXPECT_EQ(StopPx.exponent(), static_cast<std::int8_t>(-3));
 
-        auto &PartiesGrp = msg.get_PartiesGrp();
+        auto &PartiesGrp = msg.parties_grp();
         for (auto i = 0u; i < values.PartiesGrps.size(); i++)
         {
             auto &party = PartiesGrp.get(i);
             auto &party_t = values.PartiesGrps[i];
-            EXPECT_EQ(party.get_PartyID(), party_t.PartyID);
-            /*EXPECT_EQ(party.get_PartyIDSource(), party_t.PartyIDSource);*/
-            /*EXPECT_EQ(party.get_PartyRole(), party_t.PartyRole);*/
+            EXPECT_EQ(party.party_id(), party_t.PartyID);
+            /*EXPECT_EQ(party.party_id_source(), party_t.PartyIDSource);*/
+            /*EXPECT_EQ(party.party_role(), party_t.PartyRole);*/
         }
 
-        auto &AllocsGrp = msg.get_AllocsGrp();
+        auto &AllocsGrp = msg.allocs_grp();
         for (auto i = 0u; i < values.AllocsGrps.size(); i++)
         {
             auto &alloc = AllocsGrp.get(i);
             auto &alloc_t = values.AllocsGrps[i];
 
-            EXPECT_EQ(alloc.get_AllocAccount(), alloc_t.AllocAccount);
+            EXPECT_EQ(alloc.alloc_account(), alloc_t.AllocAccount);
 
-            auto &AllocShares = alloc.get_AllocShares();
-            EXPECT_EQ(AllocShares.get_mantissa(), alloc_t.AllocShares.mantissa);
-            EXPECT_EQ(AllocShares.get_exponent(), static_cast<std::int8_t>(0));
+            auto &AllocShares = alloc.alloc_shares();
+            EXPECT_EQ(AllocShares.mantissa(), alloc_t.AllocShares.mantissa);
+            EXPECT_EQ(AllocShares.exponent(), static_cast<std::int8_t>(0));
         }
 
-        auto &TradingSessionsGrp = msg.get_TradingSessionsGrp();
+        auto &TradingSessionsGrp = msg.trading_sessions_grp();
         for (auto i = 0u; i < values.TradingSessionsGrps.size(); i++)
         {
             auto &tradingSession = TradingSessionsGrp.get(i);
             auto &tradingSession_t = values.TradingSessionsGrps[i];
 
-            EXPECT_EQ(tradingSession.get_TradingSessionID(), tradingSession_t.TradingSessionID);
+            EXPECT_EQ(tradingSession.trading_session_id(), tradingSession_t.TradingSessionID);
         }
 
-        auto Text = msg.get_Text().get_str();
+        auto Text = msg.text().get_str();
         EXPECT_EQ(std::string(Text.data(), Text.length()), values.Text);
 
-        auto ClearingFirm = msg.get_ClearingFirm().get_str();
+        auto ClearingFirm = msg.clearing_firm().get_str();
         EXPECT_EQ(std::string(ClearingFirm.data(), ClearingFirm.length()), values.ClearingFirm);
 
         print_message(msg);

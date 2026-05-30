@@ -81,7 +81,7 @@ class QtyEncoding
     	#endif
     	}
     
-    	constexpr std::int32_t get_mantissa() const noexcept
+    	constexpr std::int32_t mantissa() const noexcept
     	{ 
     		return mantissa_;
     	}
@@ -109,12 +109,12 @@ class QtyEncoding
     		return "exponent"; 
     	}
     
-    	constexpr std::int8_t get_exponent() noexcept
+    	constexpr std::int8_t exponent() noexcept
     	{ 
     		return 0;
     	}
     
-    	constexpr std::int8_t get_exponent() const noexcept
+    	constexpr std::int8_t exponent() const noexcept
     	{ 
     		return 0;
     	}
@@ -135,8 +135,8 @@ class QtyEncoding
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::QtyEncoding &msg)
 {
-	os << msg.mantissa_name() << ": " << msg.get_mantissa() << " ";
-	os << msg.exponent_name() << ": " << msg.get_exponent() << " ";
+	os << msg.mantissa_name() << ": " << msg.mantissa() << " ";
+	os << msg.exponent_name() << ": " << msg.exponent() << " ";
 	return os;
 }
 }

@@ -17,15 +17,15 @@ public:
 	
 	static constexpr const char* S_FIELD_NAME_name() noexcept
 	{ 
-		return "S_FIELD_NAME"; 
+		return "S_FIELD_SCHEMA"; 
 	}
 
-	constexpr const S_FIELD_TYPE& get_S_FIELD_NAME() const noexcept
+	constexpr const S_FIELD_TYPE& S_FIELD_NAME() const noexcept
 	{ 
 		return S_FIELD_NAME_;
 	}
 
-	constexpr S_FIELD_TYPE& get_S_FIELD_NAME() noexcept
+	constexpr S_FIELD_TYPE& S_FIELD_NAME() noexcept
 	{
 		return S_FIELD_NAME_;
 	}

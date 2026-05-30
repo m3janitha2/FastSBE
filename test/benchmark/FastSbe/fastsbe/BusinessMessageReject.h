@@ -42,78 +42,78 @@ class BusinessMessageReject
     
     private:
     	#pragma pack(push, 1)
-    	char BusinesRejectRefId_[8]{};
+    	char busines_reject_ref_id_[8]{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t BusinesRejectRefId_size() noexcept
+    	static constexpr std::size_t busines_reject_ref_id_size() noexcept
     	{
     		return 8;
     	}
     
-    	static constexpr std::size_t BusinesRejectRefId_offset() noexcept
+    	static constexpr std::size_t busines_reject_ref_id_offset() noexcept
     	{
     		return 0;
     	}
     
-    	static constexpr std::size_t BusinesRejectRefId_id() noexcept
+    	static constexpr std::size_t busines_reject_ref_id_id() noexcept
     	{
     		return 379;
     	}
     
-    	static constexpr const char *BusinesRejectRefId_name() noexcept
+    	static constexpr const char *busines_reject_ref_id_name() noexcept
     	{
     		return "BusinesRejectRefId";
     	}
     
-    	constexpr char *get_BusinesRejectRefId() noexcept
+    	constexpr char *busines_reject_ref_id() noexcept
     	{
-    		return BusinesRejectRefId_;
+    		return busines_reject_ref_id_;
     	}
     
-    	constexpr const char *get_BusinesRejectRefId() const noexcept
+    	constexpr const char *busines_reject_ref_id() const noexcept
     	{
-    		return BusinesRejectRefId_;
+    		return busines_reject_ref_id_;
     	}
     
-    	constexpr std::string_view get_BusinesRejectRefId_view() noexcept
+    	constexpr std::string_view busines_reject_ref_id_view() noexcept
     	{
-    		return std::string_view(BusinesRejectRefId_, 8);
+    		return std::string_view(busines_reject_ref_id_, 8);
     	}
     
-    	constexpr const std::string_view get_BusinesRejectRefId_view() const noexcept
+    	constexpr const std::string_view busines_reject_ref_id_view() const noexcept
     	{
-    		return std::string_view(BusinesRejectRefId_, 8);
+    		return std::string_view(busines_reject_ref_id_, 8);
     	}
     
-    	const std::string get_BusinesRejectRefId_string() const noexcept
+    	const std::string busines_reject_ref_id_string() const noexcept
     	{
     		auto length = 0ULL;
-    		for (; length < 8 && *(BusinesRejectRefId_ + length) != '\0'; ++length);
-    		return std::string(BusinesRejectRefId_, length);
+    		for (; length < 8 && *(busines_reject_ref_id_ + length) != '\0'; ++length);
+    		return std::string(busines_reject_ref_id_, length);
     	}
     
-    	constexpr auto &set_BusinesRejectRefId(const char *value) noexcept
+    	constexpr auto &set_busines_reject_ref_id(const char *value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		std::memcpy(BusinesRejectRefId_, value, BusinesRejectRefId_size());
+    		std::memcpy(busines_reject_ref_id_, value, busines_reject_ref_id_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
     	#endif
     	}
     
-    	auto &set_BusinesRejectRefId(std::string_view value) noexcept
+    	auto &set_busines_reject_ref_id(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif
-    		// auto size = std::min(BusinesRejectRefId_size(), value.size());
-    		std::memcpy(BusinesRejectRefId_, value.data(), BusinesRejectRefId_size());
+    		// auto size = std::min(busines_reject_ref_id_size(), value.size());
+    		std::memcpy(busines_reject_ref_id_, value.data(), busines_reject_ref_id_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
@@ -122,43 +122,43 @@ class BusinessMessageReject
     
     private:
     	#pragma pack(push, 1)
-    	BusinessRejectReasonEnum::Value BusinessRejectReason_{};
+    	BusinessRejectReasonEnum::Value business_reject_reason_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t BusinessRejectReason_size() noexcept
+    	static constexpr std::size_t business_reject_reason_size() noexcept
     	{
     		return sizeof(BusinessRejectReasonEnum);
     	}
     
-    	static constexpr std::size_t BusinessRejectReason_offset() noexcept
+    	static constexpr std::size_t business_reject_reason_offset() noexcept
     	{ 
-    		return BusinesRejectRefId_offset() + BusinesRejectRefId_size(); 
+    		return busines_reject_ref_id_offset() + busines_reject_ref_id_size(); 
     	}
     
-    	static constexpr std::size_t BusinessRejectReason_id() noexcept
+    	static constexpr std::size_t business_reject_reason_id() noexcept
     	{ 
     		return 380; 
     	}
     
-    	static constexpr const char* BusinessRejectReason_name() noexcept
+    	static constexpr const char* business_reject_reason_name() noexcept
     	{ 
     		return "BusinessRejectReason"; 
     	}
     
-    	static constexpr BusinessRejectReasonEnum::Value BusinessRejectReason_null_value() noexcept
+    	static constexpr BusinessRejectReasonEnum::Value business_reject_reason_null_value() noexcept
     	{
     		return BusinessRejectReasonEnum::Value::nullValue;
     	}
     
-    	constexpr BusinessRejectReasonEnum::Value get_BusinessRejectReason() const noexcept
+    	constexpr BusinessRejectReasonEnum::Value business_reject_reason() const noexcept
     	{ 
-    		return BusinessRejectReason_;
+    		return business_reject_reason_;
     	}
     	
-    	constexpr auto& set_BusinessRejectReason(BusinessRejectReasonEnum::Value value) noexcept
+    	constexpr auto& set_business_reject_reason(BusinessRejectReasonEnum::Value value) noexcept
     	{
-    		BusinessRejectReason_ = value;
+    		business_reject_reason_ = value;
     		return *this;
     	}
     
@@ -195,13 +195,13 @@ class BusinessMessageReject
     	std::basic_string_view<char> get_str() noexcept
     	{
     		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(DATA);
-    		return {reinterpret_cast<char*>(buffer), this->header_.get_length()};
+    		return {reinterpret_cast<char*>(buffer), this->header_.length()};
     	}
     
     	const std::basic_string_view<char> get_str() const noexcept
     	{
     		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(DATA);
-    		return {reinterpret_cast<const char*>(buffer), this->header_.get_length()};
+    		return {reinterpret_cast<const char*>(buffer), this->header_.length()};
     	}
     
     	char* get() noexcept
@@ -216,69 +216,69 @@ class BusinessMessageReject
     		return reinterpret_cast<const char*>(buffer);
     	}
     
-    	const auto get_length() const noexcept
+    	const auto length() const noexcept
     	{
-    		return header_.get_length();
+    		return header_.length();
     	}
     
     };
     
     private:
     	#pragma pack(push, 1)
-    	Text Text_{};
+    	Text text_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t Text_size() noexcept
+    	static constexpr std::size_t text_size() noexcept
     	{
     		return 0;
     	}
     
-    	static constexpr std::size_t Text_id() noexcept
+    	static constexpr std::size_t text_id() noexcept
     	{ 
     		return 58; 
     	}
     	
-    	static constexpr const char* Text_name() noexcept
+    	static constexpr const char* text_name() noexcept
     	{ 
     		return "Text"; 
     	}
     
-    	std::size_t Text_offset() const noexcept
+    	std::size_t text_offset() const noexcept
     	{
     		return 0;
     	}
     
-    	std::size_t Text_data_length() const noexcept
+    	std::size_t text_data_length() const noexcept
     	{
-    		auto& data = get_Text();
-    		return data.header_.get_length();
+    		auto& data = text();
+    		return data.header_.length();
     	}
     	
-    	const Text& get_Text() const noexcept
+    	const Text& text() const noexcept
     	{ 
-    		const auto* buf = buffer() + Text_offset();
+    		const auto* buf = buffer() + text_offset();
     		return *reinterpret_cast<const Text*>(buf);
     	}
     	
-    	Text& get_Text() noexcept
+    	Text& text() noexcept
     	{
-    		auto* buf = buffer() + Text_offset();
+    		auto* buf = buffer() + text_offset();
     		return *reinterpret_cast<Text*>(buf);
     	}
     
-    	Text& append_Text(const char* value, std::uint16_t length) noexcept
+    	Text& AppendText(const char* value, std::uint16_t length) noexcept
     	{
-    		auto* buf = buffer() + Text_offset();
+    		auto* buf = buffer() + text_offset();
     		auto& data = *reinterpret_cast<Text*>(buf);
     		data.header_.set_length(length);
     		std::memcpy(data.get(), value, length);
     		return data;
     	}
     
-    	Text& append_Text(std::basic_string_view<char> value) noexcept
+    	Text& AppendText(std::basic_string_view<char> value) noexcept
     	{
-    		auto* buf = buffer() + Text_offset();
+    		auto* buf = buffer() + text_offset();
     		auto& data = *reinterpret_cast<Text*>(buf);
     		data.header_.set_length(value.size());
     		std::memcpy(data.get(), value.data(), value.size());
@@ -290,9 +290,9 @@ class BusinessMessageReject
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::BusinessMessageReject &msg)
 {
-	os << msg.BusinesRejectRefId_name() << ": " << msg.get_BusinesRejectRefId() << " ";
-	os << msg.BusinessRejectReason_name() << ": " << msg.get_BusinessRejectReason() << " ";
-	os << msg.Text_name() << ": " << msg.get_Text().get_str() << " ";
+	os << msg.busines_reject_ref_id_name() << ": " << msg.busines_reject_ref_id() << " ";
+	os << msg.business_reject_reason_name() << ": " << msg.business_reject_reason() << " ";
+	os << msg.text_name() << ": " << msg.text().get_str() << " ";
 	return os;
 }
 }

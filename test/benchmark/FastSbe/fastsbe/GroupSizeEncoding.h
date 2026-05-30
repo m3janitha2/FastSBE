@@ -40,36 +40,36 @@ class GroupSizeEncoding
     
     private:
     	#pragma pack(push, 1)
-    	std::uint16_t blockLength_{};
+    	std::uint16_t block_length_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t blockLength_size() noexcept
+    	static constexpr std::size_t block_length_size() noexcept
     	{
     		return sizeof(std::uint16_t);
     	}
     
-    	static constexpr std::size_t blockLength_offset() noexcept
+    	static constexpr std::size_t block_length_offset() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr const char* blockLength_name() noexcept
+    	static constexpr const char* block_length_name() noexcept
     	{ 
     		return "blockLength"; 
     	}
     	
-    	static constexpr std::uint16_t blockLength_min_value() noexcept
+    	static constexpr std::uint16_t block_length_min_value() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr std::uint16_t blockLength_max_value() noexcept
+    	static constexpr std::uint16_t block_length_max_value() noexcept
     	{
     		return 65534;
     	}
     	
-    	static constexpr std::uint16_t blockLength_null_value() noexcept
+    	static constexpr std::uint16_t block_length_null_value() noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
@@ -81,50 +81,50 @@ class GroupSizeEncoding
     	#endif
     	}
     
-    	constexpr std::uint16_t get_blockLength() const noexcept
+    	constexpr std::uint16_t block_length() const noexcept
     	{ 
-    		return blockLength_;
+    		return block_length_;
     	}
     	
-    	constexpr GroupSizeEncoding& set_blockLength(std::uint16_t value) noexcept
+    	constexpr GroupSizeEncoding& set_block_length(std::uint16_t value) noexcept
     	{
-    		blockLength_ = value;
+    		block_length_ = value;
     		return *this;
     	}
     
     
     private:
     	#pragma pack(push, 1)
-    	std::uint16_t numInGroup_{};
+    	std::uint16_t num_in_group_{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t numInGroup_size() noexcept
+    	static constexpr std::size_t num_in_group_size() noexcept
     	{
     		return sizeof(std::uint16_t);
     	}
     
-    	static constexpr std::size_t numInGroup_offset() noexcept
+    	static constexpr std::size_t num_in_group_offset() noexcept
     	{ 
-    		return blockLength_offset() + blockLength_size(); 
+    		return block_length_offset() + block_length_size(); 
     	}
     	
-    	static constexpr const char* numInGroup_name() noexcept
+    	static constexpr const char* num_in_group_name() noexcept
     	{ 
     		return "numInGroup"; 
     	}
     	
-    	static constexpr std::uint16_t numInGroup_min_value() noexcept
+    	static constexpr std::uint16_t num_in_group_min_value() noexcept
     	{ 
     		return 0; 
     	}
     	
-    	static constexpr std::uint16_t numInGroup_max_value() noexcept
+    	static constexpr std::uint16_t num_in_group_max_value() noexcept
     	{
     		return 65534;
     	}
     	
-    	static constexpr std::uint16_t numInGroup_null_value() noexcept
+    	static constexpr std::uint16_t num_in_group_null_value() noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
@@ -136,14 +136,14 @@ class GroupSizeEncoding
     	#endif
     	}
     
-    	constexpr std::uint16_t get_numInGroup() const noexcept
+    	constexpr std::uint16_t num_in_group() const noexcept
     	{ 
-    		return numInGroup_;
+    		return num_in_group_;
     	}
     	
-    	constexpr GroupSizeEncoding& set_numInGroup(std::uint16_t value) noexcept
+    	constexpr GroupSizeEncoding& set_num_in_group(std::uint16_t value) noexcept
     	{
-    		numInGroup_ = value;
+    		num_in_group_ = value;
     		return *this;
     	}
     
@@ -152,8 +152,8 @@ class GroupSizeEncoding
     	GroupSizeEncoding() = default;
     
     	/*constexpr */
-    	GroupSizeEncoding(std::uint16_t blockLength, std::uint16_t numInGroup) noexcept
-    		:blockLength_(blockLength), numInGroup_(numInGroup)
+    	GroupSizeEncoding(std::uint16_t block_length, std::uint16_t num_in_group) noexcept
+    		:block_length_(block_length), num_in_group_(num_in_group)
     	{
     		
     	}
@@ -163,8 +163,8 @@ class GroupSizeEncoding
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::GroupSizeEncoding &msg)
 {
-	os << msg.blockLength_name() << ": " << msg.get_blockLength() << " ";
-	os << msg.numInGroup_name() << ": " << msg.get_numInGroup() << " ";
+	os << msg.block_length_name() << ": " << msg.block_length() << " ";
+	os << msg.num_in_group_name() << ": " << msg.num_in_group() << " ";
 	return os;
 }
 }

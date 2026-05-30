@@ -81,7 +81,7 @@ class DATA
     	#endif
     	}
     
-    	constexpr std::uint16_t get_length() const noexcept
+    	constexpr std::uint16_t length() const noexcept
     	{ 
     		return length_;
     	}
@@ -95,75 +95,75 @@ class DATA
     
     private:
     	#pragma pack(push, 1)
-    	char varData_[0]{};
+    	char var_data_[0]{};
     	#pragma pack(pop)
     
     public:
-    	static constexpr std::size_t varData_size() noexcept
+    	static constexpr std::size_t var_data_size() noexcept
     	{
     		return 0;
     	}
     
-    	static constexpr std::size_t varData_offset() noexcept
+    	static constexpr std::size_t var_data_offset() noexcept
     	{ 
     		return length_offset() + length_size(); 
     	}
     	
-    	static constexpr const char* varData_name() noexcept
+    	static constexpr const char* var_data_name() noexcept
     	{ 
     		return "varData"; 
     	}
     
-    	constexpr char* get_varData() noexcept
+    	constexpr char* var_data() noexcept
     	{ 
-    		return varData_;
+    		return var_data_;
     	}
     
-    	constexpr const char* get_varData() const noexcept
+    	constexpr const char* var_data() const noexcept
     	{ 
-    		return varData_;
+    		return var_data_;
     	}
     
-    	constexpr std::string_view get_varData_view() noexcept
+    	constexpr std::string_view var_data_view() noexcept
     	{ 
-    		return std::string_view(varData_, 0);
+    		return std::string_view(var_data_, 0);
     	}
     
-    	constexpr const std::string_view get_varData_view() const noexcept
+    	constexpr const std::string_view var_data_view() const noexcept
     	{ 
-    		return std::string_view(varData_, 0);
+    		return std::string_view(var_data_, 0);
     	}
     
-    	const std::string get_varData_string() const noexcept
+    	const std::string var_data_string() const noexcept
     	{
     		auto length = 0ULL;
-    		for (; length < 0 && *(varData_ + length) != '\0'; ++length);
-    		return std::string(varData_, length);
+    		for (; length < 0 && *(var_data_ + length) != '\0'; ++length);
+    		return std::string(var_data_, length);
     	}	
     
-    	auto& set_varData(const char* value) noexcept
+    	auto& set_var_data(const char* value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif		
     		//auto length = strlen(value);
-    		std::memcpy(varData_, value, varData_size());
+    		std::memcpy(var_data_, value, var_data_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
     	#endif			
     	}
     
-    	auto& set_varData(std::string_view value) noexcept
+    	auto& set_var_data(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
     	#endif		
-    		//constexpr auto size = std::min(varData_size(), value.size());
-    		//auto size = std::min(varData_size(), value.size());
-    		std::memcpy(varData_, value.data(), varData_size());
+    		//constexpr auto size = std::min(var_data_size(), value.size());
+    		//auto size = std::min(var_data_size(), value.size());
+    		std::memcpy(var_data_, value.data(), var_data_size());
     		return *this;
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic pop
@@ -175,10 +175,10 @@ class DATA
     	DATA() = default;
     
     	/*constexpr */
-    	DATA(std::uint16_t length, std::string_view varData) noexcept
+    	DATA(std::uint16_t length, std::string_view var_data) noexcept
     		:length_(length)
     	{
-    		varData.copy(varData_,varData_size());
+    		var_data.copy(var_data_,var_data_size());
     	}
     
 };
@@ -186,8 +186,8 @@ class DATA
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::DATA &msg)
 {
-	os << msg.length_name() << ": " << msg.get_length() << " ";
-	os << msg.varData_name() << ": " << msg.get_varData() << " ";
+	os << msg.length_name() << ": " << msg.length() << " ";
+	os << msg.var_data_name() << ": " << msg.var_data() << " ";
 	return os;
 }
 }

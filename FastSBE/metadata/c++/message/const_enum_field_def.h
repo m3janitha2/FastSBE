@@ -17,10 +17,10 @@ public:
 	
 	static constexpr const char* S_FIELD_NAME_name() noexcept
 	{ 
-		return "S_FIELD_NAME"; 
+		return "S_FIELD_SCHEMA"; 
 	}
 
-	constexpr S_FIELD_TYPE::Value get_S_FIELD_NAME() const noexcept
+	constexpr S_FIELD_TYPE::Value S_FIELD_NAME() const noexcept
 	{ 
 		return S_FIELD_TYPE::Value::S_CONST_FIELD_VALUE;
 	}
