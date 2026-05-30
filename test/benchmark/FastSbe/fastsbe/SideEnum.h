@@ -8,15 +8,13 @@
 namespace fastsbe
 {
 
-class ordTypeEnum
+class SideEnum
 {
     public:
     enum class Value : char
     {
-        Market = '1',
-        Limit = '2',
-        Stop = '3',
-        StopLimit = '4',
+        Buy = '1',
+        Sell = '2',
         nullValue = 0,
     };
     
@@ -25,14 +23,10 @@ class ordTypeEnum
     {
         switch (value)
         {
-        case Value::Market:
-            return "Market";
-        case Value::Limit:
-            return "Limit";
-        case Value::Stop:
-            return "Stop";
-        case Value::StopLimit:
-            return "StopLimit";
+        case Value::Buy:
+            return "Buy";
+        case Value::Sell:
+            return "Sell";
         case Value::nullValue:
             return "nullValue";
         default:
@@ -42,9 +36,9 @@ class ordTypeEnum
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ordTypeEnum::Value val)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SideEnum::Value val)
 {
-    os << fastsbe::ordTypeEnum::to_string(val);
+    os << fastsbe::SideEnum::to_string(val);
     return os;
 }
 

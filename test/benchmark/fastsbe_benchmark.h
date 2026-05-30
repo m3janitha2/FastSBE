@@ -23,10 +23,10 @@ namespace fastsbe
         msg.set_ClOrdId(values.ClOrdId.c_str())
             .set_Account(values.Account.c_str())
             .set_Symbol(values.Symbol.c_str())
-            .set_Side(static_cast<sideEnum::Value>(values.Side))
+            .set_Side(static_cast<SideEnum::Value>(values.Side))
             .set_TransactTime(values.TransactTime);
         msg.get_OrderQty().set_mantissa(values.OrderQty.mantissa);
-        msg.set_OrdType(static_cast<ordTypeEnum::Value>(values.OrdType));
+        msg.set_OrdType(static_cast<OrdTypeEnum::Value>(values.OrdType));
         msg.get_Price().set_mantissa(values.Price.mantissa);
         msg.get_StopPx().set_mantissa(values.StopPx.mantissa);
 

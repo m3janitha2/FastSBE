@@ -24,7 +24,7 @@ namespace sbetool
         std::string ClOrdId{random_length_string(7).c_str()};
         std::string Account{random_length_string(7).c_str()};
         std::string Symbol{random_length_string(7).c_str()};
-        sideEnum::Value Side{random_enum<sideEnum::Value>('1', '2')};
+        SideEnum::Value Side{random_enum<SideEnum::Value>('1', '2')};
         struct timestampEncoding
         {
             std::uint64_t time{random_number<std::uint64_t>()};
@@ -35,7 +35,7 @@ namespace sbetool
             std::int32_t mantissa{random_number<std::int32_t>()};
         };
         qtyEncoding OrderQty{};
-        ordTypeEnum::Value OrdType{random_enum<ordTypeEnum::Value>('1', '4')};
+        OrdTypeEnum::Value OrdType{random_enum<OrdTypeEnum::Value>('1', '4')};
         struct decimalEncoding
         {
             std::int64_t mantissa{random_number<std::int64_t>()};

@@ -8,13 +8,13 @@
 namespace fastsbe
 {
 
-class optionalDecimalEncoding
+class OptionalDecimalEncoding
 {
     
     public:
     	static constexpr const char* name() noexcept
     	{ 
-    		return "optionalDecimalEncoding"; 
+    		return "OptionalDecimalEncoding"; 
     	}
     
     	static constexpr std::size_t template_id() noexcept
@@ -86,7 +86,7 @@ class optionalDecimalEncoding
     		return mantissa_;
     	}
     	
-    	constexpr optionalDecimalEncoding& set_mantissa(std::int64_t value) noexcept
+    	constexpr OptionalDecimalEncoding& set_mantissa(std::int64_t value) noexcept
     	{
     		mantissa_ = value;
     		return *this;
@@ -121,10 +121,10 @@ class optionalDecimalEncoding
     
     
     public:
-    	optionalDecimalEncoding() = default;
+    	OptionalDecimalEncoding() = default;
     
     	/*constexpr */
-    	optionalDecimalEncoding(std::int64_t mantissa) noexcept
+    	OptionalDecimalEncoding(std::int64_t mantissa) noexcept
     		:mantissa_(mantissa)
     	{
     		
@@ -133,7 +133,7 @@ class optionalDecimalEncoding
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::optionalDecimalEncoding &msg)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::OptionalDecimalEncoding &msg)
 {
 	os << msg.mantissa_name() << ": " << msg.get_mantissa() << " ";
 	os << msg.exponent_name() << ": " << msg.get_exponent() << " ";

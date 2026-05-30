@@ -7,7 +7,7 @@ private:
 public:
 	static constexpr std::size_t S_GROUP_NAME_size() noexcept
 	{
-		return sizeof(S_GROUP_NAME::data);
+		return sizeof(S_GROUP_NAME::Data);
 	}
 
 	static constexpr std::size_t S_GROUP_NAME_id() noexcept
@@ -47,7 +47,7 @@ public:
 	{
 		auto* buf = buffer() + S_GROUP_NAME_offset();
 		auto& group = *reinterpret_cast<S_GROUP_NAME*>(buf);
-		group.header_.set_S_BLOCK_LENGTH_NAME(sizeof(S_GROUP_NAME::data));
+		group.header_.set_S_BLOCK_LENGTH_NAME(sizeof(S_GROUP_NAME::Data));
 		group.header_.set_S_NUM_IN_GROUP_NAME(count);
 		group.header_.set_S_NUM_GROUPS_NAME(0);	// TODO
 		group.header_.set_S_NUM_VAR_DATA_FIELDS_NAME(0);	// TODO

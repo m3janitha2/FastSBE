@@ -8,19 +8,20 @@
 namespace fastsbe
 {
 
-class execTypeEnum
+class OrdStatusEnum
 {
     public:
     enum class Value : char
     {
         New = '0',
+        PartialFilled = '1',
+        Filled = '2',
         DoneForDay = '3',
         Canceled = '4',
-        Replaced = '5',
         PendingCancel = '6',
         Rejected = '8',
         PendingNew = 'A',
-        Trade = 'F',
+        PendingReplace = 'E',
         nullValue = 0,
     };
     
@@ -31,20 +32,22 @@ class execTypeEnum
         {
         case Value::New:
             return "New";
+        case Value::PartialFilled:
+            return "PartialFilled";
+        case Value::Filled:
+            return "Filled";
         case Value::DoneForDay:
             return "DoneForDay";
         case Value::Canceled:
             return "Canceled";
-        case Value::Replaced:
-            return "Replaced";
         case Value::PendingCancel:
             return "PendingCancel";
         case Value::Rejected:
             return "Rejected";
         case Value::PendingNew:
             return "PendingNew";
-        case Value::Trade:
-            return "Trade";
+        case Value::PendingReplace:
+            return "PendingReplace";
         case Value::nullValue:
             return "nullValue";
         default:
@@ -54,9 +57,9 @@ class execTypeEnum
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::execTypeEnum::Value val)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::OrdStatusEnum::Value val)
 {
-    os << fastsbe::execTypeEnum::to_string(val);
+    os << fastsbe::OrdStatusEnum::to_string(val);
     return os;
 }
 

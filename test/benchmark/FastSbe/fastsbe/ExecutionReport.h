@@ -4,15 +4,15 @@
 #include<string_view>
 #include<ostream>
 #include<cstring>
-#include<execTypeEnum.h>
-#include<ordStatusEnum.h>
-#include<MONTH_YEAR.h>
-#include<sideEnum.h>
-#include<qtyEncoding.h>
-#include<qtyEncoding.h>
-#include<optionalDecimalEncoding.h>
-#include<qtyEncoding.h>
-#include<groupSizeEncoding.h>
+#include<ExecTypeEnum.h>
+#include<OrdStatusEnum.h>
+#include<MONTHYEAR.h>
+#include<SideEnum.h>
+#include<QtyEncoding.h>
+#include<QtyEncoding.h>
+#include<OptionalDecimalEncoding.h>
+#include<QtyEncoding.h>
+#include<GroupSizeEncoding.h>
 
 namespace fastsbe
 {
@@ -209,13 +209,13 @@ class ExecutionReport
     
     private:
     	#pragma pack(push, 1)
-    	execTypeEnum::Value ExecType_{};
+    	ExecTypeEnum::Value ExecType_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t ExecType_size() noexcept
     	{
-    		return sizeof(execTypeEnum);
+    		return sizeof(ExecTypeEnum);
     	}
     
     	static constexpr std::size_t ExecType_offset() noexcept
@@ -233,17 +233,17 @@ class ExecutionReport
     		return "ExecType"; 
     	}
     
-    	static constexpr execTypeEnum::Value ExecType_null_value() noexcept
+    	static constexpr ExecTypeEnum::Value ExecType_null_value() noexcept
     	{
-    		return execTypeEnum::Value::nullValue;
+    		return ExecTypeEnum::Value::nullValue;
     	}
     
-    	constexpr execTypeEnum::Value get_ExecType() const noexcept
+    	constexpr ExecTypeEnum::Value get_ExecType() const noexcept
     	{ 
     		return ExecType_;
     	}
     	
-    	constexpr auto& set_ExecType(execTypeEnum::Value value) noexcept
+    	constexpr auto& set_ExecType(ExecTypeEnum::Value value) noexcept
     	{
     		ExecType_ = value;
     		return *this;
@@ -252,13 +252,13 @@ class ExecutionReport
     
     private:
     	#pragma pack(push, 1)
-    	ordStatusEnum::Value OrdStatus_{};
+    	OrdStatusEnum::Value OrdStatus_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t OrdStatus_size() noexcept
     	{
-    		return sizeof(ordStatusEnum);
+    		return sizeof(OrdStatusEnum);
     	}
     
     	static constexpr std::size_t OrdStatus_offset() noexcept
@@ -276,17 +276,17 @@ class ExecutionReport
     		return "OrdStatus"; 
     	}
     
-    	static constexpr ordStatusEnum::Value OrdStatus_null_value() noexcept
+    	static constexpr OrdStatusEnum::Value OrdStatus_null_value() noexcept
     	{
-    		return ordStatusEnum::Value::nullValue;
+    		return OrdStatusEnum::Value::nullValue;
     	}
     
-    	constexpr ordStatusEnum::Value get_OrdStatus() const noexcept
+    	constexpr OrdStatusEnum::Value get_OrdStatus() const noexcept
     	{ 
     		return OrdStatus_;
     	}
     	
-    	constexpr auto& set_OrdStatus(ordStatusEnum::Value value) noexcept
+    	constexpr auto& set_OrdStatus(OrdStatusEnum::Value value) noexcept
     	{
     		OrdStatus_ = value;
     		return *this;
@@ -375,13 +375,13 @@ class ExecutionReport
     
     private:
     	#pragma pack(push, 1)
-    	MONTH_YEAR MaturityMonthYear_{};
+    	MONTHYEAR MaturityMonthYear_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t MaturityMonthYear_size() noexcept
     	{
-    		return sizeof(MONTH_YEAR);
+    		return sizeof(MONTHYEAR);
     	}
     
     	static constexpr std::size_t MaturityMonthYear_offset() noexcept
@@ -399,16 +399,16 @@ class ExecutionReport
     		return "MaturityMonthYear";
     	}
     
-    	constexpr const MONTH_YEAR &get_MaturityMonthYear() const noexcept
+    	constexpr const MONTHYEAR &get_MaturityMonthYear() const noexcept
     	{
     		return MaturityMonthYear_;
     	}
     
-    	constexpr MONTH_YEAR &get_MaturityMonthYear() noexcept
+    	constexpr MONTHYEAR &get_MaturityMonthYear() noexcept
     	{
     		return MaturityMonthYear_;
     	}
-    	constexpr auto &set_MaturityMonthYear(MONTH_YEAR &value) noexcept
+    	constexpr auto &set_MaturityMonthYear(MONTHYEAR &value) noexcept
     	{
     		MaturityMonthYear_ = value;
     		return *this;
@@ -417,13 +417,13 @@ class ExecutionReport
     
     private:
     	#pragma pack(push, 1)
-    	sideEnum::Value Side_{};
+    	SideEnum::Value Side_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t Side_size() noexcept
     	{
-    		return sizeof(sideEnum);
+    		return sizeof(SideEnum);
     	}
     
     	static constexpr std::size_t Side_offset() noexcept
@@ -441,17 +441,17 @@ class ExecutionReport
     		return "Side"; 
     	}
     
-    	static constexpr sideEnum::Value Side_null_value() noexcept
+    	static constexpr SideEnum::Value Side_null_value() noexcept
     	{
-    		return sideEnum::Value::nullValue;
+    		return SideEnum::Value::nullValue;
     	}
     
-    	constexpr sideEnum::Value get_Side() const noexcept
+    	constexpr SideEnum::Value get_Side() const noexcept
     	{ 
     		return Side_;
     	}
     	
-    	constexpr auto& set_Side(sideEnum::Value value) noexcept
+    	constexpr auto& set_Side(SideEnum::Value value) noexcept
     	{
     		Side_ = value;
     		return *this;
@@ -460,13 +460,13 @@ class ExecutionReport
     
     private:
     	#pragma pack(push, 1)
-    	qtyEncoding LeavesQty_{};
+    	QtyEncoding LeavesQty_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t LeavesQty_size() noexcept
     	{
-    		return sizeof(qtyEncoding);
+    		return sizeof(QtyEncoding);
     	}
     
     	static constexpr std::size_t LeavesQty_offset() noexcept
@@ -484,16 +484,16 @@ class ExecutionReport
     		return "LeavesQty";
     	}
     
-    	constexpr const qtyEncoding &get_LeavesQty() const noexcept
+    	constexpr const QtyEncoding &get_LeavesQty() const noexcept
     	{
     		return LeavesQty_;
     	}
     
-    	constexpr qtyEncoding &get_LeavesQty() noexcept
+    	constexpr QtyEncoding &get_LeavesQty() noexcept
     	{
     		return LeavesQty_;
     	}
-    	constexpr auto &set_LeavesQty(qtyEncoding &value) noexcept
+    	constexpr auto &set_LeavesQty(QtyEncoding &value) noexcept
     	{
     		LeavesQty_ = value;
     		return *this;
@@ -502,13 +502,13 @@ class ExecutionReport
     
     private:
     	#pragma pack(push, 1)
-    	qtyEncoding CumQty_{};
+    	QtyEncoding CumQty_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t CumQty_size() noexcept
     	{
-    		return sizeof(qtyEncoding);
+    		return sizeof(QtyEncoding);
     	}
     
     	static constexpr std::size_t CumQty_offset() noexcept
@@ -526,16 +526,16 @@ class ExecutionReport
     		return "CumQty";
     	}
     
-    	constexpr const qtyEncoding &get_CumQty() const noexcept
+    	constexpr const QtyEncoding &get_CumQty() const noexcept
     	{
     		return CumQty_;
     	}
     
-    	constexpr qtyEncoding &get_CumQty() noexcept
+    	constexpr QtyEncoding &get_CumQty() noexcept
     	{
     		return CumQty_;
     	}
-    	constexpr auto &set_CumQty(qtyEncoding &value) noexcept
+    	constexpr auto &set_CumQty(QtyEncoding &value) noexcept
     	{
     		CumQty_ = value;
     		return *this;
@@ -623,18 +623,18 @@ class ExecutionReport
     {
     	friend ExecutionReport;
         
-        class data
+        class Data
         {
             
             private:
             	#pragma pack(push, 1)
-            	optionalDecimalEncoding FillPx_{};
+            	OptionalDecimalEncoding FillPx_{};
             	#pragma pack(pop)
             
             public:
             	static constexpr std::size_t FillPx_size() noexcept
             	{
-            		return sizeof(optionalDecimalEncoding);
+            		return sizeof(OptionalDecimalEncoding);
             	}
             
             	static constexpr std::size_t FillPx_offset() noexcept
@@ -652,16 +652,16 @@ class ExecutionReport
             		return "FillPx";
             	}
             
-            	constexpr const optionalDecimalEncoding &get_FillPx() const noexcept
+            	constexpr const OptionalDecimalEncoding &get_FillPx() const noexcept
             	{
             		return FillPx_;
             	}
             
-            	constexpr optionalDecimalEncoding &get_FillPx() noexcept
+            	constexpr OptionalDecimalEncoding &get_FillPx() noexcept
             	{
             		return FillPx_;
             	}
-            	constexpr auto &set_FillPx(optionalDecimalEncoding &value) noexcept
+            	constexpr auto &set_FillPx(OptionalDecimalEncoding &value) noexcept
             	{
             		FillPx_ = value;
             		return *this;
@@ -670,13 +670,13 @@ class ExecutionReport
             
             private:
             	#pragma pack(push, 1)
-            	qtyEncoding FillQty_{};
+            	QtyEncoding FillQty_{};
             	#pragma pack(pop)
             
             public:
             	static constexpr std::size_t FillQty_size() noexcept
             	{
-            		return sizeof(qtyEncoding);
+            		return sizeof(QtyEncoding);
             	}
             
             	static constexpr std::size_t FillQty_offset() noexcept
@@ -694,16 +694,16 @@ class ExecutionReport
             		return "FillQty";
             	}
             
-            	constexpr const qtyEncoding &get_FillQty() const noexcept
+            	constexpr const QtyEncoding &get_FillQty() const noexcept
             	{
             		return FillQty_;
             	}
             
-            	constexpr qtyEncoding &get_FillQty() noexcept
+            	constexpr QtyEncoding &get_FillQty() noexcept
             	{
             		return FillQty_;
             	}
-            	constexpr auto &set_FillQty(qtyEncoding &value) noexcept
+            	constexpr auto &set_FillQty(QtyEncoding &value) noexcept
             	{
             		FillQty_ = value;
             		return *this;
@@ -713,26 +713,26 @@ class ExecutionReport
     
     private:
     #pragma pack(push, 1)
-    	groupSizeEncoding header_{};
+    	GroupSizeEncoding header_{};
     #pragma pack(pop)
     
     public:
     	FillsGrp() = default;
     	FillsGrp(std::uint16_t count)
-    		:header_(sizeof(FillsGrp::data), count) {}
+    		:header_(sizeof(FillsGrp::Data), count) {}
     
-    	data& get(std::size_t group_id) noexcept
+    	Data& get(std::size_t group_id) noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<data*>(buffer);
+    		return *reinterpret_cast<Data*>(buffer);
     	}
     
-    	const data& get(std::size_t group_id) const noexcept
+    	const Data& get(std::size_t group_id) const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<const data*>(buffer);
+    		return *reinterpret_cast<const Data*>(buffer);
     	}
     
     	const auto get_blockLength() const noexcept
@@ -755,7 +755,7 @@ class ExecutionReport
     public:
     	static constexpr std::size_t FillsGrp_size() noexcept
     	{
-    		return sizeof(FillsGrp::data);
+    		return sizeof(FillsGrp::Data);
     	}
     
     	static constexpr std::size_t FillsGrp_id() noexcept
@@ -795,7 +795,7 @@ class ExecutionReport
     	{
     		auto* buf = buffer() + FillsGrp_offset();
     		auto& group = *reinterpret_cast<FillsGrp*>(buf);
-    		group.header_.set_blockLength(sizeof(FillsGrp::data));
+    		group.header_.set_blockLength(sizeof(FillsGrp::Data));
     		group.header_.set_numInGroup(count);
     		return group;	
     	}

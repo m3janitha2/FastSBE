@@ -8,13 +8,13 @@
 namespace fastsbe
 {
 
-class qtyEncoding
+class QtyEncoding
 {
     
     public:
     	static constexpr const char* name() noexcept
     	{ 
-    		return "qtyEncoding"; 
+    		return "QtyEncoding"; 
     	}
     
     	static constexpr std::size_t template_id() noexcept
@@ -86,7 +86,7 @@ class qtyEncoding
     		return mantissa_;
     	}
     	
-    	constexpr qtyEncoding& set_mantissa(std::int32_t value) noexcept
+    	constexpr QtyEncoding& set_mantissa(std::int32_t value) noexcept
     	{
     		mantissa_ = value;
     		return *this;
@@ -121,10 +121,10 @@ class qtyEncoding
     
     
     public:
-    	qtyEncoding() = default;
+    	QtyEncoding() = default;
     
     	/*constexpr */
-    	qtyEncoding(std::int32_t mantissa) noexcept
+    	QtyEncoding(std::int32_t mantissa) noexcept
     		:mantissa_(mantissa)
     	{
     		
@@ -133,7 +133,7 @@ class qtyEncoding
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::qtyEncoding &msg)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::QtyEncoding &msg)
 {
 	os << msg.mantissa_name() << ": " << msg.get_mantissa() << " ";
 	os << msg.exponent_name() << ": " << msg.get_exponent() << " ";

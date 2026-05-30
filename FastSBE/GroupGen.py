@@ -17,9 +17,9 @@ class GroupGen:
 			self.indentation.increment()
 
 			self.group_data_gen = ClassGen(handler = self.handler, indentation = self.indentation\
-				, class_name = "data")
+				, class_name = "Data")
 			self.field_gen = FieldGen(handler = self.handler, indentation = indentation\
-				, message_name = "data", class_gen = self.group_data_gen, namespace = namespace)
+				, message_name = "Data", class_gen = self.group_data_gen, namespace = namespace)
 
 		def __del__(self):
 			self.indentation.decrement()

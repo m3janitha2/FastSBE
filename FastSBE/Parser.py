@@ -10,6 +10,15 @@ from FileGen import ContentHandler
 from FileGen import Indentaion
 from FileGen import *
 
+
+def to_pascal_case(name):
+	# Canonicalise a schema type name to PascalCase for use as a C++ type
+	# identifier. Only type names (enums, composites, messages) are converted;
+	# field and enum-value names are left as the schema defines them.
+	parts = name.split('_')
+	return ''.join(part[:1].upper() + part[1:] for part in parts if part)
+
+
 class Parser:
 	def get_null_value_of_primitive(self, type):
 		null_value = Metadata.defult_null[type]
@@ -175,7 +184,7 @@ class Parser:
 		primitive_encoding_type = self.get_primitive_encoding_type(enum_attrib)
 		enum_values.append(self.get_enum_null_value(enum_attrib))
 		handler = ContentHandler()
-		enum_file = EnumClassGen(handler, enum_name, Metadata.c_field_types[primitive_encoding_type]\
+		enum_file = EnumClassGen(handler, to_pascal_case(enum_name), Metadata.c_field_types[primitive_encoding_type]\
 			, enum_values, self.namespace)
 		self.user_defined_enums.append(enum_name)
 
@@ -183,7 +192,7 @@ class Parser:
 		handler.user_includes = []
 		indentation = Indentaion(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\
-			, file_name = enum_name, namespace = self.namespace\
+			, file_name = to_pascal_case(enum_name), namespace = self.namespace\
 			, system_includes = system_includes, handler = handler)
 
 
@@ -226,14 +235,14 @@ class Parser:
 			includes.append(composite_type)
 			if(self.is_const_type(type.attrib)):
 				logging.debug('const enum field: %s', type_name)
-				field_gen.gen_composite_const_enum_field_def(message_name = composite_name, field_type = composite_type\
+				field_gen.gen_composite_const_enum_field_def(message_name = composite_name, field_type = to_pascal_case(composite_type)\
 					, field_name = type_name, prvious_field_name = prvious_type_name\
 					, value = Parser.get_enum_const_value(type))
 				return type_name, includes
 			else:
 				logging.debug('enum field: %s', type_name)
 				null_value = 0
-				field_gen.gen_composite_enum_field_def(message_name = composite_name, field_type = composite_type\
+				field_gen.gen_composite_enum_field_def(message_name = composite_name, field_type = to_pascal_case(composite_type)\
 					, field_name = type_name, prvious_field_name = prvious_type_name\
 					, null = null_value)
 				return type_name, includes
@@ -288,13 +297,13 @@ class Parser:
 	def generate_composite_class(self, composite, handler):
 		composite_name = composite.attrib['name']
 		description = Parser.get_description(composite)
-		msg_gen = MessageGen(handler = handler, message_name = composite_name, message_id = 0\
+		msg_gen = MessageGen(handler = handler, message_name = to_pascal_case(composite_name), message_id = 0\
 			, schema = self.schema_id, version = self.schema_version, description = description, namespace = self.namespace)
 
 		msg_gen.field_gen.gen_ostream_begin()
 		prvious_type_name = "";
 		for type in composite.iter('type'):
-			prvious_type_name, includes = self.generate_composite_type(msg_gen.field_gen, composite_name, type\
+			prvious_type_name, includes = self.generate_composite_type(msg_gen.field_gen, to_pascal_case(composite_name), type\
 				, prvious_type_name)
 		msg_gen.field_gen.gen_ostream_end()
 		msg_gen.field_gen.gen_constructor()
@@ -309,7 +318,7 @@ class Parser:
 		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring"]
 		indentation = Indentaion(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\
-			, file_name = composite_name, namespace = self.namespace\
+			, file_name = to_pascal_case(composite_name), namespace = self.namespace\
 			, system_includes = system_includes, handler = handler)
 
 
@@ -329,14 +338,14 @@ class Parser:
 		if(field_type in self.user_defined_enums):
 			if(self.is_const_type(field.attrib)):
 				logging.debug('const enum field: %s', field_name)
-				field_gen.gen_message_const_enum_field_def(message_name = message_name, field_type = field_type\
+				field_gen.gen_message_const_enum_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
 					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
 					, value = Parser.get_enum_const_value(field), is_group = is_group, group_name = group_name)
 				return field_name
 			else:
 				logging.debug('enum field: %s', field_name)
 				null_value = 0
-				field_gen.gen_message_enum_field_def(message_name = message_name, field_type = field_type\
+				field_gen.gen_message_enum_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
 					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
 					, null = null_value, is_group = is_group, group_name = group_name)
 				return field_name
@@ -344,7 +353,7 @@ class Parser:
 		#composite
 		if(field_type in self.user_defined_composites):
 			logging.debug('composite field: %s', field_name)
-			field_gen.gen_message_composite_field_def(message_name = message_name, field_type = field_type\
+			field_gen.gen_message_composite_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
 				, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
 				, is_group = is_group, group_name = group_name)
 			return field_name
@@ -499,12 +508,12 @@ class Parser:
 
 		dimension_type_count = len(dimension)
 		if(dimension_type_count == 2):
-			msg_gen.field_gen.gen_nested_group_def(group_name = group_name, dimension_type = dimension_type\
+			msg_gen.field_gen.gen_nested_group_def(group_name = group_name, dimension_type = to_pascal_case(dimension_type)\
 				, block_length_name = dimension[0]['name']\
 				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type'])
 
 		elif(dimension_type_count == 4):
-			msg_gen.field_gen.gen_nested_group_def_4(group_name = group_name, dimension_type = dimension_type\
+			msg_gen.field_gen.gen_nested_group_def_4(group_name = group_name, dimension_type = to_pascal_case(dimension_type)\
 				, block_length_name = dimension[0]['name']\
 				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type']\
 				, num_groups_type = dimension[2]['type']\
@@ -524,12 +533,12 @@ class Parser:
 		if(dimension_type_count == 2):
 			msg_gen.field_gen.gen_group_def(group_name = group_name\
 				, prvious_group_name = prvious_field_name, group_id = group_id\
-				, dimension_type = dimension_type, block_length_name = 'blockLength'\
+				, dimension_type = to_pascal_case(dimension_type), block_length_name = 'blockLength'\
 				, num_in_group_name = 'numInGroup', num_in_group_type = 'std::uint16_t')
 		elif(dimension_type_count == 4):
 			msg_gen.field_gen.gen_group_def_4(group_name = group_name
 				, prvious_group_name = prvious_field_name, group_id = group_id\
-				, dimension_type = dimension_type, block_length_name = dimension[0]['name']\
+				, dimension_type = to_pascal_case(dimension_type), block_length_name = dimension[0]['name']\
 				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type']\
 				, num_groups_name = dimension[2]['name'], num_groups_type = dimension[2]['type']\
 				, num_var_data_fields_name = dimension[3]['name'], num_var_data_fields_type = dimension[3]['type'])
@@ -546,7 +555,7 @@ class Parser:
 			, name = name, id = id, message_name = message_name, namespace = self.namespace\
 			, dimension_type = dimension_type)
 
-		msg_gen.field_gen.gen_nested_variable_length_data_def(var_len_data_name = name, dimension_type = dimension_type\
+		msg_gen.field_gen.gen_nested_variable_length_data_def(var_len_data_name = name, dimension_type = to_pascal_case(dimension_type)\
 			, dimension = dimension)		
 
 
@@ -560,7 +569,7 @@ class Parser:
 
 		msg_gen.field_gen.gen_variable_length_data_def(var_len_data_name = name\
 			, prvious_var_len_data_name = prvious_var_len_data_name, var_len_data_id = id\
-			, dimension_type = dimension_type, dimension = dimension)
+			, dimension_type = to_pascal_case(dimension_type), dimension = dimension)
 
 		return name;
 		

@@ -4,17 +4,17 @@
 #include<string_view>
 #include<ostream>
 #include<cstring>
-#include<sideEnum.h>
-#include<qtyEncoding.h>
-#include<ordTypeEnum.h>
-#include<optionalDecimalEncoding.h>
-#include<optionalDecimalEncoding.h>
+#include<SideEnum.h>
+#include<QtyEncoding.h>
+#include<OrdTypeEnum.h>
+#include<OptionalDecimalEncoding.h>
+#include<OptionalDecimalEncoding.h>
 #include<PartyIDSourceEnum.h>
 #include<PartyRoleEnum.h>
-#include<groupSizeEncoding.h>
-#include<qtyEncoding.h>
-#include<groupSizeEncoding.h>
-#include<groupSizeEncoding.h>
+#include<GroupSizeEncoding.h>
+#include<QtyEncoding.h>
+#include<GroupSizeEncoding.h>
+#include<GroupSizeEncoding.h>
 #include<DATA.h>
 #include<DATA.h>
 
@@ -293,13 +293,13 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	sideEnum::Value Side_{};
+    	SideEnum::Value Side_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t Side_size() noexcept
     	{
-    		return sizeof(sideEnum);
+    		return sizeof(SideEnum);
     	}
     
     	static constexpr std::size_t Side_offset() noexcept
@@ -317,17 +317,17 @@ class NewOrderSingle
     		return "Side"; 
     	}
     
-    	static constexpr sideEnum::Value Side_null_value() noexcept
+    	static constexpr SideEnum::Value Side_null_value() noexcept
     	{
-    		return sideEnum::Value::nullValue;
+    		return SideEnum::Value::nullValue;
     	}
     
-    	constexpr sideEnum::Value get_Side() const noexcept
+    	constexpr SideEnum::Value get_Side() const noexcept
     	{ 
     		return Side_;
     	}
     	
-    	constexpr auto& set_Side(sideEnum::Value value) noexcept
+    	constexpr auto& set_Side(SideEnum::Value value) noexcept
     	{
     		Side_ = value;
     		return *this;
@@ -396,13 +396,13 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	qtyEncoding OrderQty_{};
+    	QtyEncoding OrderQty_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t OrderQty_size() noexcept
     	{
-    		return sizeof(qtyEncoding);
+    		return sizeof(QtyEncoding);
     	}
     
     	static constexpr std::size_t OrderQty_offset() noexcept
@@ -420,16 +420,16 @@ class NewOrderSingle
     		return "OrderQty";
     	}
     
-    	constexpr const qtyEncoding &get_OrderQty() const noexcept
+    	constexpr const QtyEncoding &get_OrderQty() const noexcept
     	{
     		return OrderQty_;
     	}
     
-    	constexpr qtyEncoding &get_OrderQty() noexcept
+    	constexpr QtyEncoding &get_OrderQty() noexcept
     	{
     		return OrderQty_;
     	}
-    	constexpr auto &set_OrderQty(qtyEncoding &value) noexcept
+    	constexpr auto &set_OrderQty(QtyEncoding &value) noexcept
     	{
     		OrderQty_ = value;
     		return *this;
@@ -438,13 +438,13 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	ordTypeEnum::Value OrdType_{};
+    	OrdTypeEnum::Value OrdType_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t OrdType_size() noexcept
     	{
-    		return sizeof(ordTypeEnum);
+    		return sizeof(OrdTypeEnum);
     	}
     
     	static constexpr std::size_t OrdType_offset() noexcept
@@ -462,17 +462,17 @@ class NewOrderSingle
     		return "OrdType"; 
     	}
     
-    	static constexpr ordTypeEnum::Value OrdType_null_value() noexcept
+    	static constexpr OrdTypeEnum::Value OrdType_null_value() noexcept
     	{
-    		return ordTypeEnum::Value::nullValue;
+    		return OrdTypeEnum::Value::nullValue;
     	}
     
-    	constexpr ordTypeEnum::Value get_OrdType() const noexcept
+    	constexpr OrdTypeEnum::Value get_OrdType() const noexcept
     	{ 
     		return OrdType_;
     	}
     	
-    	constexpr auto& set_OrdType(ordTypeEnum::Value value) noexcept
+    	constexpr auto& set_OrdType(OrdTypeEnum::Value value) noexcept
     	{
     		OrdType_ = value;
     		return *this;
@@ -481,13 +481,13 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	optionalDecimalEncoding Price_{};
+    	OptionalDecimalEncoding Price_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t Price_size() noexcept
     	{
-    		return sizeof(optionalDecimalEncoding);
+    		return sizeof(OptionalDecimalEncoding);
     	}
     
     	static constexpr std::size_t Price_offset() noexcept
@@ -505,16 +505,16 @@ class NewOrderSingle
     		return "Price";
     	}
     
-    	constexpr const optionalDecimalEncoding &get_Price() const noexcept
+    	constexpr const OptionalDecimalEncoding &get_Price() const noexcept
     	{
     		return Price_;
     	}
     
-    	constexpr optionalDecimalEncoding &get_Price() noexcept
+    	constexpr OptionalDecimalEncoding &get_Price() noexcept
     	{
     		return Price_;
     	}
-    	constexpr auto &set_Price(optionalDecimalEncoding &value) noexcept
+    	constexpr auto &set_Price(OptionalDecimalEncoding &value) noexcept
     	{
     		Price_ = value;
     		return *this;
@@ -523,13 +523,13 @@ class NewOrderSingle
     
     private:
     	#pragma pack(push, 1)
-    	optionalDecimalEncoding StopPx_{};
+    	OptionalDecimalEncoding StopPx_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t StopPx_size() noexcept
     	{
-    		return sizeof(optionalDecimalEncoding);
+    		return sizeof(OptionalDecimalEncoding);
     	}
     
     	static constexpr std::size_t StopPx_offset() noexcept
@@ -547,16 +547,16 @@ class NewOrderSingle
     		return "StopPx";
     	}
     
-    	constexpr const optionalDecimalEncoding &get_StopPx() const noexcept
+    	constexpr const OptionalDecimalEncoding &get_StopPx() const noexcept
     	{
     		return StopPx_;
     	}
     
-    	constexpr optionalDecimalEncoding &get_StopPx() noexcept
+    	constexpr OptionalDecimalEncoding &get_StopPx() noexcept
     	{
     		return StopPx_;
     	}
-    	constexpr auto &set_StopPx(optionalDecimalEncoding &value) noexcept
+    	constexpr auto &set_StopPx(OptionalDecimalEncoding &value) noexcept
     	{
     		StopPx_ = value;
     		return *this;
@@ -584,7 +584,7 @@ class NewOrderSingle
     {
     	friend NewOrderSingle;
         
-        class data
+        class Data
         {
             
             private:
@@ -756,26 +756,26 @@ class NewOrderSingle
     
     private:
     #pragma pack(push, 1)
-    	groupSizeEncoding header_{};
+    	GroupSizeEncoding header_{};
     #pragma pack(pop)
     
     public:
     	PartiesGrp() = default;
     	PartiesGrp(std::uint16_t count)
-    		:header_(sizeof(PartiesGrp::data), count) {}
+    		:header_(sizeof(PartiesGrp::Data), count) {}
     
-    	data& get(std::size_t group_id) noexcept
+    	Data& get(std::size_t group_id) noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<data*>(buffer);
+    		return *reinterpret_cast<Data*>(buffer);
     	}
     
-    	const data& get(std::size_t group_id) const noexcept
+    	const Data& get(std::size_t group_id) const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<const data*>(buffer);
+    		return *reinterpret_cast<const Data*>(buffer);
     	}
     
     	const auto get_blockLength() const noexcept
@@ -798,7 +798,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t PartiesGrp_size() noexcept
     	{
-    		return sizeof(PartiesGrp::data);
+    		return sizeof(PartiesGrp::Data);
     	}
     
     	static constexpr std::size_t PartiesGrp_id() noexcept
@@ -838,7 +838,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + PartiesGrp_offset();
     		auto& group = *reinterpret_cast<PartiesGrp*>(buf);
-    		group.header_.set_blockLength(sizeof(PartiesGrp::data));
+    		group.header_.set_blockLength(sizeof(PartiesGrp::Data));
     		group.header_.set_numInGroup(count);
     		return group;	
     	}
@@ -849,7 +849,7 @@ class NewOrderSingle
     {
     	friend NewOrderSingle;
         
-        class data
+        class Data
         {
             
             private:
@@ -934,13 +934,13 @@ class NewOrderSingle
             
             private:
             	#pragma pack(push, 1)
-            	qtyEncoding AllocShares_{};
+            	QtyEncoding AllocShares_{};
             	#pragma pack(pop)
             
             public:
             	static constexpr std::size_t AllocShares_size() noexcept
             	{
-            		return sizeof(qtyEncoding);
+            		return sizeof(QtyEncoding);
             	}
             
             	static constexpr std::size_t AllocShares_offset() noexcept
@@ -958,16 +958,16 @@ class NewOrderSingle
             		return "AllocShares";
             	}
             
-            	constexpr const qtyEncoding &get_AllocShares() const noexcept
+            	constexpr const QtyEncoding &get_AllocShares() const noexcept
             	{
             		return AllocShares_;
             	}
             
-            	constexpr qtyEncoding &get_AllocShares() noexcept
+            	constexpr QtyEncoding &get_AllocShares() noexcept
             	{
             		return AllocShares_;
             	}
-            	constexpr auto &set_AllocShares(qtyEncoding &value) noexcept
+            	constexpr auto &set_AllocShares(QtyEncoding &value) noexcept
             	{
             		AllocShares_ = value;
             		return *this;
@@ -977,26 +977,26 @@ class NewOrderSingle
     
     private:
     #pragma pack(push, 1)
-    	groupSizeEncoding header_{};
+    	GroupSizeEncoding header_{};
     #pragma pack(pop)
     
     public:
     	AllocsGrp() = default;
     	AllocsGrp(std::uint16_t count)
-    		:header_(sizeof(AllocsGrp::data), count) {}
+    		:header_(sizeof(AllocsGrp::Data), count) {}
     
-    	data& get(std::size_t group_id) noexcept
+    	Data& get(std::size_t group_id) noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<data*>(buffer);
+    		return *reinterpret_cast<Data*>(buffer);
     	}
     
-    	const data& get(std::size_t group_id) const noexcept
+    	const Data& get(std::size_t group_id) const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<const data*>(buffer);
+    		return *reinterpret_cast<const Data*>(buffer);
     	}
     
     	const auto get_blockLength() const noexcept
@@ -1019,7 +1019,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t AllocsGrp_size() noexcept
     	{
-    		return sizeof(AllocsGrp::data);
+    		return sizeof(AllocsGrp::Data);
     	}
     
     	static constexpr std::size_t AllocsGrp_id() noexcept
@@ -1059,7 +1059,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + AllocsGrp_offset();
     		auto& group = *reinterpret_cast<AllocsGrp*>(buf);
-    		group.header_.set_blockLength(sizeof(AllocsGrp::data));
+    		group.header_.set_blockLength(sizeof(AllocsGrp::Data));
     		group.header_.set_numInGroup(count);
     		return group;	
     	}
@@ -1070,7 +1070,7 @@ class NewOrderSingle
     {
     	friend NewOrderSingle;
         
-        class data
+        class Data
         {
             
             private:
@@ -1156,26 +1156,26 @@ class NewOrderSingle
     
     private:
     #pragma pack(push, 1)
-    	groupSizeEncoding header_{};
+    	GroupSizeEncoding header_{};
     #pragma pack(pop)
     
     public:
     	TradingSessionsGrp() = default;
     	TradingSessionsGrp(std::uint16_t count)
-    		:header_(sizeof(TradingSessionsGrp::data), count) {}
+    		:header_(sizeof(TradingSessionsGrp::Data), count) {}
     
-    	data& get(std::size_t group_id) noexcept
+    	Data& get(std::size_t group_id) noexcept
     	{
-    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<data*>(buffer);
+    		return *reinterpret_cast<Data*>(buffer);
     	}
     
-    	const data& get(std::size_t group_id) const noexcept
+    	const Data& get(std::size_t group_id) const noexcept
     	{
-    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(groupSizeEncoding)
+    		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(GroupSizeEncoding)
     			+ (this->header_.get_blockLength() * group_id);
-    		return *reinterpret_cast<const data*>(buffer);
+    		return *reinterpret_cast<const Data*>(buffer);
     	}
     
     	const auto get_blockLength() const noexcept
@@ -1198,7 +1198,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t TradingSessionsGrp_size() noexcept
     	{
-    		return sizeof(TradingSessionsGrp::data);
+    		return sizeof(TradingSessionsGrp::Data);
     	}
     
     	static constexpr std::size_t TradingSessionsGrp_id() noexcept
@@ -1238,7 +1238,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + TradingSessionsGrp_offset();
     		auto& group = *reinterpret_cast<TradingSessionsGrp*>(buf);
-    		group.header_.set_blockLength(sizeof(TradingSessionsGrp::data));
+    		group.header_.set_blockLength(sizeof(TradingSessionsGrp::Data));
     		group.header_.set_numInGroup(count);
     		return group;	
     	}

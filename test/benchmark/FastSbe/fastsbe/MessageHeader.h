@@ -8,13 +8,13 @@
 namespace fastsbe
 {
 
-class messageHeader
+class MessageHeader
 {
     
     public:
     	static constexpr const char* name() noexcept
     	{ 
-    		return "messageHeader"; 
+    		return "MessageHeader"; 
     	}
     
     	static constexpr std::size_t template_id() noexcept
@@ -86,7 +86,7 @@ class messageHeader
     		return blockLength_;
     	}
     	
-    	constexpr messageHeader& set_blockLength(std::uint16_t value) noexcept
+    	constexpr MessageHeader& set_blockLength(std::uint16_t value) noexcept
     	{
     		blockLength_ = value;
     		return *this;
@@ -141,7 +141,7 @@ class messageHeader
     		return templateId_;
     	}
     	
-    	constexpr messageHeader& set_templateId(std::uint16_t value) noexcept
+    	constexpr MessageHeader& set_templateId(std::uint16_t value) noexcept
     	{
     		templateId_ = value;
     		return *this;
@@ -196,7 +196,7 @@ class messageHeader
     		return schemaId_;
     	}
     	
-    	constexpr messageHeader& set_schemaId(std::uint16_t value) noexcept
+    	constexpr MessageHeader& set_schemaId(std::uint16_t value) noexcept
     	{
     		schemaId_ = value;
     		return *this;
@@ -251,7 +251,7 @@ class messageHeader
     		return version_;
     	}
     	
-    	constexpr messageHeader& set_version(std::uint16_t value) noexcept
+    	constexpr MessageHeader& set_version(std::uint16_t value) noexcept
     	{
     		version_ = value;
     		return *this;
@@ -259,10 +259,10 @@ class messageHeader
     
     
     public:
-    	messageHeader() = default;
+    	MessageHeader() = default;
     
     	/*constexpr */
-    	messageHeader(std::uint16_t blockLength, std::uint16_t templateId, std::uint16_t schemaId, std::uint16_t version) noexcept
+    	MessageHeader(std::uint16_t blockLength, std::uint16_t templateId, std::uint16_t schemaId, std::uint16_t version) noexcept
     		:blockLength_(blockLength), templateId_(templateId), schemaId_(schemaId), version_(version)
     	{
     		
@@ -271,7 +271,7 @@ class messageHeader
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::messageHeader &msg)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MessageHeader &msg)
 {
 	os << msg.blockLength_name() << ": " << msg.get_blockLength() << " ";
 	os << msg.templateId_name() << ": " << msg.get_templateId() << " ";

@@ -4,7 +4,7 @@
 #include<string_view>
 #include<ostream>
 #include<cstring>
-#include<businessRejectReasonEnum.h>
+#include<BusinessRejectReasonEnum.h>
 #include<DATA.h>
 
 namespace fastsbe
@@ -122,13 +122,13 @@ class BusinessMessageReject
     
     private:
     	#pragma pack(push, 1)
-    	businessRejectReasonEnum::Value BusinessRejectReason_{};
+    	BusinessRejectReasonEnum::Value BusinessRejectReason_{};
     	#pragma pack(pop)
     
     public:
     	static constexpr std::size_t BusinessRejectReason_size() noexcept
     	{
-    		return sizeof(businessRejectReasonEnum);
+    		return sizeof(BusinessRejectReasonEnum);
     	}
     
     	static constexpr std::size_t BusinessRejectReason_offset() noexcept
@@ -146,17 +146,17 @@ class BusinessMessageReject
     		return "BusinessRejectReason"; 
     	}
     
-    	static constexpr businessRejectReasonEnum::Value BusinessRejectReason_null_value() noexcept
+    	static constexpr BusinessRejectReasonEnum::Value BusinessRejectReason_null_value() noexcept
     	{
-    		return businessRejectReasonEnum::Value::nullValue;
+    		return BusinessRejectReasonEnum::Value::nullValue;
     	}
     
-    	constexpr businessRejectReasonEnum::Value get_BusinessRejectReason() const noexcept
+    	constexpr BusinessRejectReasonEnum::Value get_BusinessRejectReason() const noexcept
     	{ 
     		return BusinessRejectReason_;
     	}
     	
-    	constexpr auto& set_BusinessRejectReason(businessRejectReasonEnum::Value value) noexcept
+    	constexpr auto& set_BusinessRejectReason(BusinessRejectReasonEnum::Value value) noexcept
     	{
     		BusinessRejectReason_ = value;
     		return *this;

@@ -8,13 +8,13 @@
 namespace fastsbe
 {
 
-class groupSizeEncoding
+class GroupSizeEncoding
 {
     
     public:
     	static constexpr const char* name() noexcept
     	{ 
-    		return "groupSizeEncoding"; 
+    		return "GroupSizeEncoding"; 
     	}
     
     	static constexpr std::size_t template_id() noexcept
@@ -86,7 +86,7 @@ class groupSizeEncoding
     		return blockLength_;
     	}
     	
-    	constexpr groupSizeEncoding& set_blockLength(std::uint16_t value) noexcept
+    	constexpr GroupSizeEncoding& set_blockLength(std::uint16_t value) noexcept
     	{
     		blockLength_ = value;
     		return *this;
@@ -141,7 +141,7 @@ class groupSizeEncoding
     		return numInGroup_;
     	}
     	
-    	constexpr groupSizeEncoding& set_numInGroup(std::uint16_t value) noexcept
+    	constexpr GroupSizeEncoding& set_numInGroup(std::uint16_t value) noexcept
     	{
     		numInGroup_ = value;
     		return *this;
@@ -149,10 +149,10 @@ class groupSizeEncoding
     
     
     public:
-    	groupSizeEncoding() = default;
+    	GroupSizeEncoding() = default;
     
     	/*constexpr */
-    	groupSizeEncoding(std::uint16_t blockLength, std::uint16_t numInGroup) noexcept
+    	GroupSizeEncoding(std::uint16_t blockLength, std::uint16_t numInGroup) noexcept
     		:blockLength_(blockLength), numInGroup_(numInGroup)
     	{
     		
@@ -161,7 +161,7 @@ class groupSizeEncoding
 };
 
 template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::groupSizeEncoding &msg)
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::GroupSizeEncoding &msg)
 {
 	os << msg.blockLength_name() << ": " << msg.get_blockLength() << " ";
 	os << msg.numInGroup_name() << ": " << msg.get_numInGroup() << " ";
