@@ -575,19 +575,12 @@ class ExecutionReport
     	
     	static constexpr std::uint16_t trade_date_max_value() noexcept
     	{
-    		return 65534;
+    		return (UINT16_MAX - 1);
     	}
     	
     	static constexpr std::uint16_t trade_date_null_value() noexcept
-    	{ 
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 65535;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    	{
+    		return UINT16_MAX;
     	}
     
     	constexpr std::uint16_t trade_date() const noexcept

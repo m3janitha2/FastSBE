@@ -11,33 +11,6 @@ namespace fastsbe
 class QtyEncoding
 {
     
-    public:
-    	static constexpr const char* name() noexcept
-    	{ 
-    		return "QtyEncoding"; 
-    	}
-    
-    	static constexpr std::size_t template_id() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr std::size_t schema() noexcept
-    	{  
-    		return 91; 
-    	}
-    
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr const char* semantic_type() noexcept
-    	{ 
-    		return ""; 	
-    	}
-    
-    
     private:
     	#pragma pack(push, 1)
     	std::int32_t mantissa_{};
@@ -61,24 +34,17 @@ class QtyEncoding
     	
     	static constexpr std::int32_t mantissa_min_value() noexcept
     	{ 
-    		return -2147483647; 
+    		return (INT32_MIN + 1); 
     	}
     	
     	static constexpr std::int32_t mantissa_max_value() noexcept
     	{
-    		return 2147483647;
+    		return INT32_MAX;
     	}
     	
     	static constexpr std::int32_t mantissa_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return -2147483648;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return INT32_MIN;
     	}
     
     	constexpr std::int32_t mantissa() const noexcept

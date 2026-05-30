@@ -11,33 +11,6 @@ namespace fastsbe
 class OptionalDecimalEncoding
 {
     
-    public:
-    	static constexpr const char* name() noexcept
-    	{ 
-    		return "OptionalDecimalEncoding"; 
-    	}
-    
-    	static constexpr std::size_t template_id() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr std::size_t schema() noexcept
-    	{  
-    		return 91; 
-    	}
-    
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr const char* semantic_type() noexcept
-    	{ 
-    		return ""; 	
-    	}
-    
-    
     private:
     	#pragma pack(push, 1)
     	std::int64_t mantissa_{};
@@ -61,24 +34,17 @@ class OptionalDecimalEncoding
     	
     	static constexpr std::int64_t mantissa_min_value() noexcept
     	{ 
-    		return -9223372036854775807; 
+    		return (INT64_MIN + 1); 
     	}
     	
     	static constexpr std::int64_t mantissa_max_value() noexcept
     	{
-    		return 9223372036854775807;
+    		return INT64_MAX;
     	}
     	
     	static constexpr std::int64_t mantissa_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return -9223372036854775808;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return INT64_MIN;
     	}
     
     	constexpr std::int64_t mantissa() const noexcept

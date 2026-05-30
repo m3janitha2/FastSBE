@@ -18,7 +18,7 @@ class BusinessRejectReasonEnum
         UnknownSecurity = 2,
         ApplicationNotAvailable = 4,
         NotAuthorized = 6,
-        nullValue = 255,
+        nullValue = UINT8_MAX,
     };
     
     public:

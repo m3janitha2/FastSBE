@@ -16,7 +16,7 @@ class PartyRoleEnum
         ExecutingFirm = 1,
         BrokerOfCredit = 2,
         ClientID = 3,
-        nullValue = 255,
+        nullValue = UINT8_MAX,
     };
     
     public:

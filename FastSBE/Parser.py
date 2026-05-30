@@ -4,6 +4,7 @@ import logging
 from MessageGen import MessageGen
 from Metadata import Metadata
 from EnumGen import EnumClassGen
+from SetGen import SetClassGen
 from GroupGen import GroupGen
 from VariableLengthDataGen import VariableLengthDataGen
 from FileGen import ContentHandler
@@ -38,18 +39,22 @@ class Parser:
 		return null_value
 
 
-	def get_numeric_attrib_of_primitive(self, type):
+	def get_numeric_attrib_of_primitive(self, type, attrib = None):
 		min_value = Metadata.defult_minimum[type]
 		max_value = Metadata.defult_maximum[type]
 		null_value = Metadata.defult_null[type]
-		# if minValue or maxValue or nullValue attrib defined by user, override
-		if('minValue' in type):
-			min_value = type['minValue']
-		if('maxValue' in type):
-			max_value = type['maxValue']
-		if('nullValue' in type):
-			null_value = type['nullValue']
-		return min_value, max_value, null_value
+		# if minValue / maxValue / nullValue defined in the schema, override the default.
+		# attrib is the combined field+type attribute dict from the caller.
+		if(attrib is not None):
+			if('minValue' in attrib):
+				min_value = attrib['minValue']
+			if('maxValue' in attrib):
+				max_value = attrib['maxValue']
+			if('nullValue' in attrib):
+				null_value = attrib['nullValue']
+		return (Metadata.to_cpp_int_literal(min_value, type),
+			Metadata.to_cpp_int_literal(max_value, type),
+			Metadata.to_cpp_int_literal(null_value, type))
 
 
 	#primitive_types are numeric
@@ -60,9 +65,11 @@ class Parser:
 			return False
 
 
-	#primitive type char with length defiend and length == 1 is string
+	# a char of length 1 is a single character, not a string. Any other length
+	# stays a string: length > 1 is a fixed char array, and length 0 is the
+	# variable-length-data sentinel (varData), which needs char* buffer access.
 	def is_string_field(self, primitive_type, attrib):
-		if ((primitive_type == 'char') and ('length' in attrib)):
+		if ((primitive_type == 'char') and ('length' in attrib) and (int(attrib['length']) != 1)):
 			return True
 		else:
 			return False
@@ -166,8 +173,25 @@ class Parser:
 		elif 'type' in field_attrib:
 			return field_attrib['type']
 		else:
-			logging.error('type or primitiveType is not defined in %s', field_attrib['name']) 
+			logging.error('type or primitiveType is not defined in %s', field_attrib['name'])
 			exit()
+
+	# A constant field's value may live on the field element's text, or - as CME
+	# does - on the referenced constant type's text (<type presence="constant">V).
+	# A constant with no value anywhere is a malformed schema: fail loudly rather
+	# than emit a stray Python None into the generated C++.
+	def get_const_value(self, field):
+		value = field.text
+		if value is None and 'type' in field.attrib:
+			type_elem = self.root.find(".//*[@name='" + field.attrib['type'] + "']")
+			if type_elem is not None:
+				value = type_elem.text
+		if value is None:
+			name = field.attrib.get('name', '?')
+			logging.error("constant field '%s' has no value", name)
+			raise SystemExit("FastSBE: constant field '%s' (type '%s') has no value"
+				% (name, field.attrib.get('type', '?')))
+		return value.strip()
 
 	def get_enum_null_value(self, enum_attrib):
 		#defined anywhere in the fields
@@ -210,6 +234,34 @@ class Parser:
 	def parse_all_enums(self, types):
 		for type in types.iter('enum'):
 			self.generate_enum(type)
+
+
+	def generate_set(self, type):
+		set_name = type.attrib['name']
+		# resolve encodingType (often a user-defined alias, e.g. uInt8) to a
+		# primitive, same as enums do.
+		set_attrib = self.update_enum_attrib(type = type)
+		primitive_encoding_type = self.get_primitive_encoding_type(set_attrib)
+		# choices: (name, bit index) - SetGen turns the index into a 1u<<index mask
+		choices = [(choice.attrib['name'], choice.text.strip()) for choice in type]
+
+		handler = ContentHandler()
+		SetClassGen(handler, to_pascal_case(set_name)\
+			, Metadata.c_field_types[primitive_encoding_type], choices, self.namespace)
+		self.user_defined_sets.append(set_name)
+
+		system_includes = ["cstdint", "ostream"]
+		handler.user_includes = []
+		indentation = Indentation(0)
+		FileGen(indentation = indentation, out_folder = self.out_folder\
+			, file_name = to_pascal_case(set_name), namespace = self.namespace\
+			, system_includes = system_includes, handler = handler)
+
+
+	# read all set in types
+	def parse_all_sets(self, types):
+		for type in types.iter('set'):
+			self.generate_set(type)
 
 
 	def get_composite_type(self, type):
@@ -256,7 +308,14 @@ class Parser:
 					, field_name = type_name, prvious_field_name = prvious_type_name\
 					, null = null_value)
 				return type_name, includes
-		
+
+		#set
+		if(composite_type in self.user_defined_sets):
+			logging.debug('set field: %s', type_name)
+			field_gen.gen_composite_set_field_def(message_name = composite_name, field_type = to_pascal_case(composite_type)\
+				, field_name = type_name, prvious_field_name = prvious_type_name)
+			return type_name, includes
+
 		field_attrib =  self.update_type_attrib(field = type)
 		primitive_type = self.get_primitive_type(type.attrib)
 		field_type = Metadata.c_field_types[primitive_type]
@@ -286,7 +345,7 @@ class Parser:
 					, value = type.text)
 				return type_name, includes
 			else:
-				(min_value, max_value, null_value) = self.get_numeric_attrib_of_primitive(primitive_type)
+				(min_value, max_value, null_value) = self.get_numeric_attrib_of_primitive(primitive_type, field_attrib)
 				field_gen.gen_composite_numeric_field_def(message_name = composite_name\
 					, field_type = field_type\
 					, field_name = type_name, prvious_field_name = prvious_type_name\
@@ -308,7 +367,8 @@ class Parser:
 		composite_name = composite.attrib['name']
 		description = Parser.get_description(composite)
 		msg_gen = MessageGen(handler = handler, message_name = to_pascal_case(composite_name), message_id = 0\
-			, schema = self.schema_id, version = self.schema_version, description = description, namespace = self.namespace)
+			, schema = self.schema_id, version = self.schema_version, description = description, namespace = self.namespace\
+			, descriptor = False)
 
 		msg_gen.field_gen.gen_ostream_begin()
 		prvious_type_name = "";
@@ -360,6 +420,14 @@ class Parser:
 					, null = null_value, is_group = is_group, group_name = group_name)
 				return field_name
 
+		#set
+		if(field_type in self.user_defined_sets):
+			logging.debug('set field: %s', field_name)
+			field_gen.gen_message_set_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
+				, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+				, is_group = is_group, group_name = group_name)
+			return field_name
+
 		#composite
 		if(field_type in self.user_defined_composites):
 			logging.debug('composite field: %s', field_name)
@@ -380,7 +448,7 @@ class Parser:
 					, field_type = Metadata.c_field_types[primitive_type]\
 					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
 					, field_size = field_attrib['length']\
-					, value = field.text, is_group = is_group, group_name = group_name)
+					, value = self.get_const_value(field), is_group = is_group, group_name = group_name)
 				return field_name
 
 			else:
@@ -395,14 +463,17 @@ class Parser:
 		if(self.is_numeric(primitive_type, field_attrib) == True):
 			logging.debug('const numeric field: %s', field_name)
 			if(('presence' in field_attrib) and (field_attrib['presence'] == 'constant')):
+				const_value = self.get_const_value(field)
+				if(primitive_type == 'char'):
+					const_value = "'" + const_value + "'"
 				field_gen.gen_message_const_numeric_field_def(message_name = message_name\
 					, field_type = Metadata.c_field_types[primitive_type]\
 					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
-					, value = field.text, is_group = is_group, group_name = group_name)
+					, value = const_value, is_group = is_group, group_name = group_name)
 				return field_name
 			else:
 				logging.debug('numeric field: %s', field_name)
-				(min_value, max_value, null_value) = self.get_numeric_attrib_of_primitive(primitive_type)
+				(min_value, max_value, null_value) = self.get_numeric_attrib_of_primitive(primitive_type, field_attrib)
 				field_gen.gen_message_numeric_field_def(message_name = message_name\
 					, field_type = Metadata.c_field_types[primitive_type]\
 					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
@@ -663,6 +734,7 @@ class Parser:
 		types = self.root.find('types')
 		self.parse_all_types(types = types)
 		self.parse_all_enums(types = types)
+		self.parse_all_sets(types = types)
 		self.parse_all_composites(types = types)
 		self.parse_all_messages(root = self.root)
 
@@ -675,6 +747,7 @@ class Parser:
 
 		self.user_defined_types = {}
 		self.user_defined_enums = []
+		self.user_defined_sets = []
 		self.user_defined_composites = []
 		self.group_size_encoding_types = {}
 		self.variable_data_encoding_types = {}

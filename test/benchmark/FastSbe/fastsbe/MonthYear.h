@@ -11,33 +11,6 @@ namespace fastsbe
 class MonthYear
 {
     
-    public:
-    	static constexpr const char* name() noexcept
-    	{ 
-    		return "MonthYear"; 
-    	}
-    
-    	static constexpr std::size_t template_id() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr std::size_t schema() noexcept
-    	{  
-    		return 91; 
-    	}
-    
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr const char* semantic_type() noexcept
-    	{ 
-    		return ""; 	
-    	}
-    
-    
     private:
     	#pragma pack(push, 1)
     	std::uint16_t year_{};
@@ -66,19 +39,12 @@ class MonthYear
     	
     	static constexpr std::uint16_t year_max_value() noexcept
     	{
-    		return 65534;
+    		return (UINT16_MAX - 1);
     	}
     	
     	static constexpr std::uint16_t year_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 65535;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT16_MAX;
     	}
     
     	constexpr std::uint16_t year() const noexcept
@@ -121,19 +87,12 @@ class MonthYear
     	
     	static constexpr std::uint8_t month_max_value() noexcept
     	{
-    		return 254;
+    		return (UINT8_MAX - 1);
     	}
     	
     	static constexpr std::uint8_t month_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 255;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT8_MAX;
     	}
     
     	constexpr std::uint8_t month() const noexcept
@@ -176,19 +135,12 @@ class MonthYear
     	
     	static constexpr std::uint8_t day_max_value() noexcept
     	{
-    		return 254;
+    		return (UINT8_MAX - 1);
     	}
     	
     	static constexpr std::uint8_t day_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 255;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT8_MAX;
     	}
     
     	constexpr std::uint8_t day() const noexcept
@@ -231,19 +183,12 @@ class MonthYear
     	
     	static constexpr std::uint8_t week_max_value() noexcept
     	{
-    		return 254;
+    		return (UINT8_MAX - 1);
     	}
     	
     	static constexpr std::uint8_t week_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 255;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT8_MAX;
     	}
     
     	constexpr std::uint8_t week() const noexcept

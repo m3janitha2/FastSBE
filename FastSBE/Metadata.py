@@ -71,3 +71,44 @@ class Metadata:
 		"length",
 		"varData",
 	]
+
+	@staticmethod
+	def to_cpp_int_literal(value, primitive_type):
+		# Render an SBE limit/null value as a C++ literal.
+		#
+		# A type's extreme sentinels (min, max, and one step inside) are emitted
+		# as the matching <cstdint> macro (INT8_MIN, UINT64_MAX, ...). Generated
+		# headers already include <cstdint>, so this needs no extra include, and
+		# the macro is:
+		#   - self-documenting,
+		#   - warning-free (a bare 64-bit extreme is otherwise flagged "integer
+		#     constant is so large that it is unsigned", and INT*_MIN has no
+		#     negative-literal form in C++),
+		#   - zero runtime cost (a constant expression folded by the compiler).
+		# Any other value falls back to a correctly-suffixed literal.
+		spec = {
+			"int8"  : (8,  True),  "uint8"  : (8,  False),
+			"int16" : (16, True),  "uint16" : (16, False),
+			"int32" : (32, True),  "uint32" : (32, False),
+			"int64" : (64, True),  "uint64" : (64, False),
+		}
+		if primitive_type not in spec:
+			return str(value)
+		v = int(value)
+		(bits, signed) = spec[primitive_type]
+		base = ("" if signed else "U") + "INT" + str(bits)
+		if signed:
+			type_min = -(1 << (bits - 1))
+			type_max = (1 << (bits - 1)) - 1
+			if v == type_min:     return base + "_MIN"
+			if v == type_min + 1: return "(" + base + "_MIN + 1)"
+			if v == type_max:     return base + "_MAX"
+			if v == type_max - 1: return "(" + base + "_MAX - 1)"
+			suffix = "LL" if bits == 64 else ""
+		else:
+			type_max = (1 << bits) - 1
+			if v == 0:            return "0"
+			if v == type_max:     return base + "_MAX"
+			if v == type_max - 1: return "(" + base + "_MAX - 1)"
+			suffix = "ULL" if bits == 64 else "U"
+		return str(v) + suffix

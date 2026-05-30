@@ -367,19 +367,12 @@ class NewOrderSingle
     	
     	static constexpr std::uint64_t transact_time_max_value() noexcept
     	{
-    		return 18446744073709551614;
+    		return (UINT64_MAX - 1);
     	}
     	
     	static constexpr std::uint64_t transact_time_null_value() noexcept
-    	{ 
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 18446744073709551615;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    	{
+    		return UINT64_MAX;
     	}
     
     	constexpr std::uint64_t transact_time() const noexcept

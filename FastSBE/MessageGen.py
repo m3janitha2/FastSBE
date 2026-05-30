@@ -14,6 +14,8 @@ class FieldGen:
 	#enum
 	message_enum_field_ct           = open('metadata/c++/message/enum_field_def.h', 'r').read()
 	message_const_enum_field_ct     = open('metadata/c++/message/const_enum_field_def.h', 'r').read()
+	#set
+	message_set_field_ct            = open('metadata/c++/message/set_field_def.h', 'r').read()
 	#string
 	message_string_field_ct         = open('metadata/c++/message/string_field_def.h', 'r').read()
 	message_const_string_field_ct   = open('metadata/c++/message/const_string_field_def.h', 'r').read()
@@ -26,6 +28,8 @@ class FieldGen:
 	#enum
 	composite_enum_field_ct         = open('metadata/c++/composite/enum_field_def.h', 'r').read()
 	composite_const_enum_field_ct   = open('metadata/c++/composite/const_enum_field_def.h', 'r').read()
+	#set
+	composite_set_field_ct          = open('metadata/c++/composite/set_field_def.h', 'r').read()
 	#string
 	composite_string_field_ct       = open('metadata/c++/composite/string_field_def.h', 'r').read()
 	composite_const_string_field_ct = open('metadata/c++/composite/const_string_field_def.h', 'r').read()
@@ -228,6 +232,34 @@ class FieldGen:
 		self.gen_ostream_field(field_name, is_group, group_name)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_message_enum_field_def: %s', field_name)
+
+	def gen_message_set_field_def(self, message_name\
+		, field_type, field_id, field_name, prvious_field_name\
+		, is_group, group_name):
+		field_def = self.message_set_field_ct\
+			.replace('S_MESSAGE_NAME', message_name)\
+			.replace('S_FIELD_ID', str(field_id))\
+			.replace('S_FIELD_TYPE', field_type)\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_SCHEMA', field_name)\
+			.replace('S_FIELD_NAME', to_snake_case(field_name))
+		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.gen_ostream_field(field_name, is_group, group_name)
+		self.handler.user_includes.append(field_type)
+		logging.debug('gen_message_set_field_def: %s', field_name)
+
+	def gen_composite_set_field_def(self, message_name\
+		, field_type, field_name, prvious_field_name):
+		field_def = self.composite_set_field_ct\
+			.replace('S_MESSAGE_NAME', message_name)\
+			.replace('S_FIELD_TYPE', field_type)\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_SCHEMA', field_name)\
+			.replace('S_FIELD_NAME', to_snake_case(field_name))
+		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.gen_ostream_field_def(field_name)
+		self.handler.user_includes.append(field_type)
+		logging.debug('gen_composite_set_field_def: %s', field_name)
 
 	def gen_composite_enum_field_def(self, message_name\
 		, field_type, field_name, prvious_field_name\
@@ -505,7 +537,7 @@ class FieldGen:
 
 
 class MessageGen:
-	def __init__(self, handler, message_name, message_id, schema, version, description, namespace):
+	def __init__(self, handler, message_name, message_id, schema, version, description, namespace, descriptor = True):
 		self.handler = handler
 		self.message_name = message_name
 		self.namespace = namespace
@@ -516,9 +548,14 @@ class MessageGen:
 			, class_name = message_name)
 		self.field_gen = FieldGen(handler = self.handler, indentation = self.indentation\
 			, message_name = message_name, class_gen = self.class_gen, namespace = namespace)
-		
-		self.field_gen.gen_message_descriptor(message_name = message_name, message_id = message_id\
-			, schema = schema, version = version, description = description)
+
+		# template_id()/schema()/version() are message-level metadata; emitting
+		# them on composites collides with same-named field accessors (e.g.
+		# MessageHeader's templateId/version fields). Composites pass
+		# descriptor=False.
+		if descriptor:
+			self.field_gen.gen_message_descriptor(message_name = message_name, message_id = message_id\
+				, schema = schema, version = version, description = description)
 
 
 	def __del__(self):

@@ -11,33 +11,6 @@ namespace fastsbe
 class MessageHeader
 {
     
-    public:
-    	static constexpr const char* name() noexcept
-    	{ 
-    		return "MessageHeader"; 
-    	}
-    
-    	static constexpr std::size_t template_id() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr std::size_t schema() noexcept
-    	{  
-    		return 91; 
-    	}
-    
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 0; 
-    	}
-    
-    	static constexpr const char* semantic_type() noexcept
-    	{ 
-    		return ""; 	
-    	}
-    
-    
     private:
     	#pragma pack(push, 1)
     	std::uint16_t block_length_{};
@@ -66,19 +39,12 @@ class MessageHeader
     	
     	static constexpr std::uint16_t block_length_max_value() noexcept
     	{
-    		return 65534;
+    		return (UINT16_MAX - 1);
     	}
     	
     	static constexpr std::uint16_t block_length_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 65535;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT16_MAX;
     	}
     
     	constexpr std::uint16_t block_length() const noexcept
@@ -121,19 +87,12 @@ class MessageHeader
     	
     	static constexpr std::uint16_t template_id_max_value() noexcept
     	{
-    		return 65534;
+    		return (UINT16_MAX - 1);
     	}
     	
     	static constexpr std::uint16_t template_id_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 65535;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT16_MAX;
     	}
     
     	constexpr std::uint16_t template_id() const noexcept
@@ -176,19 +135,12 @@ class MessageHeader
     	
     	static constexpr std::uint16_t schema_id_max_value() noexcept
     	{
-    		return 65534;
+    		return (UINT16_MAX - 1);
     	}
     	
     	static constexpr std::uint16_t schema_id_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 65535;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT16_MAX;
     	}
     
     	constexpr std::uint16_t schema_id() const noexcept
@@ -231,19 +183,12 @@ class MessageHeader
     	
     	static constexpr std::uint16_t version_max_value() noexcept
     	{
-    		return 65534;
+    		return (UINT16_MAX - 1);
     	}
     	
     	static constexpr std::uint16_t version_null_value() noexcept
     	{
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic push
-    	#pragma GCC diagnostic ignored "-Wtype-limits"
-    	#endif
-    		return 65535;
-    	#if defined(__GNUG__)
-    	#pragma GCC diagnostic pop
-    	#endif
+    		return UINT16_MAX;
     	}
     
     	constexpr std::uint16_t version() const noexcept
