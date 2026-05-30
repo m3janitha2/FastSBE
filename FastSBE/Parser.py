@@ -7,7 +7,7 @@ from EnumGen import EnumClassGen
 from GroupGen import GroupGen
 from VariableLengthDataGen import VariableLengthDataGen
 from FileGen import ContentHandler
-from FileGen import Indentaion
+from FileGen import Indentation
 from FileGen import *
 
 
@@ -200,7 +200,7 @@ class Parser:
 
 		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring"]
 		handler.user_includes = []
-		indentation = Indentaion(0)
+		indentation = Indentation(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\
 			, file_name = to_pascal_case(enum_name), namespace = self.namespace\
 			, system_includes = system_includes, handler = handler)
@@ -326,7 +326,7 @@ class Parser:
 		self.generate_composite_class(composite, handler)
 
 		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring"]
-		indentation = Indentaion(0)
+		indentation = Indentation(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\
 			, file_name = to_pascal_case(composite_name), namespace = self.namespace\
 			, system_includes = system_includes, handler = handler)
@@ -636,7 +636,7 @@ class Parser:
 		self.generate_message(message, handler)
 
 		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring"]
-		indentation = Indentaion(0)
+		indentation = Indentation(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\
 			, file_name = message_name, namespace = self.namespace\
 			, system_includes = system_includes, handler = handler)

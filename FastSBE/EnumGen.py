@@ -1,6 +1,6 @@
 import logging
 
-from FileGen import Indentaion
+from FileGen import Indentation
 from FileGen import FileGen
 from FileGen import ClassGen
 
@@ -150,7 +150,7 @@ class EnumClassGen:
 		self.values = values
 		self.content = ""
 
-		self.indentation = Indentaion(0)
+		self.indentation = Indentation(0)
 		class_gen = ClassGen(handler = self.handler, indentation = self.indentation\
 			, class_name = self.enum_name)
 		self.gen_enum_class_content()

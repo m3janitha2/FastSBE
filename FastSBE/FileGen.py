@@ -11,7 +11,7 @@ def to_snake_case(name):
 	return s2.lower()
 
 
-class Indentaion:
+class Indentation:
 	def __init__(self, indentation):
 		self.indentation = indentation
 		self.tab_size = 4

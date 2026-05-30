@@ -1,6 +1,6 @@
 import logging
 
-from FileGen import Indentaion
+from FileGen import Indentation
 from FileGen import ClassGen
 from MessageGen import FieldGen
 
