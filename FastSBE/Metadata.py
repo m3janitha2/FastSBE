@@ -1,5 +1,12 @@
+"""Static SBE-to-C++ mapping tables and value helpers."""
+
 
 class Metadata:
+	"""C++ type names, primitive byte sizes and default min/max/null sentinels
+	for each SBE primitive, plus the integer-literal formatter for generated
+	code.
+	"""
+
 	primitive_types = {
 		"int8",	
 		"uint8",	
@@ -38,7 +45,7 @@ class Metadata:
 		"char"	: 1,
 		}
 
-	defult_minimum = {
+	default_minimum = {
 		"int8"	: -127,
 		"uint8"	: 0,
 		"int16"	: -32767,
@@ -50,7 +57,7 @@ class Metadata:
 		"char"	: 32,
 	}
 
-	defult_maximum = {
+	default_maximum = {
 		"int8"	: 127,
 		"uint8"	: 254,
 		"int16"	: 32767,
@@ -62,7 +69,7 @@ class Metadata:
 		"char"	: 255,
 	}
 
-	defult_null = {
+	default_null = {
 		"int8"	: -128,
 		"uint8"	: 255,
 		"int16"	: -32768,

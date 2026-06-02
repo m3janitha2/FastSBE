@@ -1,10 +1,15 @@
+"""Generate C++ enum classes from SBE <enum> definitions."""
+
 import logging
 
 from FileGen import Indentation
 from FileGen import FileGen
 from FileGen import ClassGen
+from FileGen import read_template
 
 class SwitchForEnumGen:
+	"""Build the switch body that maps each enum value to its string name."""
+
 	switch_begin_ct		='switch (value)\n{{\n'
 	switch_case_ct		='case Value::{S_ENUM_VALUE}:\n    return "{S_ENUM_VALUE}";\n'
 	switch_null_ct		='case Value::NULL:\n    return "{S_RET_VALUE}";\n'
@@ -49,9 +54,15 @@ class SwitchForEnumGen:
 
 
 class EnumClassGen:
-	ostream_enum_def_ct	= open('metadata/c++/message/ostream_enum_def.h', 'r').read()
+	"""Emit a C++ enum class for a schema enum: the nested Value enum (with its
+	null value) and the to_string() helper.
+	"""
+
+	ostream_enum_def_ct	= read_template('metadata/c++/message/ostream_enum_def.h')
 
 	class EnumDefinitionGen:
+		"""Emit the nested `enum class Value` with its named values."""
+
 		enum_def_ct			= 'public:\nenum class Value : {encoding_type}\n{{\n'
 		enum_def_end_ct		= '};\n'
 		enum_value_ct		= '{S_ENUM_NAME} = {S_ENUM_VALUE},\n'
@@ -100,6 +111,8 @@ class EnumClassGen:
 
 
 	class EnumToStrFunctionGen:
+		"""Emit the enum's static to_string(Value) function."""
+
 		fuction_begin_ct = "\npublic:\nstatic constexpr const char* to_string(Value value) noexcept\n{{"
 		fuction_end_ct = "}\n"
 

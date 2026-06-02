@@ -1,5 +1,24 @@
+"""Shared helpers for emitting generated C++.
+
+Template loading, identifier casing, indentation tracking, and the
+file/namespace/class scaffolding used by every generator.
+"""
+
 import logging
+import os
 import re
+
+
+# Template files live in metadata/ next to the generator sources. Resolve them
+# relative to this module rather than the current working directory so the
+# generator runs correctly from any cwd (CMake custom command, a Bazel sandbox,
+# or a manual invocation).
+_TEMPLATE_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+
+def read_template(relative_path):
+	with open(os.path.join(_TEMPLATE_ROOT, relative_path), 'r') as template_file:
+		return template_file.read()
 
 
 def to_snake_case(name):
@@ -12,6 +31,8 @@ def to_snake_case(name):
 
 
 class Indentation:
+	"""Track indentation depth and indent emitted text accordingly."""
+
 	def __init__(self, indentation):
 		self.indentation = indentation
 		self.tab_size = 4
@@ -37,10 +58,11 @@ class Indentation:
 		return indented_str
 
 class ClassGen:
-	# pack the whole struct so its C++ layout matches the SBE wire layout exactly
-	# (per-member #pragma pack is a no-op for struct packing; only a pack that
-	# spans the whole struct keeps every data member at its wire offset). This
-	# affects only data-member layout, not member functions.
+	"""Emit a C++ class open/close, packed so the struct layout matches the SBE
+	wire format.
+	"""
+
+	# whole-struct pack only; a per-member #pragma pack would be a no-op.
 	class_ct		= "\n#pragma pack(push, 1)\nclass {s_class_name}\n{{\n"
 	class_end_ct	= "};\n#pragma pack(pop)\n"
 
@@ -58,7 +80,6 @@ class ClassGen:
 		self.handler = handler
 		self.indentation = indentation
 		self.class_name = class_name
-		#self.namespace_gen = namespace_gen
 
 		logging.debug('create ClassGen: %s', self.class_name)
 		self.gen_class_begin()
@@ -70,6 +91,8 @@ class ClassGen:
 
 
 class NameSpaceGen:
+	"""Emit a C++ namespace open/close."""
+
 	namespace_ct		= "\nnamespace {s_namespace}\n{{\n"
 	namespace_end_ct	= "\n}\n"
 
@@ -98,6 +121,10 @@ class NameSpaceGen:
 
 
 class FileGen:
+	"""Write a generated header file: include guard, includes, namespace and the
+	accumulated class content.
+	"""
+
 	header_ct		= "#pragma once\n"
 	include_ct		= "#include<{include_file}>\n"
 
@@ -170,10 +197,6 @@ class FileGen:
 
 		logging.debug('create FileGen: %s', self.file_name)
 		self.gen_file_begin()
-		#self.file_gen = FileGen(indentation = self.indentation, out_folder = self.out_folder\
-		#	, file_name = self.enum_name, namespace = "sbe::test", include_list = self.include_list)
-		#namespace_gen = NameSpaceGen(content = self.content, indentation = self.indentation\
-		#	, namespace = self.namespace)
 		self.gen_content(content)
 
 	def __del__(self):
@@ -183,6 +206,10 @@ class FileGen:
 		logging.debug('delete FileGen: %s', self.file_name)
 
 class ContentHandler:
+	"""Accumulate the generated text sections (class body, ostream operators)
+	for one output file.
+	"""
+
 	def __init__(self):
 		self.content = ""
 		self.user_includes =[]

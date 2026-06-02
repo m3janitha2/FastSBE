@@ -1,15 +1,20 @@
+"""Generate C++ accessors for SBE variable-length data fields."""
+
 import logging
 
 from FileGen import Indentation
 from FileGen import ClassGen
+from FileGen import read_template
 from MessageGen import FieldGen
 
 class VariableLengthDataGen:
-	group_qulifiyer_def_ct = open('metadata/c++/message/group_qulifiyer_def.h', 'r').read()
-	group_class_qulifiyer_def_ct = 'public:'
+	"""Emit the class for a variable-length data field (a length + varData pair)."""
 
-	def gen_qulifiyer_def(self, message_name):
-			field_def = self.group_qulifiyer_def_ct\
+	group_qualifier_def_ct = read_template('metadata/c++/message/group_qualifier_def.h')
+	group_class_qualifier_def_ct = 'public:'
+
+	def gen_qualifier_def(self, message_name):
+			field_def = self.group_qualifier_def_ct\
 				.replace('S_MESSAGE_NAME', message_name)
 			self.handler.content += self.indentation.get_indented_str(field_def)
 			
@@ -22,11 +27,11 @@ class VariableLengthDataGen:
 		self.dimension_type = dimension_type
 
 		logging.debug('create VariableLengthDataGen: %s', self.name)
-		self.handler.content += self.indentation.get_indented_str(self.group_class_qulifiyer_def_ct)
+		self.handler.content += self.indentation.get_indented_str(self.group_class_qualifier_def_ct)
 		self.class_gen = ClassGen(handler = self.handler, indentation = self.indentation\
 			, class_name = self.name)
 
-		self.gen_qulifiyer_def(message_name)
+		self.gen_qualifier_def(message_name)
 
 
 	def __del__(self):

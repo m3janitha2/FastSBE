@@ -1,3 +1,9 @@
+"""Command-line entry point for the FastSBE code generator.
+
+Parses the log-file, schema-file, output-folder and optional namespace
+arguments, then runs Parser to emit the C++ SBE codec headers for the schema.
+"""
+
 import argparse
 import logging
 import logging.handlers
@@ -39,7 +45,3 @@ if not os.path.exists(args.out_folder):
 parser = Parser(schema_file = args.schema_file
 	, out_folder = args.out_folder\
 	, override_namespace = args.override_namespace)
-
-# parser = Parser(schema_file = 'example-schema.xml'\
-# 	, out_folder = "gen"\
-# 	, override_namespace = "test::sbe")

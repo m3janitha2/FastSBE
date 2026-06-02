@@ -1,3 +1,5 @@
+"""Generate C++ classes for SBE <set> (bitset) types."""
+
 import logging
 
 from FileGen import Indentation
@@ -5,21 +7,15 @@ from FileGen import ClassGen
 
 
 class SetClassGen:
-	# A <set> is a bitmap: an unsigned integer where each <choice> is a bit.
-	# It is generated as a class scoping the choices as bit masks, mirroring
-	# how an <enum> is generated as a class scoping enum class Value:
-	#
-	#   class MatchEventIndicator {
-	#    public:
-	#     using value_type = std::uint8_t;
-	#     enum class Choice : value_type { LastTradeMsg = 1u << 0, ... };
-	#   };
-	#   constexpr MatchEventIndicator::Choice operator|(...);   // combine: A | B
-	#
-	# The raw value lives in the owning message/group field, so this type holds
-	# no state - it only scopes the choices and the combine operator.
+	"""Emit a C++ class for an SBE set. A set is a bitmap where each <choice> is
+	one bit, generated as a Choice enum of bit masks plus an operator| to
+	combine them. The set holds no state - the raw value lives in the owning
+	field.
+	"""
 
 	class ChoiceDefinitionGen:
+		"""Emit the nested Choice enum, one bit-mask value per choice."""
+
 		choice_begin_ct = 'public:\nusing value_type = {encoding_type};\nenum class Choice : value_type\n{{\n'
 		choice_end_ct = '};\n'
 		choice_value_ct = '{name} = static_cast<value_type>(1u << {index}),\n'

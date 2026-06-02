@@ -1,14 +1,23 @@
+"""Generate C++ classes for SBE repeating groups."""
+
 import logging
 
 from FileGen import Indentation
 from FileGen import ClassGen
+from FileGen import read_template
 from MessageGen import FieldGen
 
 class GroupGen:
-	group_qulifiyer_def_ct = open('metadata/c++/message/group_qulifiyer_def.h', 'r').read()
-	group_class_qulifiyer_def_ct = 'public:'
+	"""Emit the C++ class for a repeating group: its dimension header and the
+	Append accessor that adds entries.
+	"""
+
+	group_qualifier_def_ct = read_template('metadata/c++/message/group_qualifier_def.h')
+	group_class_qualifier_def_ct = 'public:'
 
 	class GroupEntryGen:
+		"""Emit the Entry class - the field layout of one group occurrence."""
+
 		def __init__(self, handler, indentation, namespace):
 			self.handler = handler
 			self.indentation = indentation
@@ -25,8 +34,8 @@ class GroupGen:
 			self.indentation.decrement()
 			logging.debug('delete GroupEntryGen')
 
-	def gen_group_qulifiyer_def(self, message_name):
-			field_def = self.group_qulifiyer_def_ct\
+	def gen_group_qualifier_def(self, message_name):
+			field_def = self.group_qualifier_def_ct\
 				.replace('S_MESSAGE_NAME', message_name)
 			self.handler.content += self.indentation.get_indented_str(field_def)
 
@@ -39,11 +48,11 @@ class GroupGen:
 		self.dimension_type = dimension_type
 
 		logging.debug('create GroupGen: %s', self.name)
-		self.handler.content += self.indentation.get_indented_str(self.group_class_qulifiyer_def_ct)
+		self.handler.content += self.indentation.get_indented_str(self.group_class_qualifier_def_ct)
 		self.class_gen = ClassGen(handler = self.handler, indentation = self.indentation\
 			, class_name = self.name)
 
-		self.gen_group_qulifiyer_def(message_name)
+		self.gen_group_qualifier_def(message_name)
 
 
 	def __del__(self):

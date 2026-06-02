@@ -1,3 +1,9 @@
+"""Parse an SBE XML schema and drive C++ codec generation.
+
+This is the orchestrator: it reads the schema's types, enums, sets, composites
+and messages and dispatches each to the matching generator.
+"""
+
 import xml.etree.ElementTree as ET
 import logging
 
@@ -9,7 +15,7 @@ from GroupGen import GroupGen
 from VariableLengthDataGen import VariableLengthDataGen
 from FileGen import ContentHandler
 from FileGen import Indentation
-from FileGen import *
+from FileGen import FileGen
 
 
 def to_pascal_case(name):
@@ -31,8 +37,13 @@ def to_pascal_case(name):
 
 
 class Parser:
+	"""Walk a parsed SBE schema and generate a C++ header per type, enum, set,
+	composite and message. Computes field byte sizes and offsets so the
+	generated struct layout matches the SBE wire format.
+	"""
+
 	def get_null_value_of_primitive(self, type):
-		null_value = Metadata.defult_null[type]
+		null_value = Metadata.default_null[type]
 		# if minValue or maxValue or nullValue attrib defined by user, override
 		if('nullValue' in type):
 			null_value = type['nullValue']
@@ -40,9 +51,9 @@ class Parser:
 
 
 	def get_numeric_attrib_of_primitive(self, type, attrib = None):
-		min_value = Metadata.defult_minimum[type]
-		max_value = Metadata.defult_maximum[type]
-		null_value = Metadata.defult_null[type]
+		min_value = Metadata.default_minimum[type]
+		max_value = Metadata.default_maximum[type]
+		null_value = Metadata.default_null[type]
 		# if minValue / maxValue / nullValue defined in the schema, override the default.
 		# attrib is the combined field+type attribute dict from the caller.
 		if(attrib is not None):
@@ -136,7 +147,6 @@ class Parser:
 		return Metadata.primitive_sizes[primitive]
 
 
-	#primitive_types are numeric
 	def is_numeric(self, primitive_type, attrib):
 		if (primitive_type in Metadata.primitive_types):
 			return True
@@ -161,8 +171,6 @@ class Parser:
 			return False
 
 
-	#name,primitiveType,minValue,maxValue,nullValue,length,characterEncoding,presence
-	#parse all type in types section
 	def parse_all_types(self, types):
 		for type in types.iter('type'):
 			type_name = type.attrib['name']
@@ -273,7 +281,6 @@ class Parser:
 		return value.strip()
 
 	def get_enum_null_value(self, enum_attrib):
-		#defined anywhere in the fields
 		enum_name = enum_attrib['name']
 		xpath = ".//*[@name='" + enum_name + "']"
 		field = self.root.find(xpath)
@@ -292,7 +299,6 @@ class Parser:
 
 		enum_name = type.attrib['name']
 		encoding_type = type.attrib['encodingType']
-		#if type is user defined
 		enum_attrib = self.update_enum_attrib(type = type)
 		primitive_encoding_type = self.get_primitive_encoding_type(enum_attrib)
 		enum_values.append(self.get_enum_null_value(enum_attrib))
@@ -309,7 +315,6 @@ class Parser:
 			, system_includes = system_includes, handler = handler)
 
 
-	# read all enum in types
 	def parse_all_enums(self, types):
 		for type in types.iter('enum'):
 			self.generate_enum(type)
@@ -337,7 +342,6 @@ class Parser:
 			, system_includes = system_includes, handler = handler)
 
 
-	# read all set in types
 	def parse_all_sets(self, types):
 		for type in types.iter('set'):
 			self.generate_set(type)
@@ -363,7 +367,7 @@ class Parser:
 			return field.attrib['type']
 
 
-	def generate_composite_type(self, field_gen, composite_name, type, prvious_type_name):
+	def generate_composite_type(self, field_gen, composite_name, type, previous_type_name):
 		type_name = type.attrib['name']
 		composite_type = self.get_composite_type(type)
 		includes = []
@@ -371,7 +375,6 @@ class Parser:
 		# honor the schema offset of this composite member (emit padding for gaps)
 		field_gen.layout_field(type_name, type.attrib.get('offset'), self.get_member_size(type))
 
-		#enum
 		if('valueRef' in type.attrib.keys()):
 			composite_type = Parser.get_enum_type(type)
 
@@ -380,57 +383,54 @@ class Parser:
 			if(self.is_const_type(type.attrib)):
 				logging.debug('const enum field: %s', type_name)
 				field_gen.gen_composite_const_enum_field_def(message_name = composite_name, field_type = to_pascal_case(composite_type)\
-					, field_name = type_name, prvious_field_name = prvious_type_name\
+					, field_name = type_name, previous_field_name = previous_type_name\
 					, value = Parser.get_enum_const_value(type))
 				return type_name, includes
 			else:
 				logging.debug('enum field: %s', type_name)
 				null_value = 0
 				field_gen.gen_composite_enum_field_def(message_name = composite_name, field_type = to_pascal_case(composite_type)\
-					, field_name = type_name, prvious_field_name = prvious_type_name\
+					, field_name = type_name, previous_field_name = previous_type_name\
 					, null = null_value)
 				return type_name, includes
 
-		#set
 		if(composite_type in self.user_defined_sets):
 			logging.debug('set field: %s', type_name)
 			field_gen.gen_composite_set_field_def(message_name = composite_name, field_type = to_pascal_case(composite_type)\
-				, field_name = type_name, prvious_field_name = prvious_type_name)
+				, field_name = type_name, previous_field_name = previous_type_name)
 			return type_name, includes
 
 		field_attrib =  self.update_type_attrib(field = type)
 		primitive_type = self.get_primitive_type(type.attrib)
 		field_type = Metadata.c_field_types[primitive_type]
 
-		#string
 		if(self.is_string_field(primitive_type, field_attrib)):
 			if(self.is_const_type(type.attrib)):
 				logging.debug('const string field: %s', type_name)
 				field_gen.gen_composite_const_string_field_def(message_name = composite_name\
 					, field_type = field_type\
-					, field_name = type_name, prvious_field_name = prvious_type_name, field_size = type.attrib['length']\
+					, field_name = type_name, previous_field_name = previous_type_name, field_size = type.attrib['length']\
 					, value = type.text)
 				return type_name, includes
 			else:
 				logging.debug('const string field: %s', type_name)
 				field_gen.gen_composite_string_field_def(message_name = composite_name\
 					, field_type = field_type\
-					, field_name = type_name, prvious_field_name = prvious_type_name, field_size = type.attrib['length'])
+					, field_name = type_name, previous_field_name = previous_type_name, field_size = type.attrib['length'])
 				return type_name, includes
 		
-		#numric
-		if(self.is_numeric(primitive_type, type.attrib) == True):
+		if(self.is_numeric(primitive_type, type.attrib)):
 			if(('presence' in type.attrib) and (type.attrib['presence'] == 'constant')):
 				field_gen.gen_composite_const_numeric_field_def(message_name = composite_name\
 					, field_type = field_type\
-					, field_name = type_name, prvious_field_name = prvious_type_name\
+					, field_name = type_name, previous_field_name = previous_type_name\
 					, value = type.text)
 				return type_name, includes
 			else:
 				(min_value, max_value, null_value) = self.get_numeric_attrib_of_primitive(primitive_type, field_attrib)
 				field_gen.gen_composite_numeric_field_def(message_name = composite_name\
 					, field_type = field_type\
-					, field_name = type_name, prvious_field_name = prvious_type_name\
+					, field_name = type_name, previous_field_name = previous_type_name\
 					, min = min_value, max = max_value, null = null_value)
 				return type_name, includes
 		else:
@@ -438,7 +438,6 @@ class Parser:
 			exit()
 
 
-	# description is an optional attribute
 	def get_description(message):
 		if 'description' in message.attrib:
 			return message.attrib['description']
@@ -454,10 +453,10 @@ class Parser:
 
 		msg_gen.field_gen.gen_ostream_begin()
 		msg_gen.field_gen.reset_layout()
-		prvious_type_name = "";
+		previous_type_name = ""
 		for type in composite.iter('type'):
-			prvious_type_name, includes = self.generate_composite_type(msg_gen.field_gen, to_pascal_case(composite_name), type\
-				, prvious_type_name)
+			previous_type_name, includes = self.generate_composite_type(msg_gen.field_gen, to_pascal_case(composite_name), type\
+				, previous_type_name)
 		msg_gen.field_gen.gen_ostream_end()
 		msg_gen.field_gen.gen_trailing_padding(composite.attrib.get('blockLength'))
 		msg_gen.field_gen.gen_constructor()
@@ -483,7 +482,7 @@ class Parser:
 			self.generate_composite(composite)
 
 
-	def generate_message_field(self, field_gen, message_name, field, prvious_field_name, is_group, group_name):
+	def generate_message_field(self, field_gen, message_name, field, previous_field_name, is_group, group_name):
 		field_name = field.attrib['name']
 		field_id = field.attrib['id']
 		field_type = field.attrib['type']
@@ -492,35 +491,32 @@ class Parser:
 		# padding for any gap) before its member is generated.
 		field_gen.layout_field(field_name, field.attrib.get('offset'), self.get_type_size(field))
 
-		#enum
 		if(field_type in self.user_defined_enums):
 			if(self.is_const_type(field.attrib)):
 				logging.debug('const enum field: %s', field_name)
 				field_gen.gen_message_const_enum_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
-					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+					, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 					, value = Parser.get_enum_const_value(field), is_group = is_group, group_name = group_name)
 				return field_name
 			else:
 				logging.debug('enum field: %s', field_name)
 				null_value = 0
 				field_gen.gen_message_enum_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
-					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+					, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 					, null = null_value, is_group = is_group, group_name = group_name)
 				return field_name
 
-		#set
 		if(field_type in self.user_defined_sets):
 			logging.debug('set field: %s', field_name)
 			field_gen.gen_message_set_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
-				, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+				, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 				, is_group = is_group, group_name = group_name)
 			return field_name
 
-		#composite
 		if(field_type in self.user_defined_composites):
 			logging.debug('composite field: %s', field_name)
 			field_gen.gen_message_composite_field_def(message_name = message_name, field_type = to_pascal_case(field_type)\
-				, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+				, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 				, is_group = is_group, group_name = group_name)
 			return field_name
 
@@ -528,13 +524,12 @@ class Parser:
 		field_attrib = self.update_field_attrib(field)
 		primitive_type = self.get_primitive_type(field_attrib)
 
-		#string
 		if(self.is_string_field(primitive_type, field_attrib)):
 			if(self.is_const_type(field_attrib)):
 				logging.debug('const string field: %s', field_name)
 				field_gen.gen_message_const_string_field_def(message_name = message_name\
 					, field_type = Metadata.c_field_types[primitive_type]\
-					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+					, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 					, field_size = field_attrib['length']\
 					, value = self.get_const_value(field), is_group = is_group, group_name = group_name)
 				return field_name
@@ -543,12 +538,11 @@ class Parser:
 				logging.debug('const string field: %s', field_name)
 				field_gen.gen_message_string_field_def(message_name = message_name\
 					, field_type = Metadata.c_field_types[primitive_type]\
-					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+					, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 					, field_size = field_attrib['length'], is_group = is_group, group_name = group_name)
 				return field_name
 
-		#numeric
-		if(self.is_numeric(primitive_type, field_attrib) == True):
+		if(self.is_numeric(primitive_type, field_attrib)):
 			logging.debug('const numeric field: %s', field_name)
 			if(('presence' in field_attrib) and (field_attrib['presence'] == 'constant')):
 				const_value = self.get_const_value(field)
@@ -556,7 +550,7 @@ class Parser:
 					const_value = "'" + const_value + "'"
 				field_gen.gen_message_const_numeric_field_def(message_name = message_name\
 					, field_type = Metadata.c_field_types[primitive_type]\
-					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+					, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 					, value = const_value, is_group = is_group, group_name = group_name)
 				return field_name
 			else:
@@ -564,7 +558,7 @@ class Parser:
 				(min_value, max_value, null_value) = self.get_numeric_attrib_of_primitive(primitive_type, field_attrib)
 				field_gen.gen_message_numeric_field_def(message_name = message_name\
 					, field_type = Metadata.c_field_types[primitive_type]\
-					, field_id = field_id, field_name = field_name, prvious_field_name = prvious_field_name\
+					, field_id = field_id, field_name = field_name, previous_field_name = previous_field_name\
 					, min = min_value, max = max_value, null = null_value, is_group = is_group, group_name = group_name)
 				return field_name
 
@@ -582,11 +576,11 @@ class Parser:
 
 		entry_gen.field_gen.gen_ostream_group_begin(group_name, message_name)
 		entry_gen.field_gen.reset_layout()
-		prvious_field_name = ""
+		previous_field_name = ""
 		for field in group:
 			if (field.tag == 'field'):
-				prvious_field_name = self.generate_message_field(entry_gen.field_gen\
-					, group_name, field, prvious_field_name, is_group = True, group_name = group_name)
+				previous_field_name = self.generate_message_field(entry_gen.field_gen\
+					, group_name, field, previous_field_name, is_group = True, group_name = group_name)
 		entry_gen.field_gen.gen_trailing_padding(group.attrib.get('blockLength'))
 		entry_gen.field_gen.gen_ostream_group_end()
 
@@ -691,7 +685,7 @@ class Parser:
 				, num_var_data_field_type = dimension[3]['type'])
 
 
-	def parse_group(self, msg_gen, handler, message_name, group, prvious_field_name):
+	def parse_group(self, msg_gen, handler, message_name, group, previous_field_name):
 		group_name = group.attrib['name']
 		group_id = group.attrib['id']
 		dimension_type = group.attrib['dimensionType']
@@ -703,18 +697,18 @@ class Parser:
 		dimension_type_count = len(dimension)
 		if(dimension_type_count == 2):
 			msg_gen.field_gen.gen_group_def(group_name = group_name\
-				, prvious_group_name = prvious_field_name, group_id = group_id\
+				, previous_group_name = previous_field_name, group_id = group_id\
 				, dimension_type = to_pascal_case(dimension_type), block_length_name = 'blockLength'\
 				, num_in_group_name = 'numInGroup', num_in_group_type = 'std::uint16_t')
 		elif(dimension_type_count == 4):
 			msg_gen.field_gen.gen_group_def_4(group_name = group_name
-				, prvious_group_name = prvious_field_name, group_id = group_id\
+				, previous_group_name = previous_field_name, group_id = group_id\
 				, dimension_type = to_pascal_case(dimension_type), block_length_name = dimension[0]['name']\
 				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type']\
 				, num_groups_name = dimension[2]['name'], num_groups_type = dimension[2]['type']\
 				, num_var_data_fields_name = dimension[3]['name'], num_var_data_fields_type = dimension[3]['type'])
 
-		return group_name;
+		return group_name
 
 
 	def generate_nested_variable_length_data(self, msg_gen, handler, var_len_data, message_name, dimension):
@@ -730,7 +724,7 @@ class Parser:
 			, dimension = dimension)		
 
 
-	def parse_data(self, msg_gen, handler, message_name, var_len_data, prvious_var_len_data_name):
+	def parse_data(self, msg_gen, handler, message_name, var_len_data, previous_var_len_data_name):
 		name = var_len_data.attrib['name']
 		id = var_len_data.attrib['id']
 		dimension_type = var_len_data.attrib['type']
@@ -739,10 +733,10 @@ class Parser:
 		self.generate_nested_variable_length_data(msg_gen, handler, var_len_data, message_name, dimension)
 
 		msg_gen.field_gen.gen_variable_length_data_def(var_len_data_name = name\
-			, prvious_var_len_data_name = prvious_var_len_data_name, var_len_data_id = id\
+			, previous_var_len_data_name = previous_var_len_data_name, var_len_data_id = id\
 			, dimension_type = to_pascal_case(dimension_type), dimension = dimension)
 
-		return name;
+		return name
 		
 
 	def generate_message(self, message, handler):
@@ -757,37 +751,35 @@ class Parser:
 		msg_gen.field_gen.reset_layout()
 		is_group_section = False
 		is_var_data_section = False
-		prvious_field_name = "";
-		for eliment in message:
-			if (eliment.tag == 'field'):
-				prvious_field_name = self.generate_message_field(msg_gen.field_gen, message_name, eliment\
-					, prvious_field_name, is_group = False, group_name = '')
-			elif(eliment.tag == 'group'):
-				if(is_group_section == False):
-					#this is the first group field
+		previous_field_name = ""
+		for element in message:
+			if (element.tag == 'field'):
+				previous_field_name = self.generate_message_field(msg_gen.field_gen, message_name, element\
+					, previous_field_name, is_group = False, group_name = '')
+			elif(element.tag == 'group'):
+				if(not is_group_section):
 					is_group_section = True
-					prvious_field_name = "";
+					previous_field_name = ""
 					msg_gen.field_gen.gen_trailing_padding(message.attrib.get('blockLength'))
 					msg_gen.field_gen.gen_buffer_def(1024)					
 					
-				prvious_field_name = self.parse_group(msg_gen, handler, message_name, eliment\
-					, prvious_field_name)
+				previous_field_name = self.parse_group(msg_gen, handler, message_name, element\
+					, previous_field_name)
 
-			elif(eliment.tag == 'data'):
-				if(is_var_data_section == False):
+			elif(element.tag == 'data'):
+				if(not is_var_data_section):
 					is_var_data_section = True
-					#this is the first variable length data field
-					if(is_group_section == True):
+					if(is_group_section):
 						#there was a group before data
 						pass
 					else:					
-						prvious_field_name = "";
+						previous_field_name = ""
 						msg_gen.field_gen.gen_trailing_padding(message.attrib.get('blockLength'))
 						msg_gen.field_gen.gen_buffer_def(1024)
 						is_fixed_length_section = False
 
-				prvious_field_name = self.parse_data(msg_gen, handler, message_name, eliment\
-					, prvious_field_name)
+				previous_field_name = self.parse_data(msg_gen, handler, message_name, element\
+					, previous_field_name)
 
 		msg_gen.field_gen.gen_ostream_end()
 

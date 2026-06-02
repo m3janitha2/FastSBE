@@ -1,3 +1,5 @@
+"""Generate the C++ classes for SBE messages and composites."""
+
 import logging
 
 from FileGen import Indentation
@@ -5,61 +7,54 @@ from FileGen import FileGen
 from FileGen import ClassGen
 from FileGen import ContentHandler
 from FileGen import to_snake_case
+from FileGen import read_template
 
 class FieldGen:
-	message_def_ct                  = open('metadata/c++/message/message_def.h', 'r').read()
-	#numeirc
-	message_numeric_field_ct        = open('metadata/c++/message/numeric_field_def.h', 'r').read()
-	message_const_numeric_field_ct  = open('metadata/c++/message/const_numeric_field_def.h', 'r').read()
-	#enum
-	message_enum_field_ct           = open('metadata/c++/message/enum_field_def.h', 'r').read()
-	message_const_enum_field_ct     = open('metadata/c++/message/const_enum_field_def.h', 'r').read()
-	#set
-	message_set_field_ct            = open('metadata/c++/message/set_field_def.h', 'r').read()
-	#string
-	message_string_field_ct         = open('metadata/c++/message/string_field_def.h', 'r').read()
-	message_const_string_field_ct   = open('metadata/c++/message/const_string_field_def.h', 'r').read()
-	#composite
-	message_composite_field_ct      = open('metadata/c++/message/composite_field_def.h', 'r').read()
-	#padding (honors explicit schema offsets)
-	padding_def_ct                  = open('metadata/c++/message/padding_def.h', 'r').read()
+	"""Emit the members and accessors for the fields of a message, composite or
+	group entry - numeric, enum, set, string, composite and constant fields -
+	plus the padding that keeps each field at its declared offset and the block
+	at its declared blockLength.
+	"""
 
-	#numeirc
-	composite_numeric_field_ct      = open('metadata/c++/composite/numeric_field_def.h', 'r').read()
-	composite_const_numeric_field_ct= open('metadata/c++/composite/const_numeric_field_def.h', 'r').read()
-	#enum
-	composite_enum_field_ct         = open('metadata/c++/composite/enum_field_def.h', 'r').read()
-	composite_const_enum_field_ct   = open('metadata/c++/composite/const_enum_field_def.h', 'r').read()
-	#set
-	composite_set_field_ct          = open('metadata/c++/composite/set_field_def.h', 'r').read()
-	#string
-	composite_string_field_ct       = open('metadata/c++/composite/string_field_def.h', 'r').read()
-	composite_const_string_field_ct = open('metadata/c++/composite/const_string_field_def.h', 'r').read()
+	message_def_ct                  = read_template('metadata/c++/message/message_def.h')
+	message_numeric_field_ct        = read_template('metadata/c++/message/numeric_field_def.h')
+	message_const_numeric_field_ct  = read_template('metadata/c++/message/const_numeric_field_def.h')
+	message_enum_field_ct           = read_template('metadata/c++/message/enum_field_def.h')
+	message_const_enum_field_ct     = read_template('metadata/c++/message/const_enum_field_def.h')
+	message_set_field_ct            = read_template('metadata/c++/message/set_field_def.h')
+	message_string_field_ct         = read_template('metadata/c++/message/string_field_def.h')
+	message_const_string_field_ct   = read_template('metadata/c++/message/const_string_field_def.h')
+	message_composite_field_ct      = read_template('metadata/c++/message/composite_field_def.h')
+	padding_def_ct                  = read_template('metadata/c++/message/padding_def.h')
 
-	constructor_ct                  = open('metadata/c++/composite/constructor_def.h', 'r').read()
+	composite_numeric_field_ct      = read_template('metadata/c++/composite/numeric_field_def.h')
+	composite_const_numeric_field_ct= read_template('metadata/c++/composite/const_numeric_field_def.h')
+	composite_enum_field_ct         = read_template('metadata/c++/composite/enum_field_def.h')
+	composite_const_enum_field_ct   = read_template('metadata/c++/composite/const_enum_field_def.h')
+	composite_set_field_ct          = read_template('metadata/c++/composite/set_field_def.h')
+	composite_string_field_ct       = read_template('metadata/c++/composite/string_field_def.h')
+	composite_const_string_field_ct = read_template('metadata/c++/composite/const_string_field_def.h')
+
+	constructor_ct                  = read_template('metadata/c++/composite/constructor_def.h')
 
 
-	#group
-	nested_group_def_ct             = open('metadata/c++/message/nested_group_def.h', 'r').read()
-	nested_group_def_ct_4           = open('metadata/c++/message/nested_group_def_4.h', 'r').read()
-	group_def_ct                    = open('metadata/c++/message/group_def.h', 'r').read()
-	group_def_ct_4                  = open('metadata/c++/message/group_def_4.h', 'r').read()
+	nested_group_def_ct             = read_template('metadata/c++/message/nested_group_def.h')
+	nested_group_def_ct_4           = read_template('metadata/c++/message/nested_group_def_4.h')
+	group_def_ct                    = read_template('metadata/c++/message/group_def.h')
+	group_def_ct_4                  = read_template('metadata/c++/message/group_def_4.h')
 
-	#variable length data
-	nested_var_len_data_def_ct      = open('metadata/c++/message/nested_variable_length_data_def.h', 'r').read()
-	var_len_data_def_ct             = open('metadata/c++/message/variable_length_data_def.h', 'r').read()
+	nested_var_len_data_def_ct      = read_template('metadata/c++/message/nested_variable_length_data_def.h')
+	var_len_data_def_ct             = read_template('metadata/c++/message/variable_length_data_def.h')
 
-	#buffer
-	buffer_def_ct                   = open('metadata/c++/message/buffer_def.h', 'r').read()
+	buffer_def_ct                   = read_template('metadata/c++/message/buffer_def.h')
 
-	#ostream
-	ostream_field_def_begin_ct      = open('metadata/c++/message/ostream_field_def_begin.h', 'r').read()
-	ostream_field_def_end_ct        = open('metadata/c++/message/ostream_field_def_end.h', 'r').read()
-	ostream_field_def_ct            = open('metadata/c++/message/ostream_field_def.h', 'r').read()
-	ostream_group_def_begin_ct      = open('metadata/c++/message/ostream_group_def_begin.h', 'r').read()
-	ostream_group_def_end_ct        = open('metadata/c++/message/ostream_group_def_end.h', 'r').read()
-	ostream_group_field_def_ct      = open('metadata/c++/message/ostream_group_field_def.h', 'r').read()
-	ostream_var_len_data_def_ct      = open('metadata/c++/message/ostream_var_len_data_def_ct.h', 'r').read()
+	ostream_field_def_begin_ct      = read_template('metadata/c++/message/ostream_field_def_begin.h')
+	ostream_field_def_end_ct        = read_template('metadata/c++/message/ostream_field_def_end.h')
+	ostream_field_def_ct            = read_template('metadata/c++/message/ostream_field_def.h')
+	ostream_group_def_begin_ct      = read_template('metadata/c++/message/ostream_group_def_begin.h')
+	ostream_group_def_end_ct        = read_template('metadata/c++/message/ostream_group_def_end.h')
+	ostream_group_field_def_ct      = read_template('metadata/c++/message/ostream_group_field_def.h')
+	ostream_var_len_data_def_ct      = read_template('metadata/c++/message/ostream_var_len_data_def_ct.h')
 	
 
 	def gen_message_descriptor(self, message_name, message_id, schema, version, description):
@@ -124,16 +119,16 @@ class FieldGen:
 		self.field_offset = self.current_offset
 		self.current_offset += field_size
 
-	def get_field_offset(self, prvious_field_name):
+	def get_field_offset(self, previous_field_name):
 		# offset resolved by layout_field; emitted as a literal constant so the
 		# generated code does no runtime offset arithmetic.
 		return str(self.field_offset)
 
-	def get_group_offset(self, prvious_field_name):
-		if(prvious_field_name ==""):
-			return '0';
+	def get_group_offset(self, previous_field_name):
+		if(previous_field_name ==""):
+			return '0'
 		else:
-			return to_snake_case(prvious_field_name) + '_offset() + ' + 'sizeof(' + prvious_field_name + '::header_) + ' + to_snake_case(prvious_field_name) + '_data_length()'
+			return to_snake_case(previous_field_name) + '_offset() + ' + 'sizeof(' + previous_field_name + '::header_) + ' + to_snake_case(previous_field_name) + '_data_length()'
 
 
 	def gen_ostream_field_def_begin(self):
@@ -164,7 +159,7 @@ class FieldGen:
 
 
 	def gen_ostream_field(self, field_name, is_group, group_name):
-		if(is_group == False):
+		if(not is_group):
 			self.gen_ostream_field_def(field_name)
 		else:
 			self.gen_ostream_group_field_def(field_name, group_name)
@@ -209,13 +204,13 @@ class FieldGen:
 
 
 	def gen_message_numeric_field_def(self, message_name\
-		, field_type, field_id, field_name, prvious_field_name\
+		, field_type, field_id, field_name, previous_field_name\
 		, min, max, null, is_group, group_name):
 		field_def = self.message_numeric_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_MIN', str(min))\
@@ -226,12 +221,12 @@ class FieldGen:
 		logging.debug('gen_message_numeric_field_def: %s', field_name)
 
 	def gen_composite_numeric_field_def(self, message_name\
-		, field_type, field_name, prvious_field_name\
+		, field_type, field_name, previous_field_name\
 		, min, max, null):
 		field_def = self.composite_numeric_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_MIN', str(min))\
@@ -244,12 +239,12 @@ class FieldGen:
 
 
 	def gen_message_const_numeric_field_def(self, message_name\
-		, field_type, field_id, field_name, prvious_field_name, value, is_group, group_name):
+		, field_type, field_id, field_name, previous_field_name, value, is_group, group_name):
 		field_def = self.message_const_numeric_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
@@ -258,11 +253,11 @@ class FieldGen:
 		logging.debug('gen_message_const_numeric_field_def: %s', field_name)
 
 	def gen_composite_const_numeric_field_def(self, message_name\
-		, field_type, field_name, prvious_field_name, value):
+		, field_type, field_name, previous_field_name, value):
 		field_def = self.composite_const_numeric_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
@@ -272,13 +267,13 @@ class FieldGen:
 
 
 	def gen_message_enum_field_def(self, message_name\
-		, field_type, field_id, field_name, prvious_field_name\
+		, field_type, field_id, field_name, previous_field_name\
 		, null, is_group, group_name):
 		field_def = self.message_enum_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_NULL', str(null))
@@ -288,13 +283,13 @@ class FieldGen:
 		logging.debug('gen_message_enum_field_def: %s', field_name)
 
 	def gen_message_set_field_def(self, message_name\
-		, field_type, field_id, field_name, prvious_field_name\
+		, field_type, field_id, field_name, previous_field_name\
 		, is_group, group_name):
 		field_def = self.message_set_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
 		self.handler.content += self.indentation.get_indented_str(field_def)
@@ -303,11 +298,11 @@ class FieldGen:
 		logging.debug('gen_message_set_field_def: %s', field_name)
 
 	def gen_composite_set_field_def(self, message_name\
-		, field_type, field_name, prvious_field_name):
+		, field_type, field_name, previous_field_name):
 		field_def = self.composite_set_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
 		self.handler.content += self.indentation.get_indented_str(field_def)
@@ -316,12 +311,12 @@ class FieldGen:
 		logging.debug('gen_composite_set_field_def: %s', field_name)
 
 	def gen_composite_enum_field_def(self, message_name\
-		, field_type, field_name, prvious_field_name\
+		, field_type, field_name, previous_field_name\
 		, null):
 		field_def = self.composite_enum_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_NULL', str(null))
@@ -333,12 +328,12 @@ class FieldGen:
 
 
 	def gen_message_const_enum_field_def(self, message_name\
-		, field_type, field_id, field_name, prvious_field_name, value, is_group, group_name):
+		, field_type, field_id, field_name, previous_field_name, value, is_group, group_name):
 		field_def = self.message_const_enum_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
@@ -348,11 +343,11 @@ class FieldGen:
 		logging.debug('gen_message_const_enum_field_def: %s', field_name)
 
 	def gen_composite_const_enum_field_def(self, message_name\
-		, field_type, field_name, prvious_field_name, value):
+		, field_type, field_name, previous_field_name, value):
 		field_def = self.composite_const_enum_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
@@ -363,12 +358,12 @@ class FieldGen:
 
 
 	def gen_message_string_field_def(self, message_name, field_type, field_id, field_name\
-		, prvious_field_name, field_size, is_group, group_name):
+		, previous_field_name, field_size, is_group, group_name):
 		field_def = self.message_string_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
@@ -377,11 +372,11 @@ class FieldGen:
 		logging.debug('gen_message_string_field_def: %s', field_name)
 
 	def gen_composite_string_field_def(self, message_name, field_type, field_name\
-		, prvious_field_name, field_size):
+		, previous_field_name, field_size):
 		field_def = self.composite_string_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
@@ -392,12 +387,12 @@ class FieldGen:
 
 
 	def gen_message_const_string_field_def(self, message_name, field_type, field_id, field_name\
-		, prvious_field_name, field_size, value, is_group, group_name):
+		, previous_field_name, field_size, value, is_group, group_name):
 		field_def = self.message_const_string_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)\
@@ -407,11 +402,11 @@ class FieldGen:
 		logging.debug('gen_message_const_string_field_def: %s', field_name)
 
 	def gen_composite_const_string_field_def(self, message_name, field_type, field_name\
-		, prvious_field_name, field_size, value):
+		, previous_field_name, field_size, value):
 		field_def = self.composite_const_string_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)\
@@ -422,12 +417,12 @@ class FieldGen:
 
 
 	def gen_message_composite_field_def(self, message_name\
-		, field_type, field_id, field_name, prvious_field_name, is_group, group_name):
+		, field_type, field_id, field_name, previous_field_name, is_group, group_name):
 		field_def = self.message_composite_field_ct\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_FIELD_ID', str(field_id))\
 			.replace('S_FIELD_TYPE', field_type)\
-			.replace('S_FIELD_OFFSET', self.get_field_offset(prvious_field_name))\
+			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
 		self.handler.content += self.indentation.get_indented_str(field_def)
@@ -466,13 +461,13 @@ class FieldGen:
 		logging.debug('gen_nested_group_def_4: %s', group_name)        
 
 
-	def gen_group_def(self, group_name, prvious_group_name, group_id\
+	def gen_group_def(self, group_name, previous_group_name, group_id\
 		, dimension_type, block_length_name
 		, num_in_group_name, num_in_group_type):
 		field_def = self.group_def_ct\
 			.replace('S_GROUP_NAME', group_name).replace('S_GROUP_SNAKE', to_snake_case(group_name))\
 			.replace('S_GROUP_ID', group_id)\
-			.replace('S_GROUP_OFFSET', self.get_group_offset(str(prvious_group_name)))\
+			.replace('S_GROUP_OFFSET', self.get_group_offset(str(previous_group_name)))\
 			.replace('S_DIAMENTION_TYPE', dimension_type)\
 			.replace('S_BLOCK_LENGTH_NAME', to_snake_case(block_length_name))\
 			.replace('S_NUM_IN_GROUP_NAME', to_snake_case(num_in_group_name))\
@@ -481,7 +476,7 @@ class FieldGen:
 		self.gen_ostream_field_def(group_name)
 		logging.debug('gen_group_def: %s', group_name)
 
-	def gen_group_def_4(self, group_name, prvious_group_name, group_id\
+	def gen_group_def_4(self, group_name, previous_group_name, group_id\
 		, dimension_type, block_length_name
 		, num_in_group_name, num_in_group_type\
 		, num_groups_name, num_groups_type\
@@ -489,7 +484,7 @@ class FieldGen:
 		field_def = self.group_def_ct_4\
 			.replace('S_GROUP_NAME', group_name).replace('S_GROUP_SNAKE', to_snake_case(group_name))\
 			.replace('S_GROUP_ID', group_id)\
-			.replace('S_GROUP_OFFSET', self.get_group_offset(str(prvious_group_name)))\
+			.replace('S_GROUP_OFFSET', self.get_group_offset(str(previous_group_name)))\
 			.replace('S_DIAMENTION_TYPE', dimension_type)\
 			.replace('S_BLOCK_LENGTH_NAME', to_snake_case(block_length_name))\
 			.replace('S_NUM_IN_GROUP_NAME', to_snake_case(num_in_group_name))\
@@ -519,7 +514,7 @@ class FieldGen:
 		self.handler.user_includes.append(dimension_type)
 		logging.debug('nested_variable_length_data_def: %s', var_len_data_name)
 
-	def gen_variable_length_data_def(self, var_len_data_name, prvious_var_len_data_name, var_len_data_id\
+	def gen_variable_length_data_def(self, var_len_data_name, previous_var_len_data_name, var_len_data_id\
 		, dimension_type, dimension):
 		var_len_data_length_name = dimension[0]['name']
 		var_len_data_length_type = dimension[0]['type']
@@ -527,7 +522,7 @@ class FieldGen:
 		field_def = self.var_len_data_def_ct\
 			.replace('S_VAR_LEN_DATA_NAME', var_len_data_name).replace('S_VAR_LEN_SNAKE', to_snake_case(var_len_data_name))\
 			.replace('S_VAR_LEN_DATA_ID', var_len_data_id)\
-			.replace('S_VAR_LEN_DATA_OFFSET', self.get_group_offset(str(prvious_var_len_data_name)))\
+			.replace('S_VAR_LEN_DATA_OFFSET', self.get_group_offset(str(previous_var_len_data_name)))\
 			.replace('S_DIAMENTION_TYPE', dimension_type)\
 			.replace('S_VAR_LEN_DATA_LENGTH_NAME', to_snake_case(var_len_data_length_name))\
 			.replace('S_VAR_LEN_DATA_LENGTH_TYPE', var_len_data_length_type)\
@@ -598,6 +593,10 @@ class FieldGen:
 
 
 class MessageGen:
+	"""Assemble a complete message or composite class - the schema descriptor
+	and its fields - into a content handler.
+	"""
+
 	def __init__(self, handler, message_name, message_id, schema, version, description, namespace, descriptor = True):
 		self.handler = handler
 		self.message_name = message_name
