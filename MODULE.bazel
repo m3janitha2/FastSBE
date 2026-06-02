@@ -1,0 +1,32 @@
+"""FastSBE - an SBE C++ codec generator.
+
+This makes FastSBE consumable as a Bazel module. A consumer depends on it and
+generates codecs with the fastsbe_cc_library rule from //:defs.bzl:
+
+    bazel_dep(name = "fastsbe", version = "0.1.0")
+
+    # BUILD.bazel
+    load("@fastsbe//:defs.bzl", "fastsbe_cc_library")
+    fastsbe_cc_library(
+        name = "cme_sbe",
+        schema = "cme-mdp3-v13.xml",
+        namespace = "cme",
+    )
+
+FastSBE keeps its own CMake build for its tests; Bazel is only the consumption
+surface for downstream projects.
+"""
+
+module(
+    name = "fastsbe",
+    version = "0.1.0",
+)
+
+# The generator is a Python CLI; consumers compile the generated C++.
+bazel_dep(name = "rules_python", version = "0.31.0")
+bazel_dep(name = "rules_cc", version = "0.0.9")
+
+# A hermetic Python toolchain for the generator. A consumer that already pins a
+# Python toolchain can drop this or override the version.
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(python_version = "3.11")

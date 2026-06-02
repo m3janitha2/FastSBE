@@ -1,0 +1,20 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+# The generator CLI:
+#     fastsbe <log_file> <schema_file> <out_folder> [namespace]
+#
+# The C++ templates under FastSBE/metadata are shipped as runfiles (data) and
+# loaded relative to the script (see FileGen.read_template), so the generator
+# runs correctly inside Bazel's sandbox regardless of the working directory.
+py_binary(
+    name = "fastsbe",
+    srcs = glob(["FastSBE/*.py"]),
+    main = "FastSBE/FastSBE.py",
+    imports = ["FastSBE"],
+    data = glob(["FastSBE/metadata/**"]),
+)
+
+# Reusable rule for consumers.
+exports_files(["defs.bzl"])
