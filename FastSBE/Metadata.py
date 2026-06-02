@@ -24,6 +24,20 @@ class Metadata:
 		"char"	: "char"
 		}
 
+	# byte width of each primitive, used to compute field offsets at generation
+	# time so explicit schema offsets can be honored with padding members.
+	primitive_sizes = {
+		"int8"	: 1,
+		"uint8"	: 1,
+		"int16"	: 2,
+		"uint16": 2,
+		"int32"	: 4,
+		"uint32": 4,
+		"int64"	: 8,
+		"uint64": 8,
+		"char"	: 1,
+		}
+
 	defult_minimum = {
 		"int8"	: -127,
 		"uint8"	: 0,

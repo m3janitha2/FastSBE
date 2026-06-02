@@ -21,6 +21,7 @@
 namespace fastsbe
 {
 
+#pragma pack(push, 1)
 class NewOrderSingle
 {
     
@@ -144,7 +145,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t account_offset() noexcept
     	{
-    		return cl_ord_id_offset() + cl_ord_id_size();
+    		return 8;
     	}
     
     	static constexpr std::size_t account_id() noexcept
@@ -224,7 +225,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t symbol_offset() noexcept
     	{
-    		return account_offset() + account_size();
+    		return 16;
     	}
     
     	static constexpr std::size_t symbol_id() noexcept
@@ -304,7 +305,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t side_offset() noexcept
     	{ 
-    		return symbol_offset() + symbol_size(); 
+    		return 24; 
     	}
     
     	static constexpr std::size_t side_id() noexcept
@@ -347,7 +348,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t transact_time_offset() noexcept
     	{ 
-    		return side_offset() + side_size(); 
+    		return 25; 
     	}
     
     	static constexpr std::size_t transact_time_id() noexcept
@@ -400,7 +401,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t order_qty_offset() noexcept
     	{
-    		return transact_time_offset() + transact_time_size();
+    		return 33;
     	}
     
     	static constexpr std::size_t order_qty_id() noexcept
@@ -442,7 +443,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t ord_type_offset() noexcept
     	{ 
-    		return order_qty_offset() + order_qty_size(); 
+    		return 37; 
     	}
     
     	static constexpr std::size_t ord_type_id() noexcept
@@ -485,7 +486,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t price_offset() noexcept
     	{
-    		return ord_type_offset() + ord_type_size();
+    		return 38;
     	}
     
     	static constexpr std::size_t price_id() noexcept
@@ -527,7 +528,7 @@ class NewOrderSingle
     
     	static constexpr std::size_t stop_px_offset() noexcept
     	{
-    		return price_offset() + price_size();
+    		return 46;
     	}
     
     	static constexpr std::size_t stop_px_id() noexcept
@@ -573,10 +574,12 @@ class NewOrderSingle
     
     public:
     
+    #pragma pack(push, 1)
     class PartiesGrp
     {
     	friend NewOrderSingle;
         
+        #pragma pack(push, 1)
         class Entry
         {
             
@@ -673,7 +676,7 @@ class NewOrderSingle
             
             	static constexpr std::size_t party_id_source_offset() noexcept
             	{ 
-            		return party_id_offset() + party_id_size(); 
+            		return 8; 
             	}
             
             	static constexpr std::size_t party_id_source_id() noexcept
@@ -716,7 +719,7 @@ class NewOrderSingle
             
             	static constexpr std::size_t party_role_offset() noexcept
             	{ 
-            		return party_id_source_offset() + party_id_source_size(); 
+            		return 9; 
             	}
             
             	static constexpr std::size_t party_role_id() noexcept
@@ -745,7 +748,14 @@ class NewOrderSingle
             		return *this;
             	}
             
+            
+            private:
+            	#pragma pack(push, 1)
+            	char block_trailing_padding_[10]{};
+            	#pragma pack(pop)
+            
     };
+    #pragma pack(pop)
     
     private:
     #pragma pack(push, 1)
@@ -782,6 +792,7 @@ class NewOrderSingle
     	}
     
     };
+    #pragma pack(pop)
     
     private:
     	#pragma pack(push, 1)
@@ -838,10 +849,12 @@ class NewOrderSingle
     
     public:
     
+    #pragma pack(push, 1)
     class AllocsGrp
     {
     	friend NewOrderSingle;
         
+        #pragma pack(push, 1)
         class Entry
         {
             
@@ -938,7 +951,7 @@ class NewOrderSingle
             
             	static constexpr std::size_t alloc_shares_offset() noexcept
             	{
-            		return alloc_account_offset() + alloc_account_size();
+            		return 16;
             	}
             
             	static constexpr std::size_t alloc_shares_id() noexcept
@@ -967,6 +980,7 @@ class NewOrderSingle
             	}
             
     };
+    #pragma pack(pop)
     
     private:
     #pragma pack(push, 1)
@@ -1003,6 +1017,7 @@ class NewOrderSingle
     	}
     
     };
+    #pragma pack(pop)
     
     private:
     	#pragma pack(push, 1)
@@ -1059,10 +1074,12 @@ class NewOrderSingle
     
     public:
     
+    #pragma pack(push, 1)
     class TradingSessionsGrp
     {
     	friend NewOrderSingle;
         
+        #pragma pack(push, 1)
         class Entry
         {
             
@@ -1146,6 +1163,7 @@ class NewOrderSingle
             	#endif
             	}
     };
+    #pragma pack(pop)
     
     private:
     #pragma pack(push, 1)
@@ -1182,6 +1200,7 @@ class NewOrderSingle
     	}
     
     };
+    #pragma pack(pop)
     
     private:
     	#pragma pack(push, 1)
@@ -1238,6 +1257,7 @@ class NewOrderSingle
     
     public:
     
+    #pragma pack(push, 1)
     class Text
     {
     	friend NewOrderSingle;
@@ -1280,6 +1300,7 @@ class NewOrderSingle
     	}
     
     };
+    #pragma pack(pop)
     
     private:
     	#pragma pack(push, 1)
@@ -1345,6 +1366,7 @@ class NewOrderSingle
     	
     public:
     
+    #pragma pack(push, 1)
     class ClearingFirm
     {
     	friend NewOrderSingle;
@@ -1387,6 +1409,7 @@ class NewOrderSingle
     	}
     
     };
+    #pragma pack(pop)
     
     private:
     	#pragma pack(push, 1)
@@ -1451,6 +1474,7 @@ class NewOrderSingle
     	}
     	
 };
+#pragma pack(pop)
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::PartiesGrp &group)

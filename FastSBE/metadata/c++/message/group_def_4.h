@@ -28,7 +28,7 @@ public:
 	std::size_t S_GROUP_SNAKE_data_length() const noexcept
 	{
 		auto& group = S_GROUP_SNAKE();
-		return group.header_.block_length() * group.header_.S_NUM_IN_GROUP_NAME();
+		return group.header_.S_BLOCK_LENGTH_NAME() * group.header_.S_NUM_IN_GROUP_NAME();
 	}
 	
 	const S_GROUP_NAME& S_GROUP_SNAKE() const noexcept

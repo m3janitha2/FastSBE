@@ -37,8 +37,12 @@ class Indentation:
 		return indented_str
 
 class ClassGen:
-	class_ct		= "\nclass {s_class_name}\n{{\n"
-	class_end_ct	= "};\n"
+	# pack the whole struct so its C++ layout matches the SBE wire layout exactly
+	# (per-member #pragma pack is a no-op for struct packing; only a pack that
+	# spans the whole struct keeps every data member at its wire offset). This
+	# affects only data-member layout, not member functions.
+	class_ct		= "\n#pragma pack(push, 1)\nclass {s_class_name}\n{{\n"
+	class_end_ct	= "};\n#pragma pack(pop)\n"
 
 
 	def gen_class_begin(self):

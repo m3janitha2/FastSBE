@@ -8,6 +8,7 @@
 namespace fastsbe
 {
 
+#pragma pack(push, 1)
 class MonthYear
 {
     
@@ -72,7 +73,7 @@ class MonthYear
     
     	static constexpr std::size_t month_offset() noexcept
     	{ 
-    		return year_offset() + year_size(); 
+    		return 2; 
     	}
     	
     	static constexpr const char* month_name() noexcept
@@ -120,7 +121,7 @@ class MonthYear
     
     	static constexpr std::size_t day_offset() noexcept
     	{ 
-    		return month_offset() + month_size(); 
+    		return 3; 
     	}
     	
     	static constexpr const char* day_name() noexcept
@@ -168,7 +169,7 @@ class MonthYear
     
     	static constexpr std::size_t week_offset() noexcept
     	{ 
-    		return day_offset() + day_size(); 
+    		return 4; 
     	}
     	
     	static constexpr const char* week_name() noexcept
@@ -214,6 +215,7 @@ class MonthYear
     	}
     
 };
+#pragma pack(pop)
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MonthYear &msg)

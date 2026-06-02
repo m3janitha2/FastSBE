@@ -21,7 +21,9 @@ class FieldGen:
 	message_const_string_field_ct   = open('metadata/c++/message/const_string_field_def.h', 'r').read()
 	#composite
 	message_composite_field_ct      = open('metadata/c++/message/composite_field_def.h', 'r').read()
-	
+	#padding (honors explicit schema offsets)
+	padding_def_ct                  = open('metadata/c++/message/padding_def.h', 'r').read()
+
 	#numeirc
 	composite_numeric_field_ct      = open('metadata/c++/composite/numeric_field_def.h', 'r').read()
 	composite_const_numeric_field_ct= open('metadata/c++/composite/const_numeric_field_def.h', 'r').read()
@@ -69,11 +71,63 @@ class FieldGen:
 		self.handler.content += self.indentation.get_indented_str(message_def)
 
 
+	def reset_layout(self):
+		# start a new fixed-length block (message root, composite, or group entry)
+		# so offsets accumulate from 0.
+		self.current_offset = 0
+		self.field_offset = 0
+
+	def gen_padding(self, member_name, size):
+		# private byte padding with no accessors. Two kinds use this:
+		#   <field>_pre_padding_    - an inter-field gap honoring a schema offset
+		#   block_trailing_padding_ - reserved bytes filling the root block to blockLength
+		pad = self.padding_def_ct\
+			.replace('S_PADDING_MEMBER', member_name)\
+			.replace('S_PADDING_SIZE', str(size))
+		self.handler.content += self.indentation.get_indented_str(pad)
+
+	def gen_trailing_padding(self, block_length):
+		# Pad the fixed root block out to the declared blockLength so the
+		# variable part (groups / variable-length data) begins at the right
+		# offset. The first group is accessed at buffer()+0, so the buffer must
+		# sit at blockLength, not merely after the last field.
+		if(block_length is None):
+			return
+		block_length = int(block_length)
+		if(block_length < self.current_offset):
+			logging.error("blockLength %d is smaller than the fixed block size %d"\
+				, block_length, self.current_offset)
+			raise SystemExit("FastSBE: blockLength %d < fixed block size %d"\
+				% (block_length, self.current_offset))
+		if(block_length > self.current_offset):
+			self.gen_padding('block_trailing_padding_', block_length - self.current_offset)
+			self.current_offset = block_length
+
+	def layout_field(self, field_name, declared_offset, field_size):
+		# resolve a field's byte offset at generation time. Padding is emitted
+		# for gaps so the C++ struct member lands at the schema offset; the C++
+		# itself performs no offset arithmetic.
+		if(field_size == 0):
+			# constants occupy no wire bytes: place at the cursor, do not advance.
+			self.field_offset = self.current_offset
+			return
+		if(declared_offset is not None):
+			declared_offset = int(declared_offset)
+			if(declared_offset > self.current_offset):
+				self.gen_padding(to_snake_case(field_name) + '_pre_padding_', declared_offset - self.current_offset)
+				self.current_offset = declared_offset
+			elif(declared_offset < self.current_offset):
+				logging.error("field '%s' declared offset %d overlaps preceding fields (cursor %d)"\
+					, field_name, declared_offset, self.current_offset)
+				raise SystemExit("FastSBE: field '%s' declared offset %d < accumulated %d (overlap)"\
+					% (field_name, declared_offset, self.current_offset))
+		self.field_offset = self.current_offset
+		self.current_offset += field_size
+
 	def get_field_offset(self, prvious_field_name):
-		if(prvious_field_name ==""):
-			return '0';
-		else:
-			return to_snake_case(prvious_field_name) + '_offset() + ' + to_snake_case(prvious_field_name) + '_size()'
+		# offset resolved by layout_field; emitted as a literal constant so the
+		# generated code does no runtime offset arithmetic.
+		return str(self.field_offset)
 
 	def get_group_offset(self, prvious_field_name):
 		if(prvious_field_name ==""):
@@ -527,6 +581,13 @@ class FieldGen:
 		self.namespace = namespace
 		self.message_name = message_name
 		self.class_gen = class_gen
+
+		# running byte cursor for the fixed-length block, and the resolved
+		# offset of the field currently being emitted (both filled by
+		# layout_field). reset_layout() is called at the start of each
+		# message root block, composite, and group entry.
+		self.current_offset = 0
+		self.field_offset = 0
 
 		logging.debug('create FieldGen: %s', self.message_name)
 		self.indentation.increment()

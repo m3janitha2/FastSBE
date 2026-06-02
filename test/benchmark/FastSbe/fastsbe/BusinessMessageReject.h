@@ -10,6 +10,7 @@
 namespace fastsbe
 {
 
+#pragma pack(push, 1)
 class BusinessMessageReject
 {
     
@@ -133,7 +134,7 @@ class BusinessMessageReject
     
     	static constexpr std::size_t business_reject_reason_offset() noexcept
     	{ 
-    		return busines_reject_ref_id_offset() + busines_reject_ref_id_size(); 
+    		return 8; 
     	}
     
     	static constexpr std::size_t business_reject_reason_id() noexcept
@@ -180,6 +181,7 @@ class BusinessMessageReject
     
     public:
     
+    #pragma pack(push, 1)
     class Text
     {
     	friend BusinessMessageReject;
@@ -222,6 +224,7 @@ class BusinessMessageReject
     	}
     
     };
+    #pragma pack(pop)
     
     private:
     	#pragma pack(push, 1)
@@ -286,6 +289,7 @@ class BusinessMessageReject
     	}
     	
 };
+#pragma pack(pop)
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::BusinessMessageReject &msg)

@@ -8,6 +8,7 @@
 namespace fastsbe
 {
 
+#pragma pack(push, 1)
 class GroupSizeEncoding
 {
     
@@ -72,7 +73,7 @@ class GroupSizeEncoding
     
     	static constexpr std::size_t num_in_group_offset() noexcept
     	{ 
-    		return block_length_offset() + block_length_size(); 
+    		return 2; 
     	}
     	
     	static constexpr const char* num_in_group_name() noexcept
@@ -118,6 +119,7 @@ class GroupSizeEncoding
     	}
     
 };
+#pragma pack(pop)
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::GroupSizeEncoding &msg)

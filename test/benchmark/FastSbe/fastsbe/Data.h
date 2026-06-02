@@ -8,6 +8,7 @@
 namespace fastsbe
 {
 
+#pragma pack(push, 1)
 class Data
 {
     
@@ -72,7 +73,7 @@ class Data
     
     	static constexpr std::size_t var_data_offset() noexcept
     	{ 
-    		return length_offset() + length_size(); 
+    		return 2; 
     	}
     	
     	static constexpr const char* var_data_name() noexcept
@@ -148,6 +149,7 @@ class Data
     	}
     
 };
+#pragma pack(pop)
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::Data &msg)

@@ -7,7 +7,7 @@
 
 namespace sbetool
 {
-    static constexpr const std::size_t field_offset{56};
+    static constexpr const std::size_t field_offset{48};
 
     // guaranteed to be null terminated
     TEST(string, field_info)

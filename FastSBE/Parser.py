@@ -57,6 +57,85 @@ class Parser:
 			Metadata.to_cpp_int_literal(null_value, type))
 
 
+	def get_encoding_primitive(self, encoding_type):
+		# encoding_type may be a primitive name (int8, ...) or a named simple type
+		if(encoding_type in Metadata.primitive_sizes):
+			return encoding_type
+		type_elem = self.root.find(".//*[@name='" + encoding_type + "']")
+		if(type_elem is not None and 'primitiveType' in type_elem.attrib):
+			return type_elem.attrib['primitiveType']
+		logging.error("cannot resolve encoding primitive for '%s'", encoding_type)
+		raise SystemExit("FastSBE: cannot resolve encoding type '%s'" % encoding_type)
+
+	def get_named_type_size(self, name):
+		# byte width of a type referenced by name (enum/set/composite/simple type)
+		if(name in self.user_defined_enums or name in self.user_defined_sets):
+			elem = self.root.find(".//*[@name='" + name + "']")
+			return Metadata.primitive_sizes[self.get_encoding_primitive(self.get_primitive_encoding_type(elem.attrib))]
+		if(name in self.user_defined_composites):
+			return self.get_composite_size(name)
+		elem = self.root.find(".//*[@name='" + name + "']")
+		if(elem is not None and 'primitiveType' in elem.attrib):
+			primitive = elem.attrib['primitiveType']
+			if(primitive == 'char'):
+				return int(elem.attrib.get('length', 1))
+			return Metadata.primitive_sizes[primitive]
+		logging.error("cannot size named type '%s'", name)
+		raise SystemExit("FastSBE: cannot size named type '%s'" % name)
+
+	def get_member_size(self, member):
+		# byte width of a single composite member element (0 for constants)
+		if(member.attrib.get('presence') == 'constant'):
+			return 0
+		tag = member.tag.split('}')[-1]
+		if(tag == 'enum' or tag == 'set'):
+			return Metadata.primitive_sizes[self.get_encoding_primitive(self.get_primitive_encoding_type(member.attrib))]
+		if(tag == 'composite'):
+			return self.get_composite_size(member.attrib['name'])
+		if(tag == 'type'):
+			if('primitiveType' in member.attrib):
+				primitive = member.attrib['primitiveType']
+				if(primitive == 'char'):
+					return int(member.attrib.get('length', 1))
+				return Metadata.primitive_sizes[primitive]
+			# a <type> with no primitiveType references an enum/set/composite/simple type
+			return self.get_named_type_size(member.attrib['type'])
+		logging.error("unsupported composite member tag '%s' in size computation", tag)
+		raise SystemExit("FastSBE: unsupported composite member tag '%s'" % tag)
+
+	def get_composite_size(self, composite_name):
+		# total byte width of a composite, honoring explicit member offsets
+		composite = self.root.find(".//*[@name='" + composite_name + "']")
+		accumulated = 0
+		total = 0
+		for member in composite:
+			member_size = self.get_member_size(member)
+			declared = member.attrib.get('offset')
+			offset = int(declared) if declared is not None else accumulated
+			total = max(total, offset + member_size)
+			accumulated = offset + member_size
+		return total
+
+	def get_type_size(self, field):
+		# byte width a message/group field occupies in the fixed block (0 for constants)
+		if(self.is_const_type(field.attrib)):
+			return 0
+		field_type = field.attrib['type']
+		if(field_type in self.user_defined_enums or field_type in self.user_defined_sets):
+			elem = self.root.find(".//*[@name='" + field_type + "']")
+			return Metadata.primitive_sizes[self.get_encoding_primitive(self.get_primitive_encoding_type(elem.attrib))]
+		if(field_type in self.user_defined_composites):
+			return self.get_composite_size(field_type)
+		attrib = self.update_field_attrib(field)
+		# a constant may be declared on the referenced type rather than the field
+		if(self.is_const_type(attrib)):
+			return 0
+		primitive = self.get_primitive_type(attrib)
+		if(primitive == 'char'):
+			return int(attrib.get('length', 1))
+		return Metadata.primitive_sizes[primitive]
+
+
 	#primitive_types are numeric
 	def is_numeric(self, primitive_type, attrib):
 		if (primitive_type in Metadata.primitive_types):
@@ -288,7 +367,10 @@ class Parser:
 		type_name = type.attrib['name']
 		composite_type = self.get_composite_type(type)
 		includes = []
-		
+
+		# honor the schema offset of this composite member (emit padding for gaps)
+		field_gen.layout_field(type_name, type.attrib.get('offset'), self.get_member_size(type))
+
 		#enum
 		if('valueRef' in type.attrib.keys()):
 			composite_type = Parser.get_enum_type(type)
@@ -371,16 +453,18 @@ class Parser:
 			, descriptor = False)
 
 		msg_gen.field_gen.gen_ostream_begin()
+		msg_gen.field_gen.reset_layout()
 		prvious_type_name = "";
 		for type in composite.iter('type'):
 			prvious_type_name, includes = self.generate_composite_type(msg_gen.field_gen, to_pascal_case(composite_name), type\
 				, prvious_type_name)
 		msg_gen.field_gen.gen_ostream_end()
+		msg_gen.field_gen.gen_trailing_padding(composite.attrib.get('blockLength'))
 		msg_gen.field_gen.gen_constructor()
 
 	def generate_composite(self, composite):
 		composite_name = composite.attrib['name']
-		logging.debug('generate_composite: %s ' , composite_name)		
+		logging.debug('generate_composite: %s ' , composite_name)
 
 		handler = ContentHandler()
 		self.generate_composite_class(composite, handler)
@@ -403,6 +487,10 @@ class Parser:
 		field_name = field.attrib['name']
 		field_id = field.attrib['id']
 		field_type = field.attrib['type']
+
+		# honor the schema offset: resolve this field's byte position (emitting
+		# padding for any gap) before its member is generated.
+		field_gen.layout_field(field_name, field.attrib.get('offset'), self.get_type_size(field))
 
 		#enum
 		if(field_type in self.user_defined_enums):
@@ -493,11 +581,13 @@ class Parser:
 		group_name = group.attrib['name']
 
 		entry_gen.field_gen.gen_ostream_group_begin(group_name, message_name)
+		entry_gen.field_gen.reset_layout()
 		prvious_field_name = ""
 		for field in group:
 			if (field.tag == 'field'):
 				prvious_field_name = self.generate_message_field(entry_gen.field_gen\
 					, group_name, field, prvious_field_name, is_group = True, group_name = group_name)
+		entry_gen.field_gen.gen_trailing_padding(group.attrib.get('blockLength'))
 		entry_gen.field_gen.gen_ostream_group_end()
 
 
@@ -663,7 +753,8 @@ class Parser:
 		msg_gen = MessageGen(handler = handler, message_name = message_name, message_id = message_id\
 			, schema = self.schema_id, version = self.schema_version, description = description, namespace = self.namespace)
 
-		msg_gen.field_gen.gen_ostream_begin()			
+		msg_gen.field_gen.gen_ostream_begin()
+		msg_gen.field_gen.reset_layout()
 		is_group_section = False
 		is_var_data_section = False
 		prvious_field_name = "";
@@ -676,6 +767,7 @@ class Parser:
 					#this is the first group field
 					is_group_section = True
 					prvious_field_name = "";
+					msg_gen.field_gen.gen_trailing_padding(message.attrib.get('blockLength'))
 					msg_gen.field_gen.gen_buffer_def(1024)					
 					
 				prvious_field_name = self.parse_group(msg_gen, handler, message_name, eliment\
@@ -689,7 +781,8 @@ class Parser:
 						#there was a group before data
 						pass
 					else:					
-						prvious_field_name = "";					
+						prvious_field_name = "";
+						msg_gen.field_gen.gen_trailing_padding(message.attrib.get('blockLength'))
 						msg_gen.field_gen.gen_buffer_def(1024)
 						is_fixed_length_section = False
 

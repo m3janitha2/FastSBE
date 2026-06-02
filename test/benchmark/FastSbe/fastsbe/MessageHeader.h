@@ -8,6 +8,7 @@
 namespace fastsbe
 {
 
+#pragma pack(push, 1)
 class MessageHeader
 {
     
@@ -72,7 +73,7 @@ class MessageHeader
     
     	static constexpr std::size_t template_id_offset() noexcept
     	{ 
-    		return block_length_offset() + block_length_size(); 
+    		return 2; 
     	}
     	
     	static constexpr const char* template_id_name() noexcept
@@ -120,7 +121,7 @@ class MessageHeader
     
     	static constexpr std::size_t schema_id_offset() noexcept
     	{ 
-    		return template_id_offset() + template_id_size(); 
+    		return 4; 
     	}
     	
     	static constexpr const char* schema_id_name() noexcept
@@ -168,7 +169,7 @@ class MessageHeader
     
     	static constexpr std::size_t version_offset() noexcept
     	{ 
-    		return schema_id_offset() + schema_id_size(); 
+    		return 6; 
     	}
     	
     	static constexpr const char* version_name() noexcept
@@ -214,6 +215,7 @@ class MessageHeader
     	}
     
 };
+#pragma pack(pop)
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MessageHeader &msg)

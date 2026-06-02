@@ -17,6 +17,7 @@
 namespace fastsbe
 {
 
+#pragma pack(push, 1)
 class ExecutionReport
 {
     
@@ -140,7 +141,7 @@ class ExecutionReport
     
     	static constexpr std::size_t exec_id_offset() noexcept
     	{
-    		return order_id_offset() + order_id_size();
+    		return 8;
     	}
     
     	static constexpr std::size_t exec_id_id() noexcept
@@ -220,7 +221,7 @@ class ExecutionReport
     
     	static constexpr std::size_t exec_type_offset() noexcept
     	{ 
-    		return exec_id_offset() + exec_id_size(); 
+    		return 16; 
     	}
     
     	static constexpr std::size_t exec_type_id() noexcept
@@ -263,7 +264,7 @@ class ExecutionReport
     
     	static constexpr std::size_t ord_status_offset() noexcept
     	{ 
-    		return exec_type_offset() + exec_type_size(); 
+    		return 17; 
     	}
     
     	static constexpr std::size_t ord_status_id() noexcept
@@ -306,7 +307,7 @@ class ExecutionReport
     
     	static constexpr std::size_t symbol_offset() noexcept
     	{
-    		return ord_status_offset() + ord_status_size();
+    		return 18;
     	}
     
     	static constexpr std::size_t symbol_id() noexcept
@@ -386,7 +387,7 @@ class ExecutionReport
     
     	static constexpr std::size_t maturity_month_year_offset() noexcept
     	{
-    		return symbol_offset() + symbol_size();
+    		return 26;
     	}
     
     	static constexpr std::size_t maturity_month_year_id() noexcept
@@ -428,7 +429,7 @@ class ExecutionReport
     
     	static constexpr std::size_t side_offset() noexcept
     	{ 
-    		return maturity_month_year_offset() + maturity_month_year_size(); 
+    		return 31; 
     	}
     
     	static constexpr std::size_t side_id() noexcept
@@ -471,7 +472,7 @@ class ExecutionReport
     
     	static constexpr std::size_t leaves_qty_offset() noexcept
     	{
-    		return side_offset() + side_size();
+    		return 32;
     	}
     
     	static constexpr std::size_t leaves_qty_id() noexcept
@@ -513,7 +514,7 @@ class ExecutionReport
     
     	static constexpr std::size_t cum_qty_offset() noexcept
     	{
-    		return leaves_qty_offset() + leaves_qty_size();
+    		return 36;
     	}
     
     	static constexpr std::size_t cum_qty_id() noexcept
@@ -555,7 +556,7 @@ class ExecutionReport
     
     	static constexpr std::size_t trade_date_offset() noexcept
     	{ 
-    		return cum_qty_offset() + cum_qty_size(); 
+    		return 40; 
     	}
     
     	static constexpr std::size_t trade_date_id() noexcept
@@ -612,10 +613,12 @@ class ExecutionReport
     
     public:
     
+    #pragma pack(push, 1)
     class FillsGrp
     {
     	friend ExecutionReport;
         
+        #pragma pack(push, 1)
         class Entry
         {
             
@@ -674,7 +677,7 @@ class ExecutionReport
             
             	static constexpr std::size_t fill_qty_offset() noexcept
             	{
-            		return fill_px_offset() + fill_px_size();
+            		return 8;
             	}
             
             	static constexpr std::size_t fill_qty_id() noexcept
@@ -703,6 +706,7 @@ class ExecutionReport
             	}
             
     };
+    #pragma pack(pop)
     
     private:
     #pragma pack(push, 1)
@@ -739,6 +743,7 @@ class ExecutionReport
     	}
     
     };
+    #pragma pack(pop)
     
     private:
     	#pragma pack(push, 1)
@@ -794,6 +799,7 @@ class ExecutionReport
     	}
     
 };
+#pragma pack(pop)
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ExecutionReport::FillsGrp &group)
