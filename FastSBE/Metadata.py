@@ -31,8 +31,7 @@ class Metadata:
 		"char"	: "char"
 		}
 
-	# byte width of each primitive, used to compute field offsets at generation
-	# time so explicit schema offsets can be honored with padding members.
+	# byte width of each primitive, for field-offset and padding computation.
 	primitive_sizes = {
 		"int8"	: 1,
 		"uint8"	: 1,
@@ -95,18 +94,9 @@ class Metadata:
 
 	@staticmethod
 	def to_cpp_int_literal(value, primitive_type):
-		# Render an SBE limit/null value as a C++ literal.
-		#
-		# A type's extreme sentinels (min, max, and one step inside) are emitted
-		# as the matching <cstdint> macro (INT8_MIN, UINT64_MAX, ...). Generated
-		# headers already include <cstdint>, so this needs no extra include, and
-		# the macro is:
-		#   - self-documenting,
-		#   - warning-free (a bare 64-bit extreme is otherwise flagged "integer
-		#     constant is so large that it is unsigned", and INT*_MIN has no
-		#     negative-literal form in C++),
-		#   - zero runtime cost (a constant expression folded by the compiler).
-		# Any other value falls back to a correctly-suffixed literal.
+		# Emit type extremes (min, max, one-step-inside) as <cstdint> macros
+		# (INT8_MIN, UINT64_MAX, ...): warning-free for 64-bit values, zero-cost.
+		# Any other value becomes a correctly-suffixed literal.
 		spec = {
 			"int8"  : (8,  True),  "uint8"  : (8,  False),
 			"int16" : (16, True),  "uint16" : (16, False),

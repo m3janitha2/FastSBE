@@ -9,10 +9,7 @@ import os
 import re
 
 
-# Template files live in metadata/ next to the generator sources. Resolve them
-# relative to this module rather than the current working directory so the
-# generator runs correctly from any cwd (CMake custom command, a Bazel sandbox,
-# or a manual invocation).
+# Resolve templates relative to this module so generation works from any cwd.
 _TEMPLATE_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -22,9 +19,6 @@ def read_template(relative_path):
 
 
 def to_snake_case(name):
-	# Convert a schema field name to snake_case for use as a C++ identifier
-	# (Google style). Acronym-aware: MDEntryPx -> md_entry_px,
-	# SecurityID -> security_id, execType -> exec_type.
 	s1 = re.sub(r'(.)([A-Z][a-z]+)', r'\1_\2', name)
 	s2 = re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', s1)
 	return s2.lower()
@@ -46,15 +40,15 @@ class Indentation:
 		self.indentation -= 1
 
 
-	def get_indentation_str(self):
-		str = " " * self.tab_size * self.indentation
-		return str
+	def get_indent_prefix(self):
+		prefix = " " * self.tab_size * self.indentation
+		return prefix
 
 
-	def get_indented_str(self, content):
+	def indent(self, content):
 		indented_str = ""
 		for line in content.splitlines():
-			indented_str += self.get_indentation_str() + line + "\n"
+			indented_str += self.get_indent_prefix() + line + "\n"
 		return indented_str
 
 class ClassGen:
@@ -69,11 +63,11 @@ class ClassGen:
 
 	def gen_class_begin(self):
 		class_str = self.class_ct.format(s_class_name = self.class_name)
-		self.handler.content += self.indentation.get_indented_str(class_str)
+		self.handler.content += self.indentation.indent(class_str)
 
 
 	def gen_class_end(self):
-		self.handler.content += self.indentation.get_indented_str(self.class_end_ct)
+		self.handler.content += self.indentation.indent(self.class_end_ct)
 
 
 	def __init__(self, handler, indentation, class_name):
@@ -90,7 +84,7 @@ class ClassGen:
 		logging.debug('delte ClassGen %s', self.class_name)
 
 
-class NameSpaceGen:
+class NamespaceGen:
 	"""Emit a C++ namespace open/close."""
 
 	namespace_ct		= "\nnamespace {s_namespace}\n{{\n"
@@ -99,11 +93,11 @@ class NameSpaceGen:
 
 	def gen_namespace_begin(self):
 		namespace_str = self.namespace_ct.format(s_namespace = self.namespace)
-		self.content += self.indentation.get_indented_str(namespace_str)
+		self.content += self.indentation.indent(namespace_str)
 
 
 	def gen_namespace_end(self):
-		self.content += self.indentation.get_indented_str(self.namespace_end_ct)
+		self.content += self.indentation.indent(self.namespace_end_ct)
 
 
 	def __init__(self, content, indentation, namespace):
@@ -111,13 +105,13 @@ class NameSpaceGen:
 		self.indentation = indentation
 		self.namespace = namespace
 
-		logging.debug('create NameSpaceGen: %s', self.namespace)
+		logging.debug('create NamespaceGen: %s', self.namespace)
 		self.gen_namespace_begin()
 
 
 	def __del__(self):
 		self.gen_namespace_end()
-		logging.debug('delte NameSpaceGen: %s', self.namespace)
+		logging.debug('delte NamespaceGen: %s', self.namespace)
 
 
 class FileGen:
@@ -134,19 +128,19 @@ class FileGen:
 
 	def gen_header(self):
 		header_str = self.header_ct
-		self.content += self.indentation.get_indented_str(header_str)
+		self.content += self.indentation.indent(header_str)
 
 
 	def gen_includes(self, include_list):
 		for include in include_list:
 			include_str = self.include_ct.format(include_file = include)
-			self.content += self.indentation.get_indented_str(include_str)
+			self.content += self.indentation.indent(include_str)
 
 	def gen_user_includes(self, include_list):
 		for include in include_list:
 			include_file = include + '.h'
 			include_str = self.include_ct.format(include_file = include_file)
-			self.content += self.indentation.get_indented_str(include_str)
+			self.content += self.indentation.indent(include_str)
 
 
 	def gen_content(self, content):
@@ -160,11 +154,11 @@ class FileGen:
 
 	def gen_namespace_begin(self):
 		namespace_str = self.namespace_ct.format(s_namespace = self.namespace)
-		self.content += self.indentation.get_indented_str(namespace_str)
+		self.content += self.indentation.indent(namespace_str)
 
 
 	def gen_namespace_end(self):
-		self.content += self.indentation.get_indented_str(self.namespace_end_ct)
+		self.content += self.indentation.indent(self.namespace_end_ct)
 
 
 	def gen_file_begin(self):
@@ -174,7 +168,7 @@ class FileGen:
 		self.gen_namespace_begin()
 
 	def gen_stream_operator(self):
-		self.content += self.indentation.get_indented_str(namespace_str)
+		self.content += self.indentation.indent(namespace_str)
 
 
 	def gen_file_end(self):

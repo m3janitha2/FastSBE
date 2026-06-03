@@ -6,7 +6,7 @@ from FileGen import Indentation
 from FileGen import ClassGen
 
 
-class SetClassGen:
+class SetGen:
 	"""Emit a C++ class for an SBE set. A set is a bitmap where each <choice> is
 	one bit, generated as a Choice enum of bit masks plus an operator| to
 	combine them. The set holds no state - the raw value lives in the owning
@@ -23,18 +23,18 @@ class SetClassGen:
 		def gen_begin(self):
 			self.indentation.increment()
 			begin = self.choice_begin_ct.format(encoding_type=self.encoding_type)
-			self.handler.content += self.indentation.get_indented_str(begin)
+			self.handler.content += self.indentation.indent(begin)
 
 		def gen_values(self):
 			body = ""
 			for (name, index) in self.choices:
 				body += self.choice_value_ct.format(name=name, index=index)
 			self.indentation.increment()
-			self.handler.content += self.indentation.get_indented_str(body)
+			self.handler.content += self.indentation.indent(body)
 			self.indentation.decrement()
 
 		def gen_end(self):
-			self.handler.content += self.indentation.get_indented_str(self.choice_end_ct)
+			self.handler.content += self.indentation.indent(self.choice_end_ct)
 			self.indentation.decrement()
 
 		def __init__(self, handler, indentation, encoding_type, choices):
@@ -71,4 +71,4 @@ class SetClassGen:
 		self.gen_operator_or()
 
 	def __del__(self):
-		logging.debug('delete SetClassGen')
+		logging.debug('delete SetGen')

@@ -9,8 +9,8 @@ import logging
 
 from MessageGen import MessageGen
 from Metadata import Metadata
-from EnumGen import EnumClassGen
-from SetGen import SetClassGen
+from EnumGen import EnumGen
+from SetGen import SetGen
 from GroupGen import GroupGen
 from VariableLengthDataGen import VariableLengthDataGen
 from FileGen import ContentHandler
@@ -19,12 +19,6 @@ from FileGen import FileGen
 
 
 def to_pascal_case(name):
-	# Canonicalise a schema type name to PascalCase for use as a C++ type
-	# identifier. Only type names (enums, composites, messages) are converted;
-	# field and enum-value names are left as the schema defines them.
-	# All-caps parts are title-cased (DATA -> Data, MONTH_YEAR -> MonthYear);
-	# camelCase parts keep their internal capitals (groupSizeEncoding ->
-	# GroupSizeEncoding).
 	out = []
 	for part in name.split('_'):
 		if not part:
@@ -42,20 +36,18 @@ class Parser:
 	generated struct layout matches the SBE wire format.
 	"""
 
-	def get_null_value_of_primitive(self, type):
-		null_value = Metadata.default_null[type]
-		# if minValue or maxValue or nullValue attrib defined by user, override
-		if('nullValue' in type):
-			null_value = type['nullValue']
+	def get_null_value_of_primitive(self, type_node):
+		null_value = Metadata.default_null[type_node]
+		if('nullValue' in type_node):
+			null_value = type_node['nullValue']
 		return null_value
 
 
-	def get_numeric_attrib_of_primitive(self, type, attrib = None):
-		min_value = Metadata.default_minimum[type]
-		max_value = Metadata.default_maximum[type]
-		null_value = Metadata.default_null[type]
-		# if minValue / maxValue / nullValue defined in the schema, override the default.
-		# attrib is the combined field+type attribute dict from the caller.
+	def get_numeric_attrib_of_primitive(self, type_node, attrib = None):
+		min_value = Metadata.default_minimum[type_node]
+		max_value = Metadata.default_maximum[type_node]
+		null_value = Metadata.default_null[type_node]
+		# attrib is the combined field+type dict; schema values override the defaults.
 		if(attrib is not None):
 			if('minValue' in attrib):
 				min_value = attrib['minValue']
@@ -63,9 +55,9 @@ class Parser:
 				max_value = attrib['maxValue']
 			if('nullValue' in attrib):
 				null_value = attrib['nullValue']
-		return (Metadata.to_cpp_int_literal(min_value, type),
-			Metadata.to_cpp_int_literal(max_value, type),
-			Metadata.to_cpp_int_literal(null_value, type))
+		return (Metadata.to_cpp_int_literal(min_value, type_node),
+			Metadata.to_cpp_int_literal(max_value, type_node),
+			Metadata.to_cpp_int_literal(null_value, type_node))
 
 
 	def get_encoding_primitive(self, encoding_type):
@@ -79,7 +71,6 @@ class Parser:
 		raise SystemExit("FastSBE: cannot resolve encoding type '%s'" % encoding_type)
 
 	def get_named_type_size(self, name):
-		# byte width of a type referenced by name (enum/set/composite/simple type)
 		if(name in self.user_defined_enums or name in self.user_defined_sets):
 			elem = self.root.find(".//*[@name='" + name + "']")
 			return Metadata.primitive_sizes[self.get_encoding_primitive(self.get_primitive_encoding_type(elem.attrib))]
@@ -95,7 +86,6 @@ class Parser:
 		raise SystemExit("FastSBE: cannot size named type '%s'" % name)
 
 	def get_member_size(self, member):
-		# byte width of a single composite member element (0 for constants)
 		if(member.attrib.get('presence') == 'constant'):
 			return 0
 		tag = member.tag.split('}')[-1]
@@ -154,9 +144,8 @@ class Parser:
 			return False
 
 
-	# a char of length 1 is a single character, not a string. Any other length
-	# stays a string: length > 1 is a fixed char array, and length 0 is the
-	# variable-length-data sentinel (varData), which needs char* buffer access.
+	# char length 1 is a single character; length > 1 a fixed array; length 0
+	# the variable-length-data sentinel (varData, needs char* access).
 	def is_string_field(self, primitive_type, attrib):
 		if ((primitive_type == 'char') and ('length' in attrib) and (int(attrib['length']) != 1)):
 			return True
@@ -172,18 +161,18 @@ class Parser:
 
 
 	def parse_all_types(self, types):
-		for type in types.iter('type'):
-			type_name = type.attrib['name']
-			self.user_defined_types.update({type_name : type.attrib})
+		for type_node in types.iter('type'):
+			type_name = type_node.attrib['name']
+			self.user_defined_types.update({type_name : type_node.attrib})
 
 
-	def update_enum_attrib(self, type):
-		items = type.items()
+	def update_enum_attrib(self, type_node):
+		items = type_node.items()
 		enum_attrib = {}
 		for (key, value) in items:
 			enum_attrib[key] = value
 		
-		encoding_type = type.attrib['encodingType']
+		encoding_type = type_node.attrib['encodingType']
 		if encoding_type in Metadata.primitive_types:
 			return enum_attrib
 		else:
@@ -263,10 +252,8 @@ class Parser:
 			logging.error('type or primitiveType is not defined in %s', field_attrib['name'])
 			exit()
 
-	# A constant field's value may live on the field element's text, or - as CME
-	# does - on the referenced constant type's text (<type presence="constant">V).
-	# A constant with no value anywhere is a malformed schema: fail loudly rather
-	# than emit a stray Python None into the generated C++.
+	# a constant's value may live on the field's text or the referenced type's
+	# text (CME uses the latter); missing in both is a malformed schema -> fail.
 	def get_const_value(self, field):
 		value = field.text
 		if value is None and 'type' in field.attrib:
@@ -292,18 +279,18 @@ class Parser:
 
 		return 'nullValue', null_value
 
-	def generate_enum(self, type):
+	def generate_enum(self, type_node):
 		enum_values = []
-		for field in type:
+		for field in type_node:
 			enum_values.append((field.attrib['name'], field.text))		
 
-		enum_name = type.attrib['name']
-		encoding_type = type.attrib['encodingType']
-		enum_attrib = self.update_enum_attrib(type = type)
+		enum_name = type_node.attrib['name']
+		encoding_type = type_node.attrib['encodingType']
+		enum_attrib = self.update_enum_attrib(type_node = type_node)
 		primitive_encoding_type = self.get_primitive_encoding_type(enum_attrib)
 		enum_values.append(self.get_enum_null_value(enum_attrib))
 		handler = ContentHandler()
-		enum_file = EnumClassGen(handler, to_pascal_case(enum_name), Metadata.c_field_types[primitive_encoding_type]\
+		enum_file = EnumGen(handler, to_pascal_case(enum_name), Metadata.c_field_types[primitive_encoding_type]\
 			, enum_values, self.namespace)
 		self.user_defined_enums.append(enum_name)
 
@@ -316,21 +303,20 @@ class Parser:
 
 
 	def parse_all_enums(self, types):
-		for type in types.iter('enum'):
-			self.generate_enum(type)
+		for type_node in types.iter('enum'):
+			self.generate_enum(type_node)
 
 
-	def generate_set(self, type):
-		set_name = type.attrib['name']
-		# resolve encodingType (often a user-defined alias, e.g. uInt8) to a
-		# primitive, same as enums do.
-		set_attrib = self.update_enum_attrib(type = type)
+	def generate_set(self, type_node):
+		set_name = type_node.attrib['name']
+		# resolve encodingType (may be a user-defined alias) to a primitive, like enums
+		set_attrib = self.update_enum_attrib(type_node = type_node)
 		primitive_encoding_type = self.get_primitive_encoding_type(set_attrib)
 		# choices: (name, bit index) - SetGen turns the index into a 1u<<index mask
-		choices = [(choice.attrib['name'], choice.text.strip()) for choice in type]
+		choices = [(choice.attrib['name'], choice.text.strip()) for choice in type_node]
 
 		handler = ContentHandler()
-		SetClassGen(handler, to_pascal_case(set_name)\
+		SetGen(handler, to_pascal_case(set_name)\
 			, Metadata.c_field_types[primitive_encoding_type], choices, self.namespace)
 		self.user_defined_sets.append(set_name)
 
@@ -343,15 +329,15 @@ class Parser:
 
 
 	def parse_all_sets(self, types):
-		for type in types.iter('set'):
-			self.generate_set(type)
+		for type_node in types.iter('set'):
+			self.generate_set(type_node)
 
 
-	def get_composite_type(self, type):
-		if('type' in type.attrib):
-			return type.attrib['type']
-		elif('primitiveType' in type.attrib):
-			return type.attrib['primitiveType']
+	def get_composite_type(self, type_node):
+		if('type' in type_node.attrib):
+			return type_node.attrib['type']
+		elif('primitiveType' in type_node.attrib):
+			return type_node.attrib['primitiveType']
 
 
 	def get_enum_const_value(field):
@@ -367,24 +353,24 @@ class Parser:
 			return field.attrib['type']
 
 
-	def generate_composite_type(self, field_gen, composite_name, type, previous_type_name):
-		type_name = type.attrib['name']
-		composite_type = self.get_composite_type(type)
+	def generate_composite_type(self, field_gen, composite_name, type_node, previous_type_name):
+		type_name = type_node.attrib['name']
+		composite_type = self.get_composite_type(type_node)
 		includes = []
 
 		# honor the schema offset of this composite member (emit padding for gaps)
-		field_gen.layout_field(type_name, type.attrib.get('offset'), self.get_member_size(type))
+		field_gen.layout_field(type_name, type_node.attrib.get('offset'), self.get_member_size(type_node))
 
-		if('valueRef' in type.attrib.keys()):
-			composite_type = Parser.get_enum_type(type)
+		if('valueRef' in type_node.attrib.keys()):
+			composite_type = Parser.get_enum_type(type_node)
 
 		if(composite_type in self.user_defined_enums):
 			includes.append(composite_type)
-			if(self.is_const_type(type.attrib)):
+			if(self.is_const_type(type_node.attrib)):
 				logging.debug('const enum field: %s', type_name)
 				field_gen.gen_composite_const_enum_field_def(message_name = composite_name, field_type = to_pascal_case(composite_type)\
 					, field_name = type_name, previous_field_name = previous_type_name\
-					, value = Parser.get_enum_const_value(type))
+					, value = Parser.get_enum_const_value(type_node))
 				return type_name, includes
 			else:
 				logging.debug('enum field: %s', type_name)
@@ -400,31 +386,31 @@ class Parser:
 				, field_name = type_name, previous_field_name = previous_type_name)
 			return type_name, includes
 
-		field_attrib =  self.update_type_attrib(field = type)
-		primitive_type = self.get_primitive_type(type.attrib)
+		field_attrib =  self.update_type_attrib(field = type_node)
+		primitive_type = self.get_primitive_type(type_node.attrib)
 		field_type = Metadata.c_field_types[primitive_type]
 
 		if(self.is_string_field(primitive_type, field_attrib)):
-			if(self.is_const_type(type.attrib)):
+			if(self.is_const_type(type_node.attrib)):
 				logging.debug('const string field: %s', type_name)
 				field_gen.gen_composite_const_string_field_def(message_name = composite_name\
 					, field_type = field_type\
-					, field_name = type_name, previous_field_name = previous_type_name, field_size = type.attrib['length']\
-					, value = type.text)
+					, field_name = type_name, previous_field_name = previous_type_name, field_size = type_node.attrib['length']\
+					, value = type_node.text)
 				return type_name, includes
 			else:
 				logging.debug('const string field: %s', type_name)
 				field_gen.gen_composite_string_field_def(message_name = composite_name\
 					, field_type = field_type\
-					, field_name = type_name, previous_field_name = previous_type_name, field_size = type.attrib['length'])
+					, field_name = type_name, previous_field_name = previous_type_name, field_size = type_node.attrib['length'])
 				return type_name, includes
 		
-		if(self.is_numeric(primitive_type, type.attrib)):
-			if(('presence' in type.attrib) and (type.attrib['presence'] == 'constant')):
+		if(self.is_numeric(primitive_type, type_node.attrib)):
+			if(('presence' in type_node.attrib) and (type_node.attrib['presence'] == 'constant')):
 				field_gen.gen_composite_const_numeric_field_def(message_name = composite_name\
 					, field_type = field_type\
 					, field_name = type_name, previous_field_name = previous_type_name\
-					, value = type.text)
+					, value = type_node.text)
 				return type_name, includes
 			else:
 				(min_value, max_value, null_value) = self.get_numeric_attrib_of_primitive(primitive_type, field_attrib)
@@ -454,8 +440,8 @@ class Parser:
 		msg_gen.field_gen.gen_ostream_begin()
 		msg_gen.field_gen.reset_layout()
 		previous_type_name = ""
-		for type in composite.iter('type'):
-			previous_type_name, includes = self.generate_composite_type(msg_gen.field_gen, to_pascal_case(composite_name), type\
+		for type_node in composite.iter('type'):
+			previous_type_name, includes = self.generate_composite_type(msg_gen.field_gen, to_pascal_case(composite_name), type_node\
 				, previous_type_name)
 		msg_gen.field_gen.gen_ostream_end()
 		msg_gen.field_gen.gen_trailing_padding(composite.attrib.get('blockLength'))
@@ -487,8 +473,7 @@ class Parser:
 		field_id = field.attrib['id']
 		field_type = field.attrib['type']
 
-		# honor the schema offset: resolve this field's byte position (emitting
-		# padding for any gap) before its member is generated.
+		# honor the schema offset: pad any gap so the member lands at its position
 		field_gen.layout_field(field_name, field.attrib.get('offset'), self.get_type_size(field))
 
 		if(field_type in self.user_defined_enums):
@@ -520,7 +505,6 @@ class Parser:
 				, is_group = is_group, group_name = group_name)
 			return field_name
 
-		# combine field.attrib and type attrib
 		field_attrib = self.update_field_attrib(field)
 		primitive_type = self.get_primitive_type(field_attrib)
 
@@ -586,16 +570,16 @@ class Parser:
 
 
 	def update_group_size_encoding_types(group_size_encoding_type_entry, composite, index):
-		type = composite[index]
+		type_node = composite[index]
 		default_type_name = Metadata.default_group_size_encoding_names[index].lower()
-		if (type.attrib['name'].lower() != default_type_name):
+		if (type_node.attrib['name'].lower() != default_type_name):
 			logging.error('invalid group size encoding. expected %s confiured %s'\
-				, default_type_name.lower(), type.attrib['name'].lower())
+				, default_type_name.lower(), type_node.attrib['name'].lower())
 			exit()
 		else:
 			group_size_encoding_type = { 
-				"name": type.attrib['name'], 
-				"type" : Metadata.c_field_types[type.attrib['primitiveType']]  
+				"name": type_node.attrib['name'], 
+				"type" : Metadata.c_field_types[type_node.attrib['primitiveType']]  
 			}
 			group_size_encoding_type_entry.append(group_size_encoding_type)
 
@@ -626,25 +610,25 @@ class Parser:
 
 
 	def update_variable_data_encoding_types(variable_data_encoding_type_entry, composite, index):
-		type = composite[index]
+		type_node = composite[index]
 		default_type_name = Metadata.default_variable_data_encoding_names[index].lower()
-		if (type.attrib['name'].lower() != default_type_name):
+		if (type_node.attrib['name'].lower() != default_type_name):
 			logging.error('invalid variable data encoding. expected %s confiured %s'\
-				, default_type_name.lower(), type.attrib['name'].lower())
+				, default_type_name.lower(), type_node.attrib['name'].lower())
 			exit()
 		else:
 			variable_data_encoding_type = { 
-				"name": type.attrib['name'], 
-				"type" : Metadata.c_field_types[type.attrib['primitiveType']]  
+				"name": type_node.attrib['name'], 
+				"type" : Metadata.c_field_types[type_node.attrib['primitiveType']]  
 			}
 			variable_data_encoding_type_entry.append(variable_data_encoding_type)
 
 
-	def parse_variable_data_encoding_header(self, type):
-		if(type in self.variable_data_encoding_types.keys()):
-			return self.variable_data_encoding_types[type]
+	def parse_variable_data_encoding_header(self, type_node):
+		if(type_node in self.variable_data_encoding_types.keys()):
+			return self.variable_data_encoding_types[type_node]
 		else:
-			xpath = ".//*[@name='" + type + "']"
+			xpath = ".//*[@name='" + type_node + "']"
 			composite = self.root.find(xpath)
 			variable_data_encoding_type = []
 			field_count = len(composite)
@@ -655,7 +639,7 @@ class Parser:
 				Parser.update_variable_data_encoding_types(variable_data_encoding_type, composite, 0)
 				Parser.update_variable_data_encoding_types(variable_data_encoding_type, composite, 1)		
 
-			self.variable_data_encoding_types.update({type : variable_data_encoding_type})
+			self.variable_data_encoding_types.update({type_node : variable_data_encoding_type})
 			logging.debug('variable data encoding. %s', variable_data_encoding_type)
 			return variable_data_encoding_type
 
@@ -666,7 +650,7 @@ class Parser:
 		dimension_type = group.attrib['dimensionType']
 		
 		group_gen = GroupGen(handler = handler, indentation = msg_gen.indentation\
-			, name = group_name, id = group_id, message_name = message_name, namespace = self.namespace\
+			, name = group_name, field_id = group_id, message_name = message_name, namespace = self.namespace\
 			, dimension_type = dimension_type)
 
 		self.generate_group_fields(msg_gen, handler, group_gen, group, message_name)
@@ -711,29 +695,29 @@ class Parser:
 		return group_name
 
 
-	def generate_nested_variable_length_data(self, msg_gen, handler, var_len_data, message_name, dimension):
-		name = var_len_data.attrib['name']
-		id = var_len_data.attrib['id']
-		dimension_type = var_len_data.attrib['type']
+	def generate_nested_variable_length_data(self, msg_gen, handler, variable_length_data, message_name, dimension):
+		name = variable_length_data.attrib['name']
+		field_id = variable_length_data.attrib['id']
+		dimension_type = variable_length_data.attrib['type']
 		
 		group_gen = VariableLengthDataGen(handler = handler, indentation = msg_gen.indentation\
-			, name = name, id = id, message_name = message_name, namespace = self.namespace\
+			, name = name, field_id = field_id, message_name = message_name, namespace = self.namespace\
 			, dimension_type = dimension_type)
 
-		msg_gen.field_gen.gen_nested_variable_length_data_def(var_len_data_name = name, dimension_type = to_pascal_case(dimension_type)\
+		msg_gen.field_gen.gen_nested_variable_length_data_def(variable_length_data_name = name, dimension_type = to_pascal_case(dimension_type)\
 			, dimension = dimension)		
 
 
-	def parse_data(self, msg_gen, handler, message_name, var_len_data, previous_var_len_data_name):
-		name = var_len_data.attrib['name']
-		id = var_len_data.attrib['id']
-		dimension_type = var_len_data.attrib['type']
+	def parse_data(self, msg_gen, handler, message_name, variable_length_data, previous_variable_length_data_name):
+		name = variable_length_data.attrib['name']
+		field_id = variable_length_data.attrib['id']
+		dimension_type = variable_length_data.attrib['type']
 
 		dimension = self.parse_variable_data_encoding_header(dimension_type)
-		self.generate_nested_variable_length_data(msg_gen, handler, var_len_data, message_name, dimension)
+		self.generate_nested_variable_length_data(msg_gen, handler, variable_length_data, message_name, dimension)
 
-		msg_gen.field_gen.gen_variable_length_data_def(var_len_data_name = name\
-			, previous_var_len_data_name = previous_var_len_data_name, var_len_data_id = id\
+		msg_gen.field_gen.gen_variable_length_data_def(variable_length_data_name = name\
+			, previous_variable_length_data_name = previous_variable_length_data_name, variable_length_data_id = field_id\
 			, dimension_type = to_pascal_case(dimension_type), dimension = dimension)
 
 		return name
@@ -770,7 +754,7 @@ class Parser:
 				if(not is_var_data_section):
 					is_var_data_section = True
 					if(is_group_section):
-						#there was a group before data
+						# buffer already emitted by the group section
 						pass
 					else:					
 						previous_field_name = ""

@@ -10,7 +10,7 @@ from FileGen import read_template
 class SwitchForEnumGen:
 	"""Build the switch body that maps each enum value to its string name."""
 
-	switch_begin_ct		='switch (value)\n{{\n'
+	switch_begin_ct	='switch (value)\n{{\n'
 	switch_case_ct		='case Value::{S_ENUM_VALUE}:\n    return "{S_ENUM_VALUE}";\n'
 	switch_null_ct		='case Value::NULL:\n    return "{S_RET_VALUE}";\n'
 	switch_default_ct	='default:\n    return "{S_DEFUAULT}";\n'
@@ -45,7 +45,7 @@ class SwitchForEnumGen:
 		self.content = ""
 
 		self.gen_begin()
-		self.handler.content += self.indentation.get_indented_str(self.content)
+		self.handler.content += self.indentation.indent(self.content)
 
 
 	def __del__(self):
@@ -53,7 +53,7 @@ class SwitchForEnumGen:
 		logging.debug('delete SwitchForEnumGen')
 
 
-class EnumClassGen:
+class EnumGen:
 	"""Emit a C++ enum class for a schema enum: the nested Value enum (with its
 	null value) and the to_string() helper.
 	"""
@@ -71,11 +71,11 @@ class EnumClassGen:
 		def gen_enum_begin(self):
 			self.indentation.increment()
 			enum_def = self.enum_def_ct.format(encoding_type = self.encoding_type)
-			self.handler.content += self.indentation.get_indented_str(enum_def)
+			self.handler.content += self.indentation.indent(enum_def)
 
 
 		def gen_enum_end(self):
-			self.handler.content += self.indentation.get_indented_str(self.enum_def_end_ct)
+			self.handler.content += self.indentation.indent(self.enum_def_end_ct)
 			self.indentation.decrement()
 
 
@@ -90,7 +90,7 @@ class EnumClassGen:
 				logging.debug('enum_name: %s, enum_value: %s' , enum_name, enum_value)
 			
 			self.indentation.increment()
-			self.handler.content += self.indentation.get_indented_str(enum_ct)
+			self.handler.content += self.indentation.indent(enum_ct)
 			self.indentation.decrement()
 
 
@@ -120,11 +120,11 @@ class EnumClassGen:
 		def gen_function_begin(self):
 			self.indentation.increment()
 			function_begin_def = self.fuction_begin_ct.format()
-			self.handler.content += self.indentation.get_indented_str(function_begin_def)
+			self.handler.content += self.indentation.indent(function_begin_def)
 
 
 		def gen_function_end(self):
-			self.handler.content += self.indentation.get_indented_str(self.fuction_end_ct)
+			self.handler.content += self.indentation.indent(self.fuction_end_ct)
 			self.indentation.decrement()
 
 
@@ -145,7 +145,7 @@ class EnumClassGen:
 		enum_def = self.EnumDefinitionGen(handler = self.handler, indentation = self.indentation, enum_name = self.enum_name, encoding_type = self.encoding_type, values = self.values)
 
 	
-	def gen_to_str_function(self):
+	def gen_to_string_function(self):
 			switch_content = self.EnumToStrFunctionGen(handler = self.handler, indentation = self.indentation, switch_variable = 'value', default_value = 'Invalid', values = self.values)
 
 
@@ -167,10 +167,10 @@ class EnumClassGen:
 		class_gen = ClassGen(handler = self.handler, indentation = self.indentation\
 			, class_name = self.enum_name)
 		self.gen_enum_class_content()
-		self.gen_to_str_function()		
+		self.gen_to_string_function()		
 		self.gen_ostream_enum_def(enum_name, namespace)
 
 
 	def __del__(self):
-		logging.debug('delete EnumClassGen')
+		logging.debug('delete EnumGen')
 		

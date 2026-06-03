@@ -37,18 +37,18 @@ class GroupGen:
 	def gen_group_qualifier_def(self, message_name):
 			field_def = self.group_qualifier_def_ct\
 				.replace('S_MESSAGE_NAME', message_name)
-			self.handler.content += self.indentation.get_indented_str(field_def)
+			self.handler.content += self.indentation.indent(field_def)
 
 
-	def __init__(self, handler, indentation, name, id, message_name, namespace, dimension_type):
+	def __init__(self, handler, indentation, name, field_id, message_name, namespace, dimension_type):
 		self.handler = handler
 		self.indentation = indentation
 		self.name = name
-		self.id = id
+		self.field_id = field_id
 		self.dimension_type = dimension_type
 
 		logging.debug('create GroupGen: %s', self.name)
-		self.handler.content += self.indentation.get_indented_str(self.group_class_qualifier_def_ct)
+		self.handler.content += self.indentation.indent(self.group_class_qualifier_def_ct)
 		self.class_gen = ClassGen(handler = self.handler, indentation = self.indentation\
 			, class_name = self.name)
 

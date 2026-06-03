@@ -43,8 +43,8 @@ class FieldGen:
 	group_def_ct                    = read_template('metadata/c++/message/group_def.h')
 	group_def_ct_4                  = read_template('metadata/c++/message/group_def_4.h')
 
-	nested_var_len_data_def_ct      = read_template('metadata/c++/message/nested_variable_length_data_def.h')
-	var_len_data_def_ct             = read_template('metadata/c++/message/variable_length_data_def.h')
+	nested_variable_length_data_def_ct      = read_template('metadata/c++/message/nested_variable_length_data_def.h')
+	variable_length_data_def_ct             = read_template('metadata/c++/message/variable_length_data_def.h')
 
 	buffer_def_ct                   = read_template('metadata/c++/message/buffer_def.h')
 
@@ -54,7 +54,7 @@ class FieldGen:
 	ostream_group_def_begin_ct      = read_template('metadata/c++/message/ostream_group_def_begin.h')
 	ostream_group_def_end_ct        = read_template('metadata/c++/message/ostream_group_def_end.h')
 	ostream_group_field_def_ct      = read_template('metadata/c++/message/ostream_group_field_def.h')
-	ostream_var_len_data_def_ct      = read_template('metadata/c++/message/ostream_var_len_data_def_ct.h')
+	ostream_variable_length_data_def_ct      = read_template('metadata/c++/message/ostream_variable_length_data_def.h')
 	
 
 	def gen_message_descriptor(self, message_name, message_id, schema, version, description):
@@ -63,29 +63,23 @@ class FieldGen:
 			.replace('S_MESSAGE_ID', str(message_id))\
 			.replace('S_SCHEMA_ID', str(schema))\
 			.replace('S_VERSION_ID', str(version))
-		self.handler.content += self.indentation.get_indented_str(message_def)
+		self.handler.content += self.indentation.indent(message_def)
 
 
 	def reset_layout(self):
-		# start a new fixed-length block (message root, composite, or group entry)
-		# so offsets accumulate from 0.
 		self.current_offset = 0
 		self.field_offset = 0
 
 	def gen_padding(self, member_name, size):
-		# private byte padding with no accessors. Two kinds use this:
-		#   <field>_pre_padding_    - an inter-field gap honoring a schema offset
-		#   block_trailing_padding_ - reserved bytes filling the root block to blockLength
+		# emit a private byte-padding member (no accessor)
 		pad = self.padding_def_ct\
 			.replace('S_PADDING_MEMBER', member_name)\
 			.replace('S_PADDING_SIZE', str(size))
-		self.handler.content += self.indentation.get_indented_str(pad)
+		self.handler.content += self.indentation.indent(pad)
 
 	def gen_trailing_padding(self, block_length):
-		# Pad the fixed root block out to the declared blockLength so the
-		# variable part (groups / variable-length data) begins at the right
-		# offset. The first group is accessed at buffer()+0, so the buffer must
-		# sit at blockLength, not merely after the last field.
+		# pad the fixed block out to blockLength so the variable part (groups /
+		# data) starts at the right offset - the first group sits at buffer()+0.
 		if(block_length is None):
 			return
 		block_length = int(block_length)
@@ -99,9 +93,8 @@ class FieldGen:
 			self.current_offset = block_length
 
 	def layout_field(self, field_name, declared_offset, field_size):
-		# resolve a field's byte offset at generation time. Padding is emitted
-		# for gaps so the C++ struct member lands at the schema offset; the C++
-		# itself performs no offset arithmetic.
+		# resolve the field's offset and pad any gap, so the C++ member lands at
+		# the schema offset - the generated code does no runtime offset math.
 		if(field_size == 0):
 			# constants occupy no wire bytes: place at the cursor, do not advance.
 			self.field_offset = self.current_offset
@@ -120,8 +113,6 @@ class FieldGen:
 		self.current_offset += field_size
 
 	def get_field_offset(self, previous_field_name):
-		# offset resolved by layout_field; emitted as a literal constant so the
-		# generated code does no runtime offset arithmetic.
 		return str(self.field_offset)
 
 	def get_group_offset(self, previous_field_name):
@@ -193,8 +184,8 @@ class FieldGen:
 		self.handler.ostream_var += field_def
 		logging.debug('gen_ostream_def')
 
-	def gen_ostream_var_len_data_def(self, field_name):
-		field_def = self.ostream_var_len_data_def_ct\
+	def gen_ostream_variable_length_data_def(self, field_name):
+		field_def = self.ostream_variable_length_data_def_ct\
 			.replace('S_MESSAGE_NAME', self.message_name)\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
@@ -216,7 +207,7 @@ class FieldGen:
 			.replace('S_FIELD_MIN', str(min))\
 			.replace('S_FIELD_MAX', str(max))\
 			.replace('S_FIELD_NULL', str(null))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		logging.debug('gen_message_numeric_field_def: %s', field_name)
 
@@ -232,7 +223,7 @@ class FieldGen:
 			.replace('S_FIELD_MIN', str(min))\
 			.replace('S_FIELD_MAX', str(max))\
 			.replace('S_FIELD_NULL', str(null))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name)
 		self.handler.field_type_and_name.append([field_type, field_name])
 		logging.debug('gen_composite_numeric_field_def: %s', field_name)
@@ -248,7 +239,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		logging.debug('gen_message_const_numeric_field_def: %s', field_name)
 
@@ -261,7 +252,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name)
 		logging.debug('gen_composite_const_numeric_field_def: %s', field_name)
 
@@ -277,7 +268,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_NULL', str(null))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_message_enum_field_def: %s', field_name)
@@ -292,7 +283,7 @@ class FieldGen:
 			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_message_set_field_def: %s', field_name)
@@ -305,7 +296,7 @@ class FieldGen:
 			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_composite_set_field_def: %s', field_name)
@@ -320,7 +311,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_NULL', str(null))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name)
 		self.handler.user_includes.append(field_type)
 		self.handler.field_type_and_name.append([field_type + '::Value', field_name])
@@ -337,7 +328,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_message_const_enum_field_def: %s', field_name)
@@ -351,7 +342,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_composite_const_enum_field_def: %s', field_name)
@@ -367,7 +358,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		logging.debug('gen_message_string_field_def: %s', field_name)
 
@@ -380,7 +371,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name)
 		self.handler.field_type_and_name.append([field_type, field_name])
 		logging.debug('gen_composite_string_field_def: %s', field_name)
@@ -397,7 +388,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)\
 			.replace('S_CONST_FIELD_VALUE', str(value))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		logging.debug('gen_message_const_string_field_def: %s', field_name)
 
@@ -411,7 +402,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)\
 			.replace('S_CONST_FIELD_VALUE', str(value))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name)
 		logging.debug('gen_composite_const_string_field_def: %s', field_name)
 
@@ -425,7 +416,7 @@ class FieldGen:
 			.replace('S_FIELD_OFFSET', self.get_field_offset(previous_field_name))\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field(field_name, is_group, group_name)
 		self.handler.user_includes.append(field_type)
 		self.handler.field_type_and_name.append([field_type, field_name])
@@ -441,7 +432,7 @@ class FieldGen:
 			.replace('S_BLOCK_LENGTH_NAME', to_snake_case(block_length_name))\
 			.replace('S_NUM_IN_GROUP_NAME', to_snake_case(num_in_group_name))\
 			.replace('S_NUM_IN_GROUP_TYPE', num_in_group_type)
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.handler.user_includes.append(dimension_type)
 		logging.debug('gen_nested_group_def: %s', group_name)
 
@@ -456,7 +447,7 @@ class FieldGen:
 			.replace('S_NUM_IN_GROUP_TYPE', num_in_group_type)\
 			.replace('S_NUM_GROUPS_TYPE', num_groups_type)\
 			.replace('S_NUM_VAR_DATA_FIELDS_TYPE', num_var_data_field_type)             
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.handler.user_includes.append(dimension_type)
 		logging.debug('gen_nested_group_def_4: %s', group_name)        
 
@@ -472,7 +463,7 @@ class FieldGen:
 			.replace('S_BLOCK_LENGTH_NAME', to_snake_case(block_length_name))\
 			.replace('S_NUM_IN_GROUP_NAME', to_snake_case(num_in_group_name))\
 			.replace('S_NUM_IN_GROUP_TYPE', num_in_group_type)                           
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(group_name)
 		logging.debug('gen_group_def: %s', group_name)
 
@@ -493,59 +484,59 @@ class FieldGen:
 			.replace('S_NUM_GROUPS_TYPE', num_groups_type)\
 			.replace('S_NUM_VAR_DATA_FIELDS_NAME', to_snake_case(num_var_data_fields_name))\
 			.replace('S_NUM_VAR_DATA_FIELDS_TYPE', num_var_data_fields_type)                            
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(group_name)
 		logging.debug('gen_group_def_4: %s', group_name)
 
 
-	def gen_nested_variable_length_data_def(self, var_len_data_name\
+	def gen_nested_variable_length_data_def(self, variable_length_data_name\
 		, dimension_type, dimension):
-		var_len_data_length_name = dimension[0]['name']
-		var_len_data_length_type = dimension[0]['type']
-		var_len_data_var_data_type = dimension[1]['type']
+		variable_length_data_length_name = dimension[0]['name']
+		variable_length_data_length_type = dimension[0]['type']
+		variable_length_data_var_data_type = dimension[1]['type']
 
-		field_def = self.nested_var_len_data_def_ct\
-			.replace('S_VAR_LEN_DATA_NAME', var_len_data_name).replace('S_VAR_LEN_SNAKE', to_snake_case(var_len_data_name))\
+		field_def = self.nested_variable_length_data_def_ct\
+			.replace('S_VAR_LEN_DATA_NAME', variable_length_data_name).replace('S_VAR_LEN_SNAKE', to_snake_case(variable_length_data_name))\
 			.replace('S_DIAMENTION_TYPE', dimension_type)\
-			.replace('S_VAR_LEN_DATA_LENGTH_NAME', to_snake_case(var_len_data_length_name))\
-			.replace('S_VAR_LEN_DATA_LENGTH_TYPE', var_len_data_length_type)\
-			.replace('S_VAR_LEN_DATA_VAR_DATA_TYPE', var_len_data_var_data_type)
-		self.handler.content += self.indentation.get_indented_str(field_def)
+			.replace('S_VAR_LEN_DATA_LENGTH_NAME', to_snake_case(variable_length_data_length_name))\
+			.replace('S_VAR_LEN_DATA_LENGTH_TYPE', variable_length_data_length_type)\
+			.replace('S_VAR_LEN_DATA_VAR_DATA_TYPE', variable_length_data_var_data_type)
+		self.handler.content += self.indentation.indent(field_def)
 		self.handler.user_includes.append(dimension_type)
-		logging.debug('nested_variable_length_data_def: %s', var_len_data_name)
+		logging.debug('nested_variable_length_data_def: %s', variable_length_data_name)
 
-	def gen_variable_length_data_def(self, var_len_data_name, previous_var_len_data_name, var_len_data_id\
+	def gen_variable_length_data_def(self, variable_length_data_name, previous_variable_length_data_name, variable_length_data_id\
 		, dimension_type, dimension):
-		var_len_data_length_name = dimension[0]['name']
-		var_len_data_length_type = dimension[0]['type']
-		var_len_data_var_data_type = dimension[1]['type']    
-		field_def = self.var_len_data_def_ct\
-			.replace('S_VAR_LEN_DATA_NAME', var_len_data_name).replace('S_VAR_LEN_SNAKE', to_snake_case(var_len_data_name))\
-			.replace('S_VAR_LEN_DATA_ID', var_len_data_id)\
-			.replace('S_VAR_LEN_DATA_OFFSET', self.get_group_offset(str(previous_var_len_data_name)))\
+		variable_length_data_length_name = dimension[0]['name']
+		variable_length_data_length_type = dimension[0]['type']
+		variable_length_data_var_data_type = dimension[1]['type']    
+		field_def = self.variable_length_data_def_ct\
+			.replace('S_VAR_LEN_DATA_NAME', variable_length_data_name).replace('S_VAR_LEN_SNAKE', to_snake_case(variable_length_data_name))\
+			.replace('S_VAR_LEN_DATA_ID', variable_length_data_id)\
+			.replace('S_VAR_LEN_DATA_OFFSET', self.get_group_offset(str(previous_variable_length_data_name)))\
 			.replace('S_DIAMENTION_TYPE', dimension_type)\
-			.replace('S_VAR_LEN_DATA_LENGTH_NAME', to_snake_case(var_len_data_length_name))\
-			.replace('S_VAR_LEN_DATA_LENGTH_TYPE', var_len_data_length_type)\
-			.replace('S_VAR_LEN_DATA_VAR_DATA_TYPE', var_len_data_var_data_type)
-		self.handler.content += self.indentation.get_indented_str(field_def)
-		self.gen_ostream_var_len_data_def(var_len_data_name)
-		logging.debug('gen_variable_length_data_def: %s', var_len_data_name)            
+			.replace('S_VAR_LEN_DATA_LENGTH_NAME', to_snake_case(variable_length_data_length_name))\
+			.replace('S_VAR_LEN_DATA_LENGTH_TYPE', variable_length_data_length_type)\
+			.replace('S_VAR_LEN_DATA_VAR_DATA_TYPE', variable_length_data_var_data_type)
+		self.handler.content += self.indentation.indent(field_def)
+		self.gen_ostream_variable_length_data_def(variable_length_data_name)
+		logging.debug('gen_variable_length_data_def: %s', variable_length_data_name)            
 
 
 	def gen_constructor(self):
 		string_fields = []
 		ct_args_list = []
-		for type in self.handler.field_type_and_name:
-			field = to_snake_case(type[1])
-			if(type[0] == 'char'):
+		for type_and_name in self.handler.field_type_and_name:
+			field = to_snake_case(type_and_name[1])
+			if(type_and_name[0] == 'char'):
 				string_fields.append(field)
 				ct_args_list.append('std::string_view ' + field)
 			else:
-				ct_args_list.append(type[0] + ' ' + field)
+				ct_args_list.append(type_and_name[0] + ' ' + field)
 		initilizer_args_list = []
-		for type in self.handler.field_type_and_name:
-			field = to_snake_case(type[1])
-			if(type[0] != 'char'):
+		for type_and_name in self.handler.field_type_and_name:
+			field = to_snake_case(type_and_name[1])
+			if(type_and_name[0] != 'char'):
 				initilizer_args_list.append(field + '_(' + field + ')')
 
 		ct_args = ', '.join(ct_args_list)
@@ -560,13 +551,13 @@ class FieldGen:
 			.replace('S_INITIALIZER_LIST', initilizer_args)\
 			.replace('S_STRING_FIELDS_ASSIGN', str_assign)
 
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 
 
 	def gen_buffer_def(self, field_size):
 		field_def = self.buffer_def_ct\
 			.replace('S_FIELD_SIZE', str(field_size))
-		self.handler.content += self.indentation.get_indented_str(field_def)
+		self.handler.content += self.indentation.indent(field_def)
 		logging.debug('gen_buffer_def')
 
 
@@ -577,10 +568,7 @@ class FieldGen:
 		self.message_name = message_name
 		self.class_gen = class_gen
 
-		# running byte cursor for the fixed-length block, and the resolved
-		# offset of the field currently being emitted (both filled by
-		# layout_field). reset_layout() is called at the start of each
-		# message root block, composite, and group entry.
+		# byte cursor and current field offset, maintained by layout_field
 		self.current_offset = 0
 		self.field_offset = 0
 
@@ -609,10 +597,8 @@ class MessageGen:
 		self.field_gen = FieldGen(handler = self.handler, indentation = self.indentation\
 			, message_name = message_name, class_gen = self.class_gen, namespace = namespace)
 
-		# template_id()/schema()/version() are message-level metadata; emitting
-		# them on composites collides with same-named field accessors (e.g.
-		# MessageHeader's templateId/version fields). Composites pass
-		# descriptor=False.
+		# composites pass descriptor=False: template_id/schema/version would
+		# collide with same-named composite fields (e.g. MessageHeader.version).
 		if descriptor:
 			self.field_gen.gen_message_descriptor(message_name = message_name, message_id = message_id\
 				, schema = schema, version = version, description = description)
