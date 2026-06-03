@@ -4032,7 +4032,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	{
 		auto &g = group.get(i);
 		os << g.md_feed_type_name() << ": " << g.md_feed_type() << " ";
-		os << g.market_depth_name() << ": " << g.market_depth() << " ";
+		os << g.market_depth_name() << ": " << +g.market_depth() << " ";
 	}
 	return os;
 }
@@ -4043,8 +4043,8 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.inst_attrib_type_name() << ": " << g.inst_attrib_type() << " ";
-		os << g.inst_attrib_value_name() << ": " << g.inst_attrib_value() << " ";
+		os << g.inst_attrib_type_name() << ": " << +g.inst_attrib_type() << " ";
+		os << g.inst_attrib_value_name() << ": " << InstAttribValue::to_string(g.inst_attrib_value()) << " ";
 	}
 	return os;
 }
@@ -4055,7 +4055,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.lot_type_name() << ": " << g.lot_type() << " ";
+		os << g.lot_type_name() << ": " << +g.lot_type() << " ";
 		os << g.min_lot_size_name() << ": " << g.min_lot_size() << " ";
 	}
 	return os;
@@ -4071,7 +4071,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.settl_date_name() << ": " << g.settl_date() << " ";
 		os << g.maturity_date_name() << ": " << g.maturity_date() << " ";
 		os << g.security_alt_id_name() << ": " << g.security_alt_id() << " ";
-		os << g.security_alt_id_source_name() << ": " << g.security_alt_id_source() << " ";
+		os << g.security_alt_id_source_name() << ": " << +g.security_alt_id_source() << " ";
 	}
 	return os;
 }
@@ -4079,14 +4079,14 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63 &msg)
 {
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.tot_num_reports_name() << ": " << msg.tot_num_reports() << " ";
 	os << msg.security_update_action_name() << ": " << msg.security_update_action() << " ";
 	os << msg.last_update_time_name() << ": " << msg.last_update_time() << " ";
 	os << msg.md_security_trading_status_name() << ": " << msg.md_security_trading_status() << " ";
 	os << msg.appl_id_name() << ": " << msg.appl_id() << " ";
-	os << msg.market_segment_id_name() << ": " << msg.market_segment_id() << " ";
-	os << msg.underlying_product_name() << ": " << msg.underlying_product() << " ";
+	os << msg.market_segment_id_name() << ": " << +msg.market_segment_id() << " ";
+	os << msg.underlying_product_name() << ": " << +msg.underlying_product() << " ";
 	os << msg.security_exchange_name() << ": " << msg.security_exchange() << " ";
 	os << msg.security_group_name() << ": " << msg.security_group() << " ";
 	os << msg.asset_name() << ": " << msg.asset() << " ";
@@ -4103,7 +4103,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	os << msg.max_trade_vol_name() << ": " << msg.max_trade_vol() << " ";
 	os << msg.min_price_increment_name() << ": " << msg.min_price_increment() << " ";
 	os << msg.display_factor_name() << ": " << msg.display_factor() << " ";
-	os << msg.price_precision_name() << ": " << msg.price_precision() << " ";
+	os << msg.price_precision_name() << ": " << +msg.price_precision() << " ";
 	os << msg.unit_of_measure_name() << ": " << msg.unit_of_measure() << " ";
 	os << msg.unit_of_measure_qty_name() << ": " << msg.unit_of_measure_qty() << " ";
 	os << msg.high_limit_price_name() << ": " << msg.high_limit_price() << " ";

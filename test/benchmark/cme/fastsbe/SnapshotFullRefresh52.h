@@ -1075,10 +1075,10 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.md_entry_px_name() << ": " << g.md_entry_px() << " ";
 		os << g.md_entry_size_name() << ": " << g.md_entry_size() << " ";
 		os << g.number_of_orders_name() << ": " << g.number_of_orders() << " ";
-		os << g.md_price_level_name() << ": " << g.md_price_level() << " ";
+		os << g.md_price_level_name() << ": " << +g.md_price_level() << " ";
 		os << g.trading_reference_date_name() << ": " << g.trading_reference_date() << " ";
 		os << g.open_close_settl_flag_name() << ": " << g.open_close_settl_flag() << " ";
-		os << g.settl_price_type_name() << ": " << g.settl_price_type() << " ";
+		os << g.settl_price_type_name() << ": " << SettlPriceType::to_string(g.settl_price_type()) << " ";
 		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
 	}
 	return os;

@@ -727,7 +727,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.md_entry_px_name() << ": " << g.md_entry_px() << " ";
 		os << g.md_entry_size_name() << ": " << g.md_entry_size() << " ";
 		os << g.number_of_orders_name() << ": " << g.number_of_orders() << " ";
-		os << g.md_price_level_name() << ": " << g.md_price_level() << " ";
+		os << g.md_price_level_name() << ": " << +g.md_price_level() << " ";
 		os << g.open_close_settl_flag_name() << ": " << g.open_close_settl_flag() << " ";
 		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
 	}
@@ -738,7 +738,7 @@ template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshTCPLongQty68 &msg)
 {
 	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.security_id_name() << ": " << msg.security_id() << " ";
 	os << msg.high_limit_price_name() << ": " << msg.high_limit_price() << " ";
 	os << msg.low_limit_price_name() << ": " << msg.low_limit_price() << " ";

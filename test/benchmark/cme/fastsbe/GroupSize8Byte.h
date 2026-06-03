@@ -126,7 +126,7 @@ template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::GroupSize8Byte &msg)
 {
 	os << msg.block_length_name() << ": " << msg.block_length() << " ";
-	os << msg.num_in_group_name() << ": " << msg.num_in_group() << " ";
+	os << msg.num_in_group_name() << ": " << +msg.num_in_group() << " ";
 	return os;
 }
 }

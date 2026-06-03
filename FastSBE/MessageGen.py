@@ -8,6 +8,7 @@ from FileGen import ClassGen
 from FileGen import ContentHandler
 from FileGen import to_snake_case
 from FileGen import read_template
+from Metadata import Metadata
 
 class FieldGen:
 	"""Emit the members and accessors for the fields of a message, composite or
@@ -139,21 +140,43 @@ class FieldGen:
 	def gen_ostream_end(self):
 		self.gen_ostream_field_def_end()
 
-	def gen_ostream_field_def(self, field_name):
+	@staticmethod
+	def gen_ostream_value(accessor, mode, set_type):
+		# how a field's value is rendered in the stream operator:
+		#   cast - promote int8/uint8 with unary + so it prints as a number
+		#   set  - decode the bitset to its active choice names
+		if(mode == 'cast'):
+			return '+' + accessor
+		if(mode == 'set'):
+			return set_type + '::to_string(' + accessor + ')'
+		return accessor
+
+	@staticmethod
+	def numeric_ostream_mode(field_type):
+		# int8/uint8 are (un)signed char, so operator<< would print them as a
+		# character; promote those to int. Wider integers stream fine as-is.
+		if(field_type in (Metadata.c_field_types['int8'], Metadata.c_field_types['uint8'])):
+			return 'cast'
+		return 'plain'
+
+	def gen_ostream_field_def(self, field_name, mode = 'plain', set_type = None):
+		snake = to_snake_case(field_name)
+		value = self.gen_ostream_value('msg.' + snake + '()', mode, set_type)
 		field_def = self.ostream_field_def_ct\
 			.replace('S_MESSAGE_NAME', self.message_name)\
 			.replace('S_FIELD_SCHEMA', field_name)\
-			.replace('S_FIELD_NAME', to_snake_case(field_name))
+			.replace('S_FIELD_VALUE', value)\
+			.replace('S_FIELD_NAME', snake)
 		field_def += '\n'
 		self.handler.ostream += field_def
 		logging.debug('gen_ostream_def')
 
 
-	def gen_ostream_field(self, field_name, is_group, group_name):
+	def gen_ostream_field(self, field_name, is_group, group_name, mode = 'plain', set_type = None):
 		if(not is_group):
-			self.gen_ostream_field_def(field_name)
+			self.gen_ostream_field_def(field_name, mode, set_type)
 		else:
-			self.gen_ostream_group_field_def(field_name, group_name)
+			self.gen_ostream_group_field_def(field_name, group_name, mode, set_type)
 
 
 	def gen_ostream_group_def_begin(self, group_name, message_name):
@@ -174,12 +197,15 @@ class FieldGen:
 	def gen_ostream_group_end(self):
 		self.gen_ostream_group_def_end()
 
-	def gen_ostream_group_field_def(self, field_name, group_name):
+	def gen_ostream_group_field_def(self, field_name, group_name, mode = 'plain', set_type = None):
+		snake = to_snake_case(field_name)
+		value = self.gen_ostream_value('g.' + snake + '()', mode, set_type)
 		field_def = self.ostream_group_field_def_ct\
 			.replace('S_MESSAGE_NAME', self.message_name)\
 			.replace('S_GROUP_NAME', self.message_name)\
 			.replace('S_FIELD_SCHEMA', field_name)\
-			.replace('S_FIELD_NAME', to_snake_case(field_name))
+			.replace('S_FIELD_VALUE', value)\
+			.replace('S_FIELD_NAME', snake)
 		field_def += '\n'
 		self.handler.ostream_var += field_def
 		logging.debug('gen_ostream_def')
@@ -208,7 +234,7 @@ class FieldGen:
 			.replace('S_FIELD_MAX', str(max))\
 			.replace('S_FIELD_NULL', str(null))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name)
+		self.gen_ostream_field(field_name, is_group, group_name, self.numeric_ostream_mode(field_type))
 		logging.debug('gen_message_numeric_field_def: %s', field_name)
 
 	def gen_composite_numeric_field_def(self, message_name\
@@ -224,7 +250,7 @@ class FieldGen:
 			.replace('S_FIELD_MAX', str(max))\
 			.replace('S_FIELD_NULL', str(null))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name)
+		self.gen_ostream_field_def(field_name, self.numeric_ostream_mode(field_type))
 		self.handler.field_type_and_name.append([field_type, field_name])
 		logging.debug('gen_composite_numeric_field_def: %s', field_name)
 
@@ -240,7 +266,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name)
+		self.gen_ostream_field(field_name, is_group, group_name, self.numeric_ostream_mode(field_type))
 		logging.debug('gen_message_const_numeric_field_def: %s', field_name)
 
 	def gen_composite_const_numeric_field_def(self, message_name\
@@ -253,7 +279,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name)
+		self.gen_ostream_field_def(field_name, self.numeric_ostream_mode(field_type))
 		logging.debug('gen_composite_const_numeric_field_def: %s', field_name)
 
 
@@ -284,7 +310,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name)
+		self.gen_ostream_field(field_name, is_group, group_name, 'set', field_type)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_message_set_field_def: %s', field_name)
 
@@ -297,7 +323,7 @@ class FieldGen:
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name)
+		self.gen_ostream_field_def(field_name, 'set', field_type)
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_composite_set_field_def: %s', field_name)
 

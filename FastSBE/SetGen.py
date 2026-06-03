@@ -46,6 +46,26 @@ class SetGen:
 			self.gen_values()
 			self.gen_end()
 
+	def gen_to_string(self):
+		# render the active choices as a brace list, e.g. {LastTradeMsg, EndOfEvent}
+		self.indentation.increment()
+		body = 'static std::string to_string(value_type value)\n'
+		body += '{\n'
+		body += '    std::string result = "{";\n'
+		body += '    bool first = true;\n'
+		for (name, index) in self.choices:
+			body += '    if(value & static_cast<value_type>(Choice::' + name + '))\n'
+			body += '    {\n'
+			body += '        if(!first) { result += ", "; }\n'
+			body += '        result += "' + name + '";\n'
+			body += '        first = false;\n'
+			body += '    }\n'
+		body += '    result += "}";\n'
+		body += '    return result;\n'
+		body += '}\n'
+		self.handler.content += self.indentation.indent(body)
+		self.indentation.decrement()
+
 	def gen_operator_or(self):
 		op = (
 			"\nconstexpr S_SET_NAME::Choice operator|("
@@ -68,6 +88,7 @@ class SetGen:
 			class_name=self.set_name)
 		self.ChoiceDefinitionGen(handler=self.handler, indentation=self.indentation,
 			encoding_type=encoding_type, choices=choices)
+		self.gen_to_string()
 		self.gen_operator_or()
 
 	def __del__(self):

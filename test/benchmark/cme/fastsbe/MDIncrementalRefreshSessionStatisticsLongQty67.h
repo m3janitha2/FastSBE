@@ -615,7 +615,7 @@ template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshSessionStatisticsLongQty67 &msg)
 {
 	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
 	return os;
 }

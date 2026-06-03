@@ -672,7 +672,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.security_id_name() << ": " << g.security_id() << " ";
 		os << g.rpt_seq_name() << ": " << g.rpt_seq() << " ";
 		os << g.trading_reference_date_name() << ": " << g.trading_reference_date() << " ";
-		os << g.settl_price_type_name() << ": " << g.settl_price_type() << " ";
+		os << g.settl_price_type_name() << ": " << SettlPriceType::to_string(g.settl_price_type()) << " ";
 		os << g.md_update_action_name() << ": " << g.md_update_action() << " ";
 		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
 	}
@@ -683,7 +683,7 @@ template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshDailyStatistics49 &msg)
 {
 	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
 	return os;
 }

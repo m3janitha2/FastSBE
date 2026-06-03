@@ -544,7 +544,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	os << msg.asset_name() << ": " << msg.asset() << " ";
 	os << msg.security_id_name() << ": " << msg.security_id() << " ";
 	os << msg.trade_date_name() << ": " << msg.trade_date() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.security_trading_status_name() << ": " << msg.security_trading_status() << " ";
 	os << msg.halt_reason_name() << ": " << msg.halt_reason() << " ";
 	os << msg.security_trading_event_name() << ": " << msg.security_trading_event() << " ";

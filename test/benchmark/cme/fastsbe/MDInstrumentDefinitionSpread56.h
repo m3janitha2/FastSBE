@@ -3715,7 +3715,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	{
 		auto &g = group.get(i);
 		os << g.md_feed_type_name() << ": " << g.md_feed_type() << " ";
-		os << g.market_depth_name() << ": " << g.market_depth() << " ";
+		os << g.market_depth_name() << ": " << +g.market_depth() << " ";
 	}
 	return os;
 }
@@ -3726,8 +3726,8 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.inst_attrib_type_name() << ": " << g.inst_attrib_type() << " ";
-		os << g.inst_attrib_value_name() << ": " << g.inst_attrib_value() << " ";
+		os << g.inst_attrib_type_name() << ": " << +g.inst_attrib_type() << " ";
+		os << g.inst_attrib_value_name() << ": " << InstAttribValue::to_string(g.inst_attrib_value()) << " ";
 	}
 	return os;
 }
@@ -3738,7 +3738,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.lot_type_name() << ": " << g.lot_type() << " ";
+		os << g.lot_type_name() << ": " << +g.lot_type() << " ";
 		os << g.min_lot_size_name() << ": " << g.min_lot_size() << " ";
 	}
 	return os;
@@ -3753,7 +3753,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.leg_security_id_name() << ": " << g.leg_security_id() << " ";
 		os << g.leg_security_id_source_name() << ": " << g.leg_security_id_source() << " ";
 		os << g.leg_side_name() << ": " << g.leg_side() << " ";
-		os << g.leg_ratio_qty_name() << ": " << g.leg_ratio_qty() << " ";
+		os << g.leg_ratio_qty_name() << ": " << +g.leg_ratio_qty() << " ";
 		os << g.leg_price_name() << ": " << g.leg_price() << " ";
 		os << g.leg_option_delta_name() << ": " << g.leg_option_delta() << " ";
 	}
@@ -3763,14 +3763,14 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionSpread56 &msg)
 {
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.tot_num_reports_name() << ": " << msg.tot_num_reports() << " ";
 	os << msg.security_update_action_name() << ": " << msg.security_update_action() << " ";
 	os << msg.last_update_time_name() << ": " << msg.last_update_time() << " ";
 	os << msg.md_security_trading_status_name() << ": " << msg.md_security_trading_status() << " ";
 	os << msg.appl_id_name() << ": " << msg.appl_id() << " ";
-	os << msg.market_segment_id_name() << ": " << msg.market_segment_id() << " ";
-	os << msg.underlying_product_name() << ": " << msg.underlying_product() << " ";
+	os << msg.market_segment_id_name() << ": " << +msg.market_segment_id() << " ";
+	os << msg.underlying_product_name() << ": " << +msg.underlying_product() << " ";
 	os << msg.security_exchange_name() << ": " << msg.security_exchange() << " ";
 	os << msg.security_group_name() << ": " << msg.security_group() << " ";
 	os << msg.asset_name() << ": " << msg.asset() << " ";
@@ -3788,19 +3788,19 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	os << msg.max_trade_vol_name() << ": " << msg.max_trade_vol() << " ";
 	os << msg.min_price_increment_name() << ": " << msg.min_price_increment() << " ";
 	os << msg.display_factor_name() << ": " << msg.display_factor() << " ";
-	os << msg.price_display_format_name() << ": " << msg.price_display_format() << " ";
+	os << msg.price_display_format_name() << ": " << +msg.price_display_format() << " ";
 	os << msg.price_ratio_name() << ": " << msg.price_ratio() << " ";
-	os << msg.tick_rule_name() << ": " << msg.tick_rule() << " ";
+	os << msg.tick_rule_name() << ": " << +msg.tick_rule() << " ";
 	os << msg.unit_of_measure_name() << ": " << msg.unit_of_measure() << " ";
 	os << msg.trading_reference_price_name() << ": " << msg.trading_reference_price() << " ";
-	os << msg.settl_price_type_name() << ": " << msg.settl_price_type() << " ";
+	os << msg.settl_price_type_name() << ": " << SettlPriceType::to_string(msg.settl_price_type()) << " ";
 	os << msg.open_interest_qty_name() << ": " << msg.open_interest_qty() << " ";
 	os << msg.cleared_volume_name() << ": " << msg.cleared_volume() << " ";
 	os << msg.high_limit_price_name() << ": " << msg.high_limit_price() << " ";
 	os << msg.low_limit_price_name() << ": " << msg.low_limit_price() << " ";
 	os << msg.max_price_variation_name() << ": " << msg.max_price_variation() << " ";
-	os << msg.main_fraction_name() << ": " << msg.main_fraction() << " ";
-	os << msg.sub_fraction_name() << ": " << msg.sub_fraction() << " ";
+	os << msg.main_fraction_name() << ": " << +msg.main_fraction() << " ";
+	os << msg.sub_fraction_name() << ": " << +msg.sub_fraction() << " ";
 	os << msg.trading_reference_date_name() << ": " << msg.trading_reference_date() << " ";
 	os << msg.price_quote_method_name() << ": " << msg.price_quote_method() << " ";
 	os << msg.risk_set_name() << ": " << msg.risk_set() << " ";

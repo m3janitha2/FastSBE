@@ -1,6 +1,7 @@
 #pragma once
 
 #include<cstdint>
+#include<string>
 #include<ostream>
 
 namespace fastsbe
@@ -22,6 +23,61 @@ class MatchEventIndicator
         Reserved = static_cast<value_type>(1u << 6),
         EndOfEvent = static_cast<value_type>(1u << 7),
     };
+    static std::string to_string(value_type value)
+    {
+        std::string result = "{";
+        bool first = true;
+        if(value & static_cast<value_type>(Choice::LastTradeMsg))
+        {
+            if(!first) { result += ", "; }
+            result += "LastTradeMsg";
+            first = false;
+        }
+        if(value & static_cast<value_type>(Choice::LastVolumeMsg))
+        {
+            if(!first) { result += ", "; }
+            result += "LastVolumeMsg";
+            first = false;
+        }
+        if(value & static_cast<value_type>(Choice::LastQuoteMsg))
+        {
+            if(!first) { result += ", "; }
+            result += "LastQuoteMsg";
+            first = false;
+        }
+        if(value & static_cast<value_type>(Choice::LastStatsMsg))
+        {
+            if(!first) { result += ", "; }
+            result += "LastStatsMsg";
+            first = false;
+        }
+        if(value & static_cast<value_type>(Choice::LastImpliedMsg))
+        {
+            if(!first) { result += ", "; }
+            result += "LastImpliedMsg";
+            first = false;
+        }
+        if(value & static_cast<value_type>(Choice::RecoveryMsg))
+        {
+            if(!first) { result += ", "; }
+            result += "RecoveryMsg";
+            first = false;
+        }
+        if(value & static_cast<value_type>(Choice::Reserved))
+        {
+            if(!first) { result += ", "; }
+            result += "Reserved";
+            first = false;
+        }
+        if(value & static_cast<value_type>(Choice::EndOfEvent))
+        {
+            if(!first) { result += ", "; }
+            result += "EndOfEvent";
+            first = false;
+        }
+        result += "}";
+        return result;
+    }
 };
 #pragma pack(pop)
 

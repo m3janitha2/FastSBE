@@ -740,7 +740,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
 	os << msg.md_entry_px_name() << ": " << msg.md_entry_px() << " ";
 	os << msg.security_id_name() << ": " << msg.security_id() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.trade_date_name() << ": " << msg.trade_date() << " ";
 	os << msg.trade_link_id_name() << ": " << msg.trade_link_id() << " ";
 	os << msg.security_trading_status_name() << ": " << msg.security_trading_status() << " ";

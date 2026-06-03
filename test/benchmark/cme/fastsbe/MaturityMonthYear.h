@@ -214,9 +214,9 @@ template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MaturityMonthYear &msg)
 {
 	os << msg.year_name() << ": " << msg.year() << " ";
-	os << msg.month_name() << ": " << msg.month() << " ";
-	os << msg.day_name() << ": " << msg.day() << " ";
-	os << msg.week_name() << ": " << msg.week() << " ";
+	os << msg.month_name() << ": " << +msg.month() << " ";
+	os << msg.day_name() << ": " << +msg.day() << " ";
+	os << msg.week_name() << ": " << +msg.week() << " ";
 	return os;
 }
 }

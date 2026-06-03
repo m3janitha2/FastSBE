@@ -1015,7 +1015,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.security_id_name() << ": " << g.security_id() << " ";
 		os << g.rpt_seq_name() << ": " << g.rpt_seq() << " ";
 		os << g.number_of_orders_name() << ": " << g.number_of_orders() << " ";
-		os << g.md_price_level_name() << ": " << g.md_price_level() << " ";
+		os << g.md_price_level_name() << ": " << +g.md_price_level() << " ";
 		os << g.md_update_action_name() << ": " << g.md_update_action() << " ";
 		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
 	}
@@ -1031,7 +1031,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.order_id_name() << ": " << g.order_id() << " ";
 		os << g.md_order_priority_name() << ": " << g.md_order_priority() << " ";
 		os << g.md_display_qty_name() << ": " << g.md_display_qty() << " ";
-		os << g.reference_id_name() << ": " << g.reference_id() << " ";
+		os << g.reference_id_name() << ": " << +g.reference_id() << " ";
 		os << g.order_update_action_name() << ": " << g.order_update_action() << " ";
 	}
 	return os;
@@ -1041,7 +1041,7 @@ template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBookLongQty64 &msg)
 {
 	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
 	os << msg.no_order_id_entries_name() << ": " << msg.no_order_id_entries() << " ";
 	return os;

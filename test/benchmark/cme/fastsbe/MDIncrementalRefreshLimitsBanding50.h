@@ -560,7 +560,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.max_price_variation_name() << ": " << g.max_price_variation() << " ";
 		os << g.security_id_name() << ": " << g.security_id() << " ";
 		os << g.rpt_seq_name() << ": " << g.rpt_seq() << " ";
-		os << g.md_update_action_name() << ": " << g.md_update_action() << " ";
+		os << g.md_update_action_name() << ": " << +g.md_update_action() << " ";
 		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
 	}
 	return os;
@@ -570,7 +570,7 @@ template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshLimitsBanding50 &msg)
 {
 	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
 	return os;
 }

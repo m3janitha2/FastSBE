@@ -643,8 +643,8 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.symbol_name() << ": " << g.symbol() << " ";
 		os << g.security_id_name() << ": " << g.security_id() << " ";
 		os << g.order_qty_name() << ": " << g.order_qty() << " ";
-		os << g.quote_type_name() << ": " << g.quote_type() << " ";
-		os << g.side_name() << ": " << g.side() << " ";
+		os << g.quote_type_name() << ": " << +g.quote_type() << " ";
+		os << g.side_name() << ": " << +g.side() << " ";
 	}
 	return os;
 }
@@ -654,7 +654,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 {
 	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
 	os << msg.quote_req_id_name() << ": " << msg.quote_req_id() << " ";
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.no_related_sym_name() << ": " << msg.no_related_sym() << " ";
 	return os;
 }

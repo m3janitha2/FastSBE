@@ -96,7 +96,7 @@ class AdminLogin15
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::AdminLogin15 &msg)
 {
-	os << msg.heart_bt_int_name() << ": " << msg.heart_bt_int() << " ";
+	os << msg.heart_bt_int_name() << ": " << +msg.heart_bt_int() << " ";
 	return os;
 }
 }

@@ -320,7 +320,7 @@ class Parser:
 			, Metadata.c_field_types[primitive_encoding_type], choices, self.namespace)
 		self.user_defined_sets.append(set_name)
 
-		system_includes = ["cstdint", "ostream"]
+		system_includes = ["cstdint", "string", "ostream"]
 		handler.user_includes = []
 		indentation = Indentation(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\

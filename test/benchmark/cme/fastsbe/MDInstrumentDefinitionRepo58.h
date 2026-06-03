@@ -4982,7 +4982,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	{
 		auto &g = group.get(i);
 		os << g.md_feed_type_name() << ": " << g.md_feed_type() << " ";
-		os << g.market_depth_name() << ": " << g.market_depth() << " ";
+		os << g.market_depth_name() << ": " << +g.market_depth() << " ";
 	}
 	return os;
 }
@@ -4993,8 +4993,8 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.inst_attrib_type_name() << ": " << g.inst_attrib_type() << " ";
-		os << g.inst_attrib_value_name() << ": " << g.inst_attrib_value() << " ";
+		os << g.inst_attrib_type_name() << ": " << +g.inst_attrib_type() << " ";
+		os << g.inst_attrib_value_name() << ": " << InstAttribValue::to_string(g.inst_attrib_value()) << " ";
 	}
 	return os;
 }
@@ -5005,7 +5005,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
 		auto &g = group.get(i);
-		os << g.lot_type_name() << ": " << g.lot_type() << " ";
+		os << g.lot_type_name() << ": " << +g.lot_type() << " ";
 		os << g.min_lot_size_name() << ": " << g.min_lot_size() << " ";
 	}
 	return os;
@@ -5026,7 +5026,7 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 		os << g.underlying_security_type_name() << ": " << g.underlying_security_type() << " ";
 		os << g.underlying_country_of_issue_name() << ": " << g.underlying_country_of_issue() << " ";
 		os << g.underlying_issuer_name() << ": " << g.underlying_issuer() << " ";
-		os << g.underlying_max_life_time_name() << ": " << g.underlying_max_life_time() << " ";
+		os << g.underlying_max_life_time_name() << ": " << +g.underlying_max_life_time() << " ";
 		os << g.underlying_min_days_to_maturity_name() << ": " << g.underlying_min_days_to_maturity() << " ";
 		os << g.underlying_instrument_guid_name() << ": " << g.underlying_instrument_guid() << " ";
 		os << g.underlying_maturity_date_name() << ": " << g.underlying_maturity_date() << " ";
@@ -5065,14 +5065,14 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58 &msg)
 {
-	os << msg.match_event_indicator_name() << ": " << msg.match_event_indicator() << " ";
+	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
 	os << msg.tot_num_reports_name() << ": " << msg.tot_num_reports() << " ";
 	os << msg.security_update_action_name() << ": " << msg.security_update_action() << " ";
 	os << msg.last_update_time_name() << ": " << msg.last_update_time() << " ";
 	os << msg.md_security_trading_status_name() << ": " << msg.md_security_trading_status() << " ";
 	os << msg.appl_id_name() << ": " << msg.appl_id() << " ";
-	os << msg.market_segment_id_name() << ": " << msg.market_segment_id() << " ";
-	os << msg.underlying_product_name() << ": " << msg.underlying_product() << " ";
+	os << msg.market_segment_id_name() << ": " << +msg.market_segment_id() << " ";
+	os << msg.underlying_product_name() << ": " << +msg.underlying_product() << " ";
 	os << msg.security_exchange_name() << ": " << msg.security_exchange() << " ";
 	os << msg.security_group_name() << ": " << msg.security_group() << " ";
 	os << msg.asset_name() << ": " << msg.asset() << " ";
@@ -5102,14 +5102,14 @@ inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, T
 	os << msg.termination_type_name() << ": " << msg.termination_type() << " ";
 	os << msg.security_sub_type_name() << ": " << msg.security_sub_type() << " ";
 	os << msg.money_or_par_name() << ": " << msg.money_or_par() << " ";
-	os << msg.max_no_of_substitutions_name() << ": " << msg.max_no_of_substitutions() << " ";
+	os << msg.max_no_of_substitutions_name() << ": " << +msg.max_no_of_substitutions() << " ";
 	os << msg.price_quote_method_name() << ": " << msg.price_quote_method() << " ";
 	os << msg.user_defined_instrument_name() << ": " << msg.user_defined_instrument() << " ";
 	os << msg.risk_set_name() << ": " << msg.risk_set() << " ";
 	os << msg.market_set_name() << ": " << msg.market_set() << " ";
 	os << msg.instrument_guid_name() << ": " << msg.instrument_guid() << " ";
 	os << msg.term_code_name() << ": " << msg.term_code() << " ";
-	os << msg.broken_date_term_type_name() << ": " << msg.broken_date_term_type() << " ";
+	os << msg.broken_date_term_type_name() << ": " << +msg.broken_date_term_type() << " ";
 	os << msg.no_events_name() << ": " << msg.no_events() << " ";
 	os << msg.no_md_feed_types_name() << ": " << msg.no_md_feed_types() << " ";
 	os << msg.no_inst_attrib_name() << ": " << msg.no_inst_attrib() << " ";

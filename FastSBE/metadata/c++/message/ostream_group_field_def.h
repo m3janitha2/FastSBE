@@ -1,1 +1,1 @@
-		os << g.S_FIELD_NAME_name() << ": " << g.S_FIELD_NAME() << " ";
+		os << g.S_FIELD_NAME_name() << ": " << S_FIELD_VALUE << " ";
