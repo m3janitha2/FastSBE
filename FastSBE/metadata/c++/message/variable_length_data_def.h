@@ -1,8 +1,6 @@
 
 private:
-	#pragma pack(push, 1)
 	S_VAR_LEN_DATA_NAME S_VAR_LEN_SNAKE_{};
-	#pragma pack(pop)
 
 public:
 	static constexpr std::size_t S_VAR_LEN_SNAKE_size() noexcept

@@ -1,8 +1,6 @@
 
 private:
-	#pragma pack(push, 1)
 	S_GROUP_NAME S_GROUP_SNAKE_{};
-	#pragma pack(pop)
 
 public:
 	static constexpr std::size_t S_GROUP_SNAKE_size() noexcept

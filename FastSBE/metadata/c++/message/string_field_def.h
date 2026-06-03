@@ -1,8 +1,6 @@
 
 private:
-	#pragma pack(push, 1)
 	char S_FIELD_NAME_[S_FIELD_SIZE]{};
-	#pragma pack(pop)
 
 public:
 	static constexpr std::size_t S_FIELD_NAME_size() noexcept

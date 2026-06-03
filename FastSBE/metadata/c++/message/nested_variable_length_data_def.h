@@ -1,8 +1,6 @@
 
 private:
-#pragma pack(push, 1)
 	S_DIAMENTION_TYPE header_{};
-#pragma pack(pop)
 
 public:
 	S_VAR_LEN_DATA_NAME() = default;

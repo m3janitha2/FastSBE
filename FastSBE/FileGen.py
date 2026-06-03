@@ -119,8 +119,10 @@ class FileGen:
 	accumulated class content.
 	"""
 
-	header_ct		= "#pragma once\n"
+	header_ct		= "#pragma once\n\n"
 	include_ct		= "#include<{include_file}>\n"
+	# local headers use quotes so they resolve relative to the including header
+	user_include_ct	= '#include "{include_file}"\n'
 
 	namespace_ct	= "\nnamespace {s_namespace}\n{{\n"
 	namespace_end_ct= "}\n"
@@ -139,7 +141,7 @@ class FileGen:
 	def gen_user_includes(self, include_list):
 		for include in include_list:
 			include_file = include + '.h'
-			include_str = self.include_ct.format(include_file = include_file)
+			include_str = self.user_include_ct.format(include_file = include_file)
 			self.content += self.indentation.indent(include_str)
 
 
@@ -164,6 +166,9 @@ class FileGen:
 	def gen_file_begin(self):
 		self.gen_header()
 		self.gen_includes(self.system_includes)
+		# blank line between the system and local include groups
+		if(self.system_includes and self.user_includes):
+			self.content += "\n"
 		self.gen_user_includes(self.user_includes)
 		self.gen_namespace_begin()
 
