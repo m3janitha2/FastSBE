@@ -1,0 +1,57 @@
+#pragma once
+
+#include<cstdint>
+#include<string>
+#include<string_view>
+#include<ostream>
+#include<cstring>
+
+namespace fastsbe
+{
+
+#pragma pack(push, 1)
+class BusinessRejectReasonEnum
+{
+    public:
+    enum class Value : std::uint8_t
+    {
+        Other = 0,
+        UnknownID = 1,
+        UnknownSecurity = 2,
+        ApplicationNotAvailable = 4,
+        NotAuthorized = 6,
+        nullValue = UINT8_MAX,
+    };
+    
+    public:
+    static constexpr const char* to_string(Value value) noexcept
+    {
+        switch (value)
+        {
+        case Value::Other:
+            return "Other";
+        case Value::UnknownID:
+            return "UnknownID";
+        case Value::UnknownSecurity:
+            return "UnknownSecurity";
+        case Value::ApplicationNotAvailable:
+            return "ApplicationNotAvailable";
+        case Value::NotAuthorized:
+            return "NotAuthorized";
+        case Value::nullValue:
+            return "nullValue";
+        default:
+            return "Invalid";
+        }
+    }
+};
+#pragma pack(pop)
+
+template <class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::BusinessRejectReasonEnum::Value val)
+{
+    os << fastsbe::BusinessRejectReasonEnum::to_string(val);
+    return os;
+}
+
+}
