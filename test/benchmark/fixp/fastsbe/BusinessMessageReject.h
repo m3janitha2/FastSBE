@@ -22,19 +22,24 @@ class BusinessMessageReject
     		return "BusinessMessageReject"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 97; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 91; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 0; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 0;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 9;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -286,9 +291,12 @@ class BusinessMessageReject
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::BusinessMessageReject &msg)
 {
-	os << msg.busines_reject_ref_id_name() << ": " << msg.busines_reject_ref_id() << " ";
-	os << msg.business_reject_reason_name() << ": " << msg.business_reject_reason() << " ";
-	os << msg.text_name() << ": " << msg.text().get_str() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"BusinesRejectRefId\": " << "\"" << msg.busines_reject_ref_id() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"BusinessRejectReason\": " << "\"" << msg.business_reject_reason() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Text\": " << "\"" << msg.text().get_str() << "\""; comma = true;
+	os << "}";
 	return os;
 }
 }

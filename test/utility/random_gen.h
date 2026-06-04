@@ -22,12 +22,20 @@ inline char random_char(char start = ' ', char end = '~')
     return val;
 }
 
+// Alphanumeric only - the usual shape of SBE string fields (symbols, IDs) and
+// safe to embed in JSON without escaping.
+inline char random_alnum_char()
+{
+    static const char alnum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    return alnum[random_number<std::size_t>(0, sizeof(alnum) - 2)];
+}
+
 inline std::string random_length_string(std::size_t max_length)
 {
     auto length = random_number<std::size_t>(1, max_length);
     std::string str{};
     for (auto i = 0u; i < length; i++)
-        str.push_back(random_char());
+        str.push_back(random_alnum_char());
     return str;
 }
 
@@ -35,7 +43,7 @@ inline std::string random_string(std::size_t length)
 {
     std::string str{};
     for (auto i = 0u; i < length; i++)
-        str.push_back(random_char());
+        str.push_back(random_alnum_char());
     return str;
 }
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <cstdint>
 
@@ -6,6 +7,7 @@
 #include <random_gen.h>
 
 #include <MDIncrementalRefreshBook46.h>
+#include <SbeMessage.h>
 
 namespace cme
 {
@@ -53,10 +55,8 @@ namespace cme
               OrderIDEntries(random_number<std::size_t>(0, 10)) {}
     };
 
-    void encode(MDIncrementalRefreshBook46Data &values, char *buffer)
+    void encode_body(MDIncrementalRefreshBook46Data &values, MDIncrementalRefreshBook46 &msg)
     {
-        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46 *>(buffer);
-
         msg.set_transact_time(values.TransactTime)
             .set_match_event_indicator(static_cast<MatchEventIndicator::value_type>(values.MatchEventIndicator));
 
@@ -87,14 +87,25 @@ namespace cme
                 .set_reference_id(e.ReferenceID)
                 .set_order_update_action(static_cast<OrderUpdateAction::Value>(e.OrderUpdateAction));
         }
+    }
 
+    void encode_message(MDIncrementalRefreshBook46Data &values, char *buffer)
+    {
+        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46 *>(buffer);
+        encode_body(values, msg);
         print_message(msg);
     }
 
-    void decode(MDIncrementalRefreshBook46Data &values, char *buffer)
+    void encode_message_with_header(MDIncrementalRefreshBook46Data &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46 *>(buffer);
+        auto &msg = *reinterpret_cast<SbeMessage<MDIncrementalRefreshBook46> *>(buffer);
+        msg = {};   // reinterpret_cast runs no ctor; assign a default to stamp the header
+        encode_body(values, msg.body());
+        print_message(msg);
+    }
 
+    void decode_body(MDIncrementalRefreshBook46Data &values, MDIncrementalRefreshBook46 &msg)
+    {
         EXPECT_EQ(msg.transact_time(), values.TransactTime);
         EXPECT_EQ(msg.match_event_indicator(), static_cast<MatchEventIndicator::value_type>(values.MatchEventIndicator));
 
@@ -128,7 +139,26 @@ namespace cme
             EXPECT_EQ(entry.reference_id(), e.ReferenceID);
             EXPECT_EQ(entry.order_update_action(), static_cast<OrderUpdateAction::Value>(e.OrderUpdateAction));
         }
+    }
 
+    void decode_message(MDIncrementalRefreshBook46Data &values, char *buffer)
+    {
+        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46 *>(buffer);
+        decode_body(values, msg);
+        print_message(msg);
+    }
+
+    void decode_message_with_header(MDIncrementalRefreshBook46Data &values, char *buffer)
+    {
+        // a received message is just a view over the wire bytes - construct nothing
+        auto &msg = *reinterpret_cast<SbeMessage<MDIncrementalRefreshBook46> *>(buffer);
+
+        EXPECT_EQ(msg.header().block_length(), MDIncrementalRefreshBook46::block_length());
+        EXPECT_EQ(msg.header().template_id(), MDIncrementalRefreshBook46::template_id());
+        EXPECT_EQ(msg.header().schema_id(), MDIncrementalRefreshBook46::schema());
+        EXPECT_EQ(msg.header().version(), MDIncrementalRefreshBook46::version());
+
+        decode_body(values, msg.body());
         print_message(msg);
     }
 
@@ -141,8 +171,36 @@ namespace cme
 
     TEST_F(EncodeDecodeFixture, encode_and_decode)
     {
-        encode(values_, buffer_);
-        decode(values_, buffer_);
+        encode_message(values_, buffer_);
+        decode_message(values_, buffer_);
+    }
+
+    TEST_F(EncodeDecodeFixture, encode_and_decode_with_header)
+    {
+        encode_message_with_header(values_, buffer_);
+        decode_message_with_header(values_, buffer_);
+    }
+
+    // SbeMessage<Body> pairs the message header with the body and fills the
+    // header from the body's compile-time descriptor.
+    TEST(SbeMessage, header_initialized_from_descriptor)
+    {
+        using Body = MDIncrementalRefreshBook46;
+        SbeMessage<Body> msg{};
+
+        EXPECT_EQ(msg.header().block_length(), Body::block_length());
+        EXPECT_EQ(msg.header().template_id(), Body::template_id());
+        EXPECT_EQ(msg.header().schema_id(), Body::schema());
+        EXPECT_EQ(msg.header().version(), Body::version());
+
+        // header immediately followed by the body: wire order, no padding.
+        static_assert(sizeof(SbeMessage<Body>) == sizeof(MessageHeader) + sizeof(Body));
+
+        std::ostringstream os;
+        os << msg;
+        EXPECT_EQ(os.str().rfind("{\"header\": {", 0), 0u);
+
+        print_message(msg);
     }
 }
 

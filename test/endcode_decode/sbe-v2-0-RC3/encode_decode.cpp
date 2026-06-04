@@ -6,6 +6,7 @@
 #include <BusinessMessageReject.h>
 #include <ExecutionReportTrade.h>
 #include <NewOrderSingle.h>
+#include <SbeMessage.h>
 
 namespace sbetool
 {
@@ -69,10 +70,8 @@ namespace sbetool
               TradingSessionsGrps(random_number<std::size_t>(0, 10)) {}
     };
 
-    void encode(NewOrderSingleData &values, char *buffer)
+    void encode_body(NewOrderSingleData &values, NewOrderSingle &msg)
     {
-        auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
-
         msg.set_cl_ord_id(values.ClOrdId)
             .set_account(values.Account)
             .set_symbol(values.Symbol)
@@ -112,14 +111,25 @@ namespace sbetool
         }
         msg.AppendText(values.Text.c_str(), values.Text.length());
         msg.AppendClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
+    }
 
+    void encode_message(NewOrderSingleData &values, char *buffer)
+    {
+        auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
+        encode_body(values, msg);
         print_message(msg);
     }
 
-    void decode(NewOrderSingleData &values, char *buffer)
+    void encode_message_with_header(NewOrderSingleData &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
+        auto &msg = *reinterpret_cast<SbeMessage<NewOrderSingle> *>(buffer);
+        msg = {};   // reinterpret_cast runs no ctor; assign a default to stamp the header
+        encode_body(values, msg.body());
+        print_message(msg);
+    }
 
+    void decode_body(NewOrderSingleData &values, NewOrderSingle &msg)
+    {
         EXPECT_EQ(msg.cl_ord_id(), values.ClOrdId);
         EXPECT_EQ(msg.account(), values.Account);
         EXPECT_EQ(msg.symbol(), values.Symbol);
@@ -178,7 +188,26 @@ namespace sbetool
 
         auto ClearingFirm = msg.clearing_firm().get_str();
         EXPECT_EQ(std::string(ClearingFirm.data(), ClearingFirm.length()), values.ClearingFirm);
+    }
 
+    void decode_message(NewOrderSingleData &values, char *buffer)
+    {
+        auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
+        decode_body(values, msg);
+        print_message(msg);
+    }
+
+    void decode_message_with_header(NewOrderSingleData &values, char *buffer)
+    {
+        // a received message is just a view over the wire bytes - construct nothing
+        auto &msg = *reinterpret_cast<SbeMessage<NewOrderSingle> *>(buffer);
+
+        EXPECT_EQ(msg.header().block_length(), NewOrderSingle::block_length());
+        EXPECT_EQ(msg.header().template_id(), NewOrderSingle::template_id());
+        EXPECT_EQ(msg.header().schema_id(), NewOrderSingle::schema());
+        EXPECT_EQ(msg.header().version(), NewOrderSingle::version());
+
+        decode_body(values, msg.body());
         print_message(msg);
     }
 
@@ -191,8 +220,14 @@ namespace sbetool
 
     TEST_F(EncodeDecodeFixture, encode_and_decode)
     {
-        encode(values_, buffer_);
-        decode(values_, buffer_);
+        encode_message(values_, buffer_);
+        decode_message(values_, buffer_);
+    }
+
+    TEST_F(EncodeDecodeFixture, encode_and_decode_with_header)
+    {
+        encode_message_with_header(values_, buffer_);
+        decode_message_with_header(values_, buffer_);
     }
 }
 

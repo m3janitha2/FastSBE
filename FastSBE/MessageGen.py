@@ -58,12 +58,20 @@ class FieldGen:
 	ostream_variable_length_data_def_ct      = read_template('metadata/c++/message/ostream_variable_length_data_def.h')
 	
 
-	def gen_message_descriptor(self, message_name, message_id, schema, version, description):
+	def gen_message_descriptor(self, message_name, message_id, schema, version, description, block_length, header_types):
+		# Return types come from the message header fields (S_*_TYPE) - replace
+		# them before the values so S_BLOCK_LENGTH_TYPE is not clobbered by the
+		# S_BLOCK_LENGTH value substitution.
 		message_def = self.message_def_ct\
+			.replace('S_BLOCK_LENGTH_TYPE', header_types['blockLength'])\
+			.replace('S_TEMPLATE_ID_TYPE', header_types['templateId'])\
+			.replace('S_SCHEMA_TYPE', header_types['schemaId'])\
+			.replace('S_VERSION_TYPE', header_types['version'])\
 			.replace('S_MESSAGE_NAME', message_name)\
 			.replace('S_MESSAGE_ID', str(message_id))\
 			.replace('S_SCHEMA_ID', str(schema))\
-			.replace('S_VERSION_ID', str(version))
+			.replace('S_VERSION_ID', str(version))\
+			.replace('S_BLOCK_LENGTH', str(block_length))
 		self.handler.content += self.indentation.indent(message_def)
 
 
@@ -142,13 +150,16 @@ class FieldGen:
 
 	@staticmethod
 	def gen_ostream_value(accessor, mode, set_type):
-		# how a field's value is rendered in the stream operator:
-		#   cast - promote int8/uint8 with unary + so it prints as a number
-		#   set  - decode the bitset to its active choice names
+		# how a field's value is rendered in the JSON stream operator:
+		#   cast   - promote int8/uint8 with unary + so it prints as a number
+		#   set    - decode the bitset to a JSON array of choice names
+		#   quoted - wrap in double quotes (enum name or string value)
 		if(mode == 'cast'):
 			return '+' + accessor
 		if(mode == 'set'):
 			return set_type + '::to_string(' + accessor + ')'
+		if(mode == 'quoted'):
+			return '"\\"" << ' + accessor + ' << "\\""'
 		return accessor
 
 	@staticmethod
@@ -295,7 +306,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_NULL', str(null))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name)
+		self.gen_ostream_field(field_name, is_group, group_name, 'quoted')
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_message_enum_field_def: %s', field_name)
 
@@ -338,7 +349,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_NULL', str(null))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name)
+		self.gen_ostream_field_def(field_name, 'quoted')
 		self.handler.user_includes.append(field_type)
 		self.handler.field_type_and_name.append([field_type + '::Value', field_name])
 		logging.debug('gen_composite_enum_field_def: %s', field_name)
@@ -355,7 +366,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name)
+		self.gen_ostream_field(field_name, is_group, group_name, 'quoted')
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_message_const_enum_field_def: %s', field_name)
 
@@ -369,7 +380,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_CONST_FIELD_VALUE', str(value))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name)
+		self.gen_ostream_field_def(field_name, 'quoted')
 		self.handler.user_includes.append(field_type)
 		logging.debug('gen_composite_const_enum_field_def: %s', field_name)
 
@@ -385,7 +396,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name)
+		self.gen_ostream_field(field_name, is_group, group_name, 'quoted')
 		logging.debug('gen_message_string_field_def: %s', field_name)
 
 	def gen_composite_string_field_def(self, message_name, field_type, field_name\
@@ -398,7 +409,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name)
+		self.gen_ostream_field_def(field_name, 'quoted')
 		self.handler.field_type_and_name.append([field_type, field_name])
 		logging.debug('gen_composite_string_field_def: %s', field_name)
 
@@ -415,7 +426,7 @@ class FieldGen:
 			.replace('S_FIELD_SIZE', field_size)\
 			.replace('S_CONST_FIELD_VALUE', str(value))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name)
+		self.gen_ostream_field(field_name, is_group, group_name, 'quoted')
 		logging.debug('gen_message_const_string_field_def: %s', field_name)
 
 	def gen_composite_const_string_field_def(self, message_name, field_type, field_name\
@@ -429,7 +440,7 @@ class FieldGen:
 			.replace('S_FIELD_SIZE', field_size)\
 			.replace('S_CONST_FIELD_VALUE', str(value))
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name)
+		self.gen_ostream_field_def(field_name, 'quoted')
 		logging.debug('gen_composite_const_string_field_def: %s', field_name)
 
 
@@ -611,7 +622,7 @@ class MessageGen:
 	and its fields - into a content handler.
 	"""
 
-	def __init__(self, handler, message_name, message_id, schema, version, description, namespace, descriptor = True):
+	def __init__(self, handler, message_name, message_id, schema, version, description, namespace, descriptor = True, block_length = 0, header_types = None):
 		self.handler = handler
 		self.message_name = message_name
 		self.namespace = namespace
@@ -627,7 +638,8 @@ class MessageGen:
 		# collide with same-named composite fields (e.g. MessageHeader.version).
 		if descriptor:
 			self.field_gen.gen_message_descriptor(message_name = message_name, message_id = message_id\
-				, schema = schema, version = version, description = description)
+				, schema = schema, version = version, description = description, block_length = block_length\
+				, header_types = header_types)
 
 
 	def __del__(self):

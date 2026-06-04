@@ -102,8 +102,11 @@ class Pricenull9
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::Pricenull9 &msg)
 {
-	os << msg.mantissa_name() << ": " << msg.mantissa() << " ";
-	os << msg.exponent_name() << ": " << +msg.exponent() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"mantissa\": " << msg.mantissa(); comma = true;
+	if(comma) { os << ", "; } os << "\"exponent\": " << +msg.exponent(); comma = true;
+	os << "}";
 	return os;
 }
 }

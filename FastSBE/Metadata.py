@@ -92,6 +92,15 @@ class Metadata:
 		"varData",
 	]
 
+	# The mandatory message-header fields; their schema types drive the message
+	# descriptor return types (template_id / schema / version / block_length).
+	default_message_header_names = [
+		"blockLength",
+		"templateId",
+		"schemaId",
+		"version",
+	]
+
 	@staticmethod
 	def to_cpp_int_literal(value, primitive_type):
 		# Emit type extremes (min, max, one-step-inside) as <cstdint> macros

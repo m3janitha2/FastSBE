@@ -47,20 +47,20 @@ class SetGen:
 			self.gen_end()
 
 	def gen_to_string(self):
-		# render the active choices as a brace list, e.g. {LastTradeMsg, EndOfEvent}
+		# render the active choices as a JSON array, e.g. ["LastTradeMsg", "EndOfEvent"]
 		self.indentation.increment()
 		body = 'static std::string to_string(value_type value)\n'
 		body += '{\n'
-		body += '    std::string result = "{";\n'
+		body += '    std::string result = "[";\n'
 		body += '    bool first = true;\n'
 		for (name, index) in self.choices:
 			body += '    if(value & static_cast<value_type>(Choice::' + name + '))\n'
 			body += '    {\n'
 			body += '        if(!first) { result += ", "; }\n'
-			body += '        result += "' + name + '";\n'
+			body += '        result += "\\"' + name + '\\"";\n'
 			body += '        first = false;\n'
 			body += '    }\n'
-		body += '    result += "}";\n'
+		body += '    result += "]";\n'
 		body += '    return result;\n'
 		body += '}\n'
 		self.handler.content += self.indentation.indent(body)

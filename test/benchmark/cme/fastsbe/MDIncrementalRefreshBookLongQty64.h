@@ -27,19 +27,24 @@ class MDIncrementalRefreshBookLongQty64
     		return "MDIncrementalRefreshBookLongQty64"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 64; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 11;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -1007,43 +1012,58 @@ class MDIncrementalRefreshBookLongQty64
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBookLongQty64::NoMDEntries &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.md_entry_px_name() << ": " << g.md_entry_px() << " ";
-		os << g.md_entry_size_name() << ": " << g.md_entry_size() << " ";
-		os << g.security_id_name() << ": " << g.security_id() << " ";
-		os << g.rpt_seq_name() << ": " << g.rpt_seq() << " ";
-		os << g.number_of_orders_name() << ": " << g.number_of_orders() << " ";
-		os << g.md_price_level_name() << ": " << +g.md_price_level() << " ";
-		os << g.md_update_action_name() << ": " << g.md_update_action() << " ";
-		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
+		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
+		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDPriceLevel\": " << +g.md_price_level(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << "\"" << g.md_update_action() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBookLongQty64::NoOrderIDEntries &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.order_id_name() << ": " << g.order_id() << " ";
-		os << g.md_order_priority_name() << ": " << g.md_order_priority() << " ";
-		os << g.md_display_qty_name() << ": " << g.md_display_qty() << " ";
-		os << g.reference_id_name() << ": " << +g.reference_id() << " ";
-		os << g.order_update_action_name() << ": " << g.order_update_action() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDOrderPriority\": " << g.md_order_priority(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDDisplayQty\": " << g.md_display_qty(); comma = true;
+		if(comma) { os << ", "; } os << "\"ReferenceID\": " << +g.reference_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"OrderUpdateAction\": " << "\"" << g.order_update_action() << "\""; comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBookLongQty64 &msg)
 {
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
-	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
-	os << msg.no_order_id_entries_name() << ": " << msg.no_order_id_entries() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"MatchEventIndicator\": " << MatchEventIndicator::to_string(msg.match_event_indicator()); comma = true;
+	if(comma) { os << ", "; } os << "\"NoMDEntries\": " << msg.no_md_entries(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoOrderIDEntries\": " << msg.no_order_id_entries(); comma = true;
+	os << "}";
 	return os;
 }
 }

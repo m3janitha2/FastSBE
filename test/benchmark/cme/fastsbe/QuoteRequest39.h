@@ -22,19 +22,24 @@ class QuoteRequest39
     		return "QuoteRequest39"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 39; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 35;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -637,25 +642,34 @@ class QuoteRequest39
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::QuoteRequest39::NoRelatedSym &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.symbol_name() << ": " << g.symbol() << " ";
-		os << g.security_id_name() << ": " << g.security_id() << " ";
-		os << g.order_qty_name() << ": " << g.order_qty() << " ";
-		os << g.quote_type_name() << ": " << +g.quote_type() << " ";
-		os << g.side_name() << ": " << +g.side() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"Symbol\": " << "\"" << g.symbol() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"OrderQty\": " << g.order_qty(); comma = true;
+		if(comma) { os << ", "; } os << "\"QuoteType\": " << +g.quote_type(); comma = true;
+		if(comma) { os << ", "; } os << "\"Side\": " << +g.side(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::QuoteRequest39 &msg)
 {
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.quote_req_id_name() << ": " << msg.quote_req_id() << " ";
-	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
-	os << msg.no_related_sym_name() << ": " << msg.no_related_sym() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"QuoteReqID\": " << "\"" << msg.quote_req_id() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"MatchEventIndicator\": " << MatchEventIndicator::to_string(msg.match_event_indicator()); comma = true;
+	if(comma) { os << ", "; } os << "\"NoRelatedSym\": " << msg.no_related_sym(); comma = true;
+	os << "}";
 	return os;
 }
 }

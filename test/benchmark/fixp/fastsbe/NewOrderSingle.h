@@ -33,19 +33,24 @@ class NewOrderSingle
     		return "NewOrderSingle"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 99; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 91; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 0; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 0;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 54;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -1427,56 +1432,77 @@ class NewOrderSingle
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::PartiesGrp &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.party_id_name() << ": " << g.party_id() << " ";
-		os << g.party_id_source_name() << ": " << g.party_id_source() << " ";
-		os << g.party_role_name() << ": " << g.party_role() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"PartyID\": " << "\"" << g.party_id() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"PartyIDSource\": " << "\"" << g.party_id_source() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"PartyRole\": " << "\"" << g.party_role() << "\""; comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::AllocsGrp &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.alloc_account_name() << ": " << g.alloc_account() << " ";
-		os << g.alloc_shares_name() << ": " << g.alloc_shares() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"AllocAccount\": " << "\"" << g.alloc_account() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"AllocShares\": " << g.alloc_shares(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::TradingSessionsGrp &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.trading_session_id_name() << ": " << g.trading_session_id() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"TradingSessionID\": " << "\"" << g.trading_session_id() << "\""; comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle &msg)
 {
-	os << msg.cl_ord_id_name() << ": " << msg.cl_ord_id() << " ";
-	os << msg.account_name() << ": " << msg.account() << " ";
-	os << msg.symbol_name() << ": " << msg.symbol() << " ";
-	os << msg.side_name() << ": " << msg.side() << " ";
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.order_qty_name() << ": " << msg.order_qty() << " ";
-	os << msg.ord_type_name() << ": " << msg.ord_type() << " ";
-	os << msg.price_name() << ": " << msg.price() << " ";
-	os << msg.stop_px_name() << ": " << msg.stop_px() << " ";
-	os << msg.parties_grp_name() << ": " << msg.parties_grp() << " ";
-	os << msg.allocs_grp_name() << ": " << msg.allocs_grp() << " ";
-	os << msg.trading_sessions_grp_name() << ": " << msg.trading_sessions_grp() << " ";
-	os << msg.text_name() << ": " << msg.text().get_str() << " ";
-	os << msg.clearing_firm_name() << ": " << msg.clearing_firm().get_str() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"ClOrdId\": " << "\"" << msg.cl_ord_id() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Account\": " << "\"" << msg.account() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Symbol\": " << "\"" << msg.symbol() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Side\": " << "\"" << msg.side() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"OrderQty\": " << msg.order_qty(); comma = true;
+	if(comma) { os << ", "; } os << "\"OrdType\": " << "\"" << msg.ord_type() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Price\": " << msg.price(); comma = true;
+	if(comma) { os << ", "; } os << "\"StopPx\": " << msg.stop_px(); comma = true;
+	if(comma) { os << ", "; } os << "\"PartiesGrp\": " << msg.parties_grp(); comma = true;
+	if(comma) { os << ", "; } os << "\"AllocsGrp\": " << msg.allocs_grp(); comma = true;
+	if(comma) { os << ", "; } os << "\"TradingSessionsGrp\": " << msg.trading_sessions_grp(); comma = true;
+	if(comma) { os << ", "; } os << "\"Text\": " << "\"" << msg.text().get_str() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"ClearingFirm\": " << "\"" << msg.clearing_firm().get_str() << "\""; comma = true;
+	os << "}";
 	return os;
 }
 }

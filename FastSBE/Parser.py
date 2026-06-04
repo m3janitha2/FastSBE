@@ -16,6 +16,7 @@ from VariableLengthDataGen import VariableLengthDataGen
 from FileGen import ContentHandler
 from FileGen import Indentation
 from FileGen import FileGen
+from FileGen import read_template
 
 
 def to_pascal_case(name):
@@ -135,6 +136,26 @@ class Parser:
 		if(primitive == 'char'):
 			return int(attrib.get('length', 1))
 		return Metadata.primitive_sizes[primitive]
+
+
+	def get_message_block_length(self, message):
+		# root block length = what the fixed block is padded to: the schema's
+		# blockLength when given, otherwise (per SBE) the size of the root
+		# fields, which is what FastSBE lays the struct out to.
+		declared = message.attrib.get('blockLength')
+		if(declared is not None):
+			return int(declared)
+		size = 0
+		accumulated = 0
+		for element in message:
+			if(element.tag != 'field'):
+				break
+			field_size = self.get_type_size(element)
+			field_offset = element.attrib.get('offset')
+			offset = int(field_offset) if field_offset is not None else accumulated
+			size = max(size, offset + field_size)
+			accumulated = offset + field_size
+		return size
 
 
 	def is_numeric(self, primitive_type, attrib):
@@ -729,7 +750,8 @@ class Parser:
 		description = Parser.get_description(message)
 
 		msg_gen = MessageGen(handler = handler, message_name = message_name, message_id = message_id\
-			, schema = self.schema_id, version = self.schema_version, description = description, namespace = self.namespace)
+			, schema = self.schema_id, version = self.schema_version, description = description, namespace = self.namespace\
+			, block_length = self.get_message_block_length(message), header_types = self.message_header_types)
 
 		msg_gen.field_gen.gen_ostream_begin()
 		msg_gen.field_gen.reset_layout()
@@ -793,6 +815,41 @@ class Parser:
 			for message in messages.iterfind('sbe:message', namespaces):
 				self.parse_message(message)
 
+	def get_message_header_field_types(self):
+		# The message header is mandatory: its field types are the single source
+		# of truth for the descriptor return types, so a missing header or a
+		# misnamed field is a hard error rather than a silently-wrong codec.
+		header_type = self.root.attrib.get('headerType', 'messageHeader')
+		composite = self.root.find(".//*[@name='" + header_type + "']")
+		if(composite is None):
+			logging.error("message header composite '%s' is not defined in the schema", header_type)
+			raise SystemExit("FastSBE: message header composite '%s' is not defined in the schema" % header_type)
+		field_types = {}
+		for member in composite:
+			name = member.attrib.get('name')
+			if(name in Metadata.default_message_header_names):
+				primitive = self.get_encoding_primitive(member.attrib.get('primitiveType') or member.attrib.get('type'))
+				field_types[name] = Metadata.c_field_types[primitive]
+		missing = [name for name in Metadata.default_message_header_names if name not in field_types]
+		if(missing):
+			logging.error("message header '%s' is missing required field(s): %s", header_type, ', '.join(missing))
+			raise SystemExit("FastSBE: message header '%s' is missing required field(s): %s"
+				% (header_type, ', '.join(missing)))
+		return field_types
+
+
+	def generate_sbe_message(self):
+		# Generic header+body wrapper shared by every message in the schema.
+		handler = ContentHandler()
+		handler.content = read_template('metadata/c++/message/sbe_message.h')
+		handler.user_includes = ['MessageHeader']
+		system_includes = ["cstdint", "string", "ostream"]
+		indentation = Indentation(0)
+		FileGen(indentation = indentation, out_folder = self.out_folder\
+			, file_name = 'SbeMessage', namespace = self.namespace\
+			, system_includes = system_includes, handler = handler)
+
+
 	def run(self):
 		tree = ET.parse(self.schema_file)
 		self.root = tree.getroot()
@@ -802,10 +859,12 @@ class Parser:
 
 		types = self.root.find('types')
 		self.parse_all_types(types = types)
+		self.message_header_types = self.get_message_header_field_types()
 		self.parse_all_enums(types = types)
 		self.parse_all_sets(types = types)
 		self.parse_all_composites(types = types)
 		self.parse_all_messages(root = self.root)
+		self.generate_sbe_message()
 
 
 

@@ -45,177 +45,177 @@ class InstAttribValue
     };
     static std::string to_string(value_type value)
     {
-        std::string result = "{";
+        std::string result = "[";
         bool first = true;
         if(value & static_cast<value_type>(Choice::ElectronicMatchEligible))
         {
             if(!first) { result += ", "; }
-            result += "ElectronicMatchEligible";
+            result += "\"ElectronicMatchEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::OrderCrossEligible))
         {
             if(!first) { result += ", "; }
-            result += "OrderCrossEligible";
+            result += "\"OrderCrossEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::BlockTradeEligible))
         {
             if(!first) { result += ", "; }
-            result += "BlockTradeEligible";
+            result += "\"BlockTradeEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::EFPEligible))
         {
             if(!first) { result += ", "; }
-            result += "EFPEligible";
+            result += "\"EFPEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::EBFEligible))
         {
             if(!first) { result += ", "; }
-            result += "EBFEligible";
+            result += "\"EBFEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::EFSEligible))
         {
             if(!first) { result += ", "; }
-            result += "EFSEligible";
+            result += "\"EFSEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::EFREligible))
         {
             if(!first) { result += ", "; }
-            result += "EFREligible";
+            result += "\"EFREligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::OTCEligible))
         {
             if(!first) { result += ", "; }
-            result += "OTCEligible";
+            result += "\"OTCEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::iLinkIndicativeMassQuotingEligible))
         {
             if(!first) { result += ", "; }
-            result += "iLinkIndicativeMassQuotingEligible";
+            result += "\"iLinkIndicativeMassQuotingEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::NegativeStrikeEligible))
         {
             if(!first) { result += ", "; }
-            result += "NegativeStrikeEligible";
+            result += "\"NegativeStrikeEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::NegativePriceOutrightEligible))
         {
             if(!first) { result += ", "; }
-            result += "NegativePriceOutrightEligible";
+            result += "\"NegativePriceOutrightEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::IsFractional))
         {
             if(!first) { result += ", "; }
-            result += "IsFractional";
+            result += "\"IsFractional\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::VolatilityQuotedOption))
         {
             if(!first) { result += ", "; }
-            result += "VolatilityQuotedOption";
+            result += "\"VolatilityQuotedOption\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::RFQCrossEligible))
         {
             if(!first) { result += ", "; }
-            result += "RFQCrossEligible";
+            result += "\"RFQCrossEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::ZeroPriceOutrightEligible))
         {
             if(!first) { result += ", "; }
-            result += "ZeroPriceOutrightEligible";
+            result += "\"ZeroPriceOutrightEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::DecayingProductEligibility))
         {
             if(!first) { result += ", "; }
-            result += "DecayingProductEligibility";
+            result += "\"DecayingProductEligibility\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::VariableProductEligibility))
         {
             if(!first) { result += ", "; }
-            result += "VariableProductEligibility";
+            result += "\"VariableProductEligibility\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::DailyProductEligibility))
         {
             if(!first) { result += ", "; }
-            result += "DailyProductEligibility";
+            result += "\"DailyProductEligibility\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::GTOrdersEligibility))
         {
             if(!first) { result += ", "; }
-            result += "GTOrdersEligibility";
+            result += "\"GTOrdersEligibility\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::ImpliedMatchingEligibility))
         {
             if(!first) { result += ", "; }
-            result += "ImpliedMatchingEligibility";
+            result += "\"ImpliedMatchingEligibility\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::TriangulationEligible))
         {
             if(!first) { result += ", "; }
-            result += "TriangulationEligible";
+            result += "\"TriangulationEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::VariableCabEligible))
         {
             if(!first) { result += ", "; }
-            result += "VariableCabEligible";
+            result += "\"VariableCabEligible\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::InvertedBook))
         {
             if(!first) { result += ", "; }
-            result += "InvertedBook";
+            result += "\"InvertedBook\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::IsAoNInstrument))
         {
             if(!first) { result += ", "; }
-            result += "IsAoNInstrument";
+            result += "\"IsAoNInstrument\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::SEFRegulated))
         {
             if(!first) { result += ", "; }
-            result += "SEFRegulated";
+            result += "\"SEFRegulated\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::MTFRegulated))
         {
             if(!first) { result += ", "; }
-            result += "MTFRegulated";
+            result += "\"MTFRegulated\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::eFIXInstrument))
         {
             if(!first) { result += ", "; }
-            result += "eFIXInstrument";
+            result += "\"eFIXInstrument\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::HedgeInstrument))
         {
             if(!first) { result += ", "; }
-            result += "HedgeInstrument";
+            result += "\"HedgeInstrument\"";
             first = false;
         }
-        result += "}";
+        result += "]";
         return result;
     }
 };

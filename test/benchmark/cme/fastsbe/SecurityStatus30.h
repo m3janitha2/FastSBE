@@ -24,19 +24,24 @@ class SecurityStatus30
     		return "SecurityStatus30"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 30; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 30;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -539,15 +544,18 @@ class SecurityStatus30
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SecurityStatus30 &msg)
 {
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.security_group_name() << ": " << msg.security_group() << " ";
-	os << msg.asset_name() << ": " << msg.asset() << " ";
-	os << msg.security_id_name() << ": " << msg.security_id() << " ";
-	os << msg.trade_date_name() << ": " << msg.trade_date() << " ";
-	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
-	os << msg.security_trading_status_name() << ": " << msg.security_trading_status() << " ";
-	os << msg.halt_reason_name() << ": " << msg.halt_reason() << " ";
-	os << msg.security_trading_event_name() << ": " << msg.security_trading_event() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityGroup\": " << "\"" << msg.security_group() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Asset\": " << "\"" << msg.asset() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityID\": " << msg.security_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"TradeDate\": " << msg.trade_date(); comma = true;
+	if(comma) { os << ", "; } os << "\"MatchEventIndicator\": " << MatchEventIndicator::to_string(msg.match_event_indicator()); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityTradingStatus\": " << "\"" << msg.security_trading_status() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"HaltReason\": " << "\"" << msg.halt_reason() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityTradingEvent\": " << "\"" << msg.security_trading_event() << "\""; comma = true;
+	os << "}";
 	return os;
 }
 }

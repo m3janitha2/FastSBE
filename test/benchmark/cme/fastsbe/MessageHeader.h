@@ -213,10 +213,13 @@ class MessageHeader
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MessageHeader &msg)
 {
-	os << msg.block_length_name() << ": " << msg.block_length() << " ";
-	os << msg.template_id_name() << ": " << msg.template_id() << " ";
-	os << msg.schema_id_name() << ": " << msg.schema_id() << " ";
-	os << msg.version_name() << ": " << msg.version() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"blockLength\": " << msg.block_length(); comma = true;
+	if(comma) { os << ", "; } os << "\"templateId\": " << msg.template_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"schemaId\": " << msg.schema_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"version\": " << msg.version(); comma = true;
+	os << "}";
 	return os;
 }
 }

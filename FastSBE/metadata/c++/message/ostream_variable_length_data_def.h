@@ -1,1 +1,1 @@
-	os << msg.S_FIELD_NAME_name() << ": " << msg.S_FIELD_NAME().get_str() << " ";
+	if(comma) { os << ", "; } os << "\"S_FIELD_SCHEMA\": " << "\"" << msg.S_FIELD_NAME().get_str() << "\""; comma = true;

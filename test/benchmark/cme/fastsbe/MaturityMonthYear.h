@@ -213,10 +213,13 @@ class MaturityMonthYear
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MaturityMonthYear &msg)
 {
-	os << msg.year_name() << ": " << msg.year() << " ";
-	os << msg.month_name() << ": " << +msg.month() << " ";
-	os << msg.day_name() << ": " << +msg.day() << " ";
-	os << msg.week_name() << ": " << +msg.week() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"year\": " << msg.year(); comma = true;
+	if(comma) { os << ", "; } os << "\"month\": " << +msg.month(); comma = true;
+	if(comma) { os << ", "; } os << "\"day\": " << +msg.day(); comma = true;
+	if(comma) { os << ", "; } os << "\"week\": " << +msg.week(); comma = true;
+	os << "}";
 	return os;
 }
 }

@@ -25,57 +25,57 @@ class MatchEventIndicator
     };
     static std::string to_string(value_type value)
     {
-        std::string result = "{";
+        std::string result = "[";
         bool first = true;
         if(value & static_cast<value_type>(Choice::LastTradeMsg))
         {
             if(!first) { result += ", "; }
-            result += "LastTradeMsg";
+            result += "\"LastTradeMsg\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::LastVolumeMsg))
         {
             if(!first) { result += ", "; }
-            result += "LastVolumeMsg";
+            result += "\"LastVolumeMsg\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::LastQuoteMsg))
         {
             if(!first) { result += ", "; }
-            result += "LastQuoteMsg";
+            result += "\"LastQuoteMsg\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::LastStatsMsg))
         {
             if(!first) { result += ", "; }
-            result += "LastStatsMsg";
+            result += "\"LastStatsMsg\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::LastImpliedMsg))
         {
             if(!first) { result += ", "; }
-            result += "LastImpliedMsg";
+            result += "\"LastImpliedMsg\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::RecoveryMsg))
         {
             if(!first) { result += ", "; }
-            result += "RecoveryMsg";
+            result += "\"RecoveryMsg\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::Reserved))
         {
             if(!first) { result += ", "; }
-            result += "Reserved";
+            result += "\"Reserved\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::EndOfEvent))
         {
             if(!first) { result += ", "; }
-            result += "EndOfEvent";
+            result += "\"EndOfEvent\"";
             first = false;
         }
-        result += "}";
+        result += "]";
         return result;
     }
 };

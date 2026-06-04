@@ -25,19 +25,24 @@ class MDIncrementalRefreshLimitsBanding50
     		return "MDIncrementalRefreshLimitsBanding50"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 50; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 11;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -552,26 +557,35 @@ class MDIncrementalRefreshLimitsBanding50
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshLimitsBanding50::NoMDEntries &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.high_limit_price_name() << ": " << g.high_limit_price() << " ";
-		os << g.low_limit_price_name() << ": " << g.low_limit_price() << " ";
-		os << g.max_price_variation_name() << ": " << g.max_price_variation() << " ";
-		os << g.security_id_name() << ": " << g.security_id() << " ";
-		os << g.rpt_seq_name() << ": " << g.rpt_seq() << " ";
-		os << g.md_update_action_name() << ": " << +g.md_update_action() << " ";
-		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"HighLimitPrice\": " << g.high_limit_price(); comma = true;
+		if(comma) { os << ", "; } os << "\"LowLimitPrice\": " << g.low_limit_price(); comma = true;
+		if(comma) { os << ", "; } os << "\"MaxPriceVariation\": " << g.max_price_variation(); comma = true;
+		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << +g.md_update_action(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntryType\": " << g.md_entry_type(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshLimitsBanding50 &msg)
 {
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
-	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"MatchEventIndicator\": " << MatchEventIndicator::to_string(msg.match_event_indicator()); comma = true;
+	if(comma) { os << ", "; } os << "\"NoMDEntries\": " << msg.no_md_entries(); comma = true;
+	os << "}";
 	return os;
 }
 }

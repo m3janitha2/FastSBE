@@ -43,19 +43,24 @@ class MDInstrumentDefinitionRepo58
     		return "MDInstrumentDefinitionRepo58"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 58; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 276;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -4966,157 +4971,202 @@ class MDInstrumentDefinitionRepo58
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58::NoEvents &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.event_type_name() << ": " << g.event_type() << " ";
-		os << g.event_time_name() << ": " << g.event_time() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"EventType\": " << "\"" << g.event_type() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"EventTime\": " << g.event_time(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58::NoMDFeedTypes &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.md_feed_type_name() << ": " << g.md_feed_type() << " ";
-		os << g.market_depth_name() << ": " << +g.market_depth() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"MDFeedType\": " << "\"" << g.md_feed_type() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"MarketDepth\": " << +g.market_depth(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58::NoInstAttrib &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.inst_attrib_type_name() << ": " << +g.inst_attrib_type() << " ";
-		os << g.inst_attrib_value_name() << ": " << InstAttribValue::to_string(g.inst_attrib_value()) << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"InstAttribType\": " << +g.inst_attrib_type(); comma = true;
+		if(comma) { os << ", "; } os << "\"InstAttribValue\": " << InstAttribValue::to_string(g.inst_attrib_value()); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58::NoLotTypeRules &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.lot_type_name() << ": " << +g.lot_type() << " ";
-		os << g.min_lot_size_name() << ": " << g.min_lot_size() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"LotType\": " << +g.lot_type(); comma = true;
+		if(comma) { os << ", "; } os << "\"MinLotSize\": " << g.min_lot_size(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58::NoUnderlyings &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.underlying_symbol_name() << ": " << g.underlying_symbol() << " ";
-		os << g.underlying_security_id_name() << ": " << g.underlying_security_id() << " ";
-		os << g.underlying_security_id_source_name() << ": " << g.underlying_security_id_source() << " ";
-		os << g.underlying_security_alt_id_name() << ": " << g.underlying_security_alt_id() << " ";
-		os << g.underlying_security_alt_id_source_name() << ": " << g.underlying_security_alt_id_source() << " ";
-		os << g.underlying_financial_instrument_full_name_name() << ": " << g.underlying_financial_instrument_full_name() << " ";
-		os << g.underlying_security_type_name() << ": " << g.underlying_security_type() << " ";
-		os << g.underlying_country_of_issue_name() << ": " << g.underlying_country_of_issue() << " ";
-		os << g.underlying_issuer_name() << ": " << g.underlying_issuer() << " ";
-		os << g.underlying_max_life_time_name() << ": " << +g.underlying_max_life_time() << " ";
-		os << g.underlying_min_days_to_maturity_name() << ": " << g.underlying_min_days_to_maturity() << " ";
-		os << g.underlying_instrument_guid_name() << ": " << g.underlying_instrument_guid() << " ";
-		os << g.underlying_maturity_date_name() << ": " << g.underlying_maturity_date() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"UnderlyingSymbol\": " << "\"" << g.underlying_symbol() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingSecurityID\": " << g.underlying_security_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingSecurityIDSource\": " << g.underlying_security_id_source(); comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltID\": " << "\"" << g.underlying_security_alt_id() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltIDSource\": " << "\"" << g.underlying_security_alt_id_source() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingFinancialInstrumentFullName\": " << "\"" << g.underlying_financial_instrument_full_name() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingSecurityType\": " << "\"" << g.underlying_security_type() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingCountryOfIssue\": " << "\"" << g.underlying_country_of_issue() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingIssuer\": " << "\"" << g.underlying_issuer() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingMaxLifeTime\": " << +g.underlying_max_life_time(); comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingMinDaysToMaturity\": " << g.underlying_min_days_to_maturity(); comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingInstrumentGUID\": " << g.underlying_instrument_guid(); comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingMaturityDate\": " << g.underlying_maturity_date(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58::NoRelatedInstruments &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.related_security_id_name() << ": " << g.related_security_id() << " ";
-		os << g.related_security_id_source_name() << ": " << g.related_security_id_source() << " ";
-		os << g.related_symbol_name() << ": " << g.related_symbol() << " ";
-		os << g.related_instrument_guid_name() << ": " << g.related_instrument_guid() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"RelatedSecurityID\": " << g.related_security_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"RelatedSecurityIDSource\": " << g.related_security_id_source(); comma = true;
+		if(comma) { os << ", "; } os << "\"RelatedSymbol\": " << "\"" << g.related_symbol() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"RelatedInstrumentGUID\": " << g.related_instrument_guid(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58::NoBrokenDates &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.broken_date_guid_name() << ": " << g.broken_date_guid() << " ";
-		os << g.broken_date_security_id_name() << ": " << g.broken_date_security_id() << " ";
-		os << g.broken_date_start_name() << ": " << g.broken_date_start() << " ";
-		os << g.broken_date_end_name() << ": " << g.broken_date_end() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"BrokenDateGUID\": " << g.broken_date_guid(); comma = true;
+		if(comma) { os << ", "; } os << "\"BrokenDateSecurityID\": " << g.broken_date_security_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"BrokenDateStart\": " << g.broken_date_start(); comma = true;
+		if(comma) { os << ", "; } os << "\"BrokenDateEnd\": " << g.broken_date_end(); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionRepo58 &msg)
 {
-	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
-	os << msg.tot_num_reports_name() << ": " << msg.tot_num_reports() << " ";
-	os << msg.security_update_action_name() << ": " << msg.security_update_action() << " ";
-	os << msg.last_update_time_name() << ": " << msg.last_update_time() << " ";
-	os << msg.md_security_trading_status_name() << ": " << msg.md_security_trading_status() << " ";
-	os << msg.appl_id_name() << ": " << msg.appl_id() << " ";
-	os << msg.market_segment_id_name() << ": " << +msg.market_segment_id() << " ";
-	os << msg.underlying_product_name() << ": " << +msg.underlying_product() << " ";
-	os << msg.security_exchange_name() << ": " << msg.security_exchange() << " ";
-	os << msg.security_group_name() << ": " << msg.security_group() << " ";
-	os << msg.asset_name() << ": " << msg.asset() << " ";
-	os << msg.symbol_name() << ": " << msg.symbol() << " ";
-	os << msg.security_id_name() << ": " << msg.security_id() << " ";
-	os << msg.security_id_source_name() << ": " << msg.security_id_source() << " ";
-	os << msg.security_type_name() << ": " << msg.security_type() << " ";
-	os << msg.cfi_code_name() << ": " << msg.cfi_code() << " ";
-	os << msg.currency_name() << ": " << msg.currency() << " ";
-	os << msg.settl_currency_name() << ": " << msg.settl_currency() << " ";
-	os << msg.match_algorithm_name() << ": " << msg.match_algorithm() << " ";
-	os << msg.min_trade_vol_name() << ": " << msg.min_trade_vol() << " ";
-	os << msg.max_trade_vol_name() << ": " << msg.max_trade_vol() << " ";
-	os << msg.min_price_increment_name() << ": " << msg.min_price_increment() << " ";
-	os << msg.display_factor_name() << ": " << msg.display_factor() << " ";
-	os << msg.unit_of_measure_name() << ": " << msg.unit_of_measure() << " ";
-	os << msg.unit_of_measure_qty_name() << ": " << msg.unit_of_measure_qty() << " ";
-	os << msg.trading_reference_price_name() << ": " << msg.trading_reference_price() << " ";
-	os << msg.trading_reference_date_name() << ": " << msg.trading_reference_date() << " ";
-	os << msg.high_limit_price_name() << ": " << msg.high_limit_price() << " ";
-	os << msg.low_limit_price_name() << ": " << msg.low_limit_price() << " ";
-	os << msg.max_price_variation_name() << ": " << msg.max_price_variation() << " ";
-	os << msg.financial_instrument_full_name_name() << ": " << msg.financial_instrument_full_name() << " ";
-	os << msg.party_role_clearing_org_name() << ": " << msg.party_role_clearing_org() << " ";
-	os << msg.start_date_name() << ": " << msg.start_date() << " ";
-	os << msg.end_date_name() << ": " << msg.end_date() << " ";
-	os << msg.termination_type_name() << ": " << msg.termination_type() << " ";
-	os << msg.security_sub_type_name() << ": " << msg.security_sub_type() << " ";
-	os << msg.money_or_par_name() << ": " << msg.money_or_par() << " ";
-	os << msg.max_no_of_substitutions_name() << ": " << +msg.max_no_of_substitutions() << " ";
-	os << msg.price_quote_method_name() << ": " << msg.price_quote_method() << " ";
-	os << msg.user_defined_instrument_name() << ": " << msg.user_defined_instrument() << " ";
-	os << msg.risk_set_name() << ": " << msg.risk_set() << " ";
-	os << msg.market_set_name() << ": " << msg.market_set() << " ";
-	os << msg.instrument_guid_name() << ": " << msg.instrument_guid() << " ";
-	os << msg.term_code_name() << ": " << msg.term_code() << " ";
-	os << msg.broken_date_term_type_name() << ": " << +msg.broken_date_term_type() << " ";
-	os << msg.no_events_name() << ": " << msg.no_events() << " ";
-	os << msg.no_md_feed_types_name() << ": " << msg.no_md_feed_types() << " ";
-	os << msg.no_inst_attrib_name() << ": " << msg.no_inst_attrib() << " ";
-	os << msg.no_lot_type_rules_name() << ": " << msg.no_lot_type_rules() << " ";
-	os << msg.no_underlyings_name() << ": " << msg.no_underlyings() << " ";
-	os << msg.no_related_instruments_name() << ": " << msg.no_related_instruments() << " ";
-	os << msg.no_broken_dates_name() << ": " << msg.no_broken_dates() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"MatchEventIndicator\": " << MatchEventIndicator::to_string(msg.match_event_indicator()); comma = true;
+	if(comma) { os << ", "; } os << "\"TotNumReports\": " << msg.tot_num_reports(); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityUpdateAction\": " << "\"" << msg.security_update_action() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"LastUpdateTime\": " << msg.last_update_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"MDSecurityTradingStatus\": " << "\"" << msg.md_security_trading_status() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"ApplID\": " << msg.appl_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"MarketSegmentID\": " << +msg.market_segment_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"UnderlyingProduct\": " << +msg.underlying_product(); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityExchange\": " << "\"" << msg.security_exchange() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityGroup\": " << "\"" << msg.security_group() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Asset\": " << "\"" << msg.asset() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Symbol\": " << "\"" << msg.symbol() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityID\": " << msg.security_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityIDSource\": " << msg.security_id_source(); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityType\": " << "\"" << msg.security_type() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"CFICode\": " << "\"" << msg.cfi_code() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"Currency\": " << "\"" << msg.currency() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"SettlCurrency\": " << "\"" << msg.settl_currency() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"MatchAlgorithm\": " << msg.match_algorithm(); comma = true;
+	if(comma) { os << ", "; } os << "\"MinTradeVol\": " << msg.min_trade_vol(); comma = true;
+	if(comma) { os << ", "; } os << "\"MaxTradeVol\": " << msg.max_trade_vol(); comma = true;
+	if(comma) { os << ", "; } os << "\"MinPriceIncrement\": " << msg.min_price_increment(); comma = true;
+	if(comma) { os << ", "; } os << "\"DisplayFactor\": " << msg.display_factor(); comma = true;
+	if(comma) { os << ", "; } os << "\"UnitOfMeasure\": " << "\"" << msg.unit_of_measure() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"UnitOfMeasureQty\": " << msg.unit_of_measure_qty(); comma = true;
+	if(comma) { os << ", "; } os << "\"TradingReferencePrice\": " << msg.trading_reference_price(); comma = true;
+	if(comma) { os << ", "; } os << "\"TradingReferenceDate\": " << msg.trading_reference_date(); comma = true;
+	if(comma) { os << ", "; } os << "\"HighLimitPrice\": " << msg.high_limit_price(); comma = true;
+	if(comma) { os << ", "; } os << "\"LowLimitPrice\": " << msg.low_limit_price(); comma = true;
+	if(comma) { os << ", "; } os << "\"MaxPriceVariation\": " << msg.max_price_variation(); comma = true;
+	if(comma) { os << ", "; } os << "\"FinancialInstrumentFullName\": " << "\"" << msg.financial_instrument_full_name() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"PartyRoleClearingOrg\": " << "\"" << msg.party_role_clearing_org() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"StartDate\": " << msg.start_date(); comma = true;
+	if(comma) { os << ", "; } os << "\"EndDate\": " << msg.end_date(); comma = true;
+	if(comma) { os << ", "; } os << "\"TerminationType\": " << "\"" << msg.termination_type() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"SecuritySubType\": " << "\"" << msg.security_sub_type() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"MoneyOrPar\": " << "\"" << msg.money_or_par() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"MaxNoOfSubstitutions\": " << +msg.max_no_of_substitutions(); comma = true;
+	if(comma) { os << ", "; } os << "\"PriceQuoteMethod\": " << "\"" << msg.price_quote_method() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"UserDefinedInstrument\": " << msg.user_defined_instrument(); comma = true;
+	if(comma) { os << ", "; } os << "\"RiskSet\": " << "\"" << msg.risk_set() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"MarketSet\": " << "\"" << msg.market_set() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"InstrumentGUID\": " << msg.instrument_guid(); comma = true;
+	if(comma) { os << ", "; } os << "\"TermCode\": " << "\"" << msg.term_code() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"BrokenDateTermType\": " << +msg.broken_date_term_type(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoEvents\": " << msg.no_events(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoMDFeedTypes\": " << msg.no_md_feed_types(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoInstAttrib\": " << msg.no_inst_attrib(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoLotTypeRules\": " << msg.no_lot_type_rules(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoUnderlyings\": " << msg.no_underlyings(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoRelatedInstruments\": " << msg.no_related_instruments(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoBrokenDates\": " << msg.no_broken_dates(); comma = true;
+	os << "}";
 	return os;
 }
 }

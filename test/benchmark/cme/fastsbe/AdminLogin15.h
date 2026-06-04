@@ -19,19 +19,24 @@ class AdminLogin15
     		return "AdminLogin15"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 15; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 1;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -96,7 +101,10 @@ class AdminLogin15
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::AdminLogin15 &msg)
 {
-	os << msg.heart_bt_int_name() << ": " << +msg.heart_bt_int() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"HeartBtInt\": " << +msg.heart_bt_int(); comma = true;
+	os << "}";
 	return os;
 }
 }

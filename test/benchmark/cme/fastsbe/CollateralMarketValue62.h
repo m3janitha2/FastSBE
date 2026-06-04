@@ -26,19 +26,24 @@ class CollateralMarketValue62
     		return "CollateralMarketValue62"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 62; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 11;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -572,25 +577,34 @@ class CollateralMarketValue62
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::CollateralMarketValue62::NoMDEntries &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.underlying_security_alt_id_name() << ": " << g.underlying_security_alt_id() << " ";
-		os << g.underlying_security_alt_id_source_name() << ": " << g.underlying_security_alt_id_source() << " ";
-		os << g.collateral_market_price_name() << ": " << g.collateral_market_price() << " ";
-		os << g.dirty_price_name() << ": " << g.dirty_price() << " ";
-		os << g.underlying_instrument_guid_name() << ": " << g.underlying_instrument_guid() << " ";
-		os << g.md_stream_id_name() << ": " << g.md_stream_id() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltID\": " << "\"" << g.underlying_security_alt_id() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltIDSource\": " << "\"" << g.underlying_security_alt_id_source() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"CollateralMarketPrice\": " << g.collateral_market_price(); comma = true;
+		if(comma) { os << ", "; } os << "\"DirtyPrice\": " << g.dirty_price(); comma = true;
+		if(comma) { os << ", "; } os << "\"UnderlyingInstrumentGUID\": " << g.underlying_instrument_guid(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDStreamID\": " << "\"" << g.md_stream_id() << "\""; comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::CollateralMarketValue62 &msg)
 {
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
-	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"MatchEventIndicator\": " << MatchEventIndicator::to_string(msg.match_event_indicator()); comma = true;
+	if(comma) { os << ", "; } os << "\"NoMDEntries\": " << msg.no_md_entries(); comma = true;
+	os << "}";
 	return os;
 }
 }

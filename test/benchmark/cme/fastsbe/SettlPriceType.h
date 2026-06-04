@@ -23,45 +23,45 @@ class SettlPriceType
     };
     static std::string to_string(value_type value)
     {
-        std::string result = "{";
+        std::string result = "[";
         bool first = true;
         if(value & static_cast<value_type>(Choice::FinalDaily))
         {
             if(!first) { result += ", "; }
-            result += "FinalDaily";
+            result += "\"FinalDaily\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::Actual))
         {
             if(!first) { result += ", "; }
-            result += "Actual";
+            result += "\"Actual\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::Rounded))
         {
             if(!first) { result += ", "; }
-            result += "Rounded";
+            result += "\"Rounded\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::Intraday))
         {
             if(!first) { result += ", "; }
-            result += "Intraday";
+            result += "\"Intraday\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::ReservedBits))
         {
             if(!first) { result += ", "; }
-            result += "ReservedBits";
+            result += "\"ReservedBits\"";
             first = false;
         }
         if(value & static_cast<value_type>(Choice::NullValue))
         {
             if(!first) { result += ", "; }
-            result += "NullValue";
+            result += "\"NullValue\"";
             first = false;
         }
-        result += "}";
+        result += "]";
         return result;
     }
 };

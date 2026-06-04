@@ -29,19 +29,24 @@ class SnapshotFullRefreshTCP61
     		return "SnapshotFullRefreshTCP61"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 61; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 37;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -881,32 +886,41 @@ class SnapshotFullRefreshTCP61
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshTCP61::NoMDEntries &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.md_entry_px_name() << ": " << g.md_entry_px() << " ";
-		os << g.md_entry_size_name() << ": " << g.md_entry_size() << " ";
-		os << g.tradeable_size_name() << ": " << g.tradeable_size() << " ";
-		os << g.number_of_orders_name() << ": " << g.number_of_orders() << " ";
-		os << g.md_price_level_name() << ": " << +g.md_price_level() << " ";
-		os << g.open_close_settl_flag_name() << ": " << g.open_close_settl_flag() << " ";
-		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
-		os << g.trading_reference_date_name() << ": " << g.trading_reference_date() << " ";
-		os << g.settl_price_type_name() << ": " << SettlPriceType::to_string(g.settl_price_type()) << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
+		if(comma) { os << ", "; } os << "\"TradeableSize\": " << g.tradeable_size(); comma = true;
+		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDPriceLevel\": " << +g.md_price_level(); comma = true;
+		if(comma) { os << ", "; } os << "\"OpenCloseSettlFlag\": " << "\"" << g.open_close_settl_flag() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"TradingReferenceDate\": " << g.trading_reference_date(); comma = true;
+		if(comma) { os << ", "; } os << "\"SettlPriceType\": " << SettlPriceType::to_string(g.settl_price_type()); comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshTCP61 &msg)
 {
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.match_event_indicator_name() << ": " << MatchEventIndicator::to_string(msg.match_event_indicator()) << " ";
-	os << msg.security_id_name() << ": " << msg.security_id() << " ";
-	os << msg.high_limit_price_name() << ": " << msg.high_limit_price() << " ";
-	os << msg.low_limit_price_name() << ": " << msg.low_limit_price() << " ";
-	os << msg.max_price_variation_name() << ": " << msg.max_price_variation() << " ";
-	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"MatchEventIndicator\": " << MatchEventIndicator::to_string(msg.match_event_indicator()); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityID\": " << msg.security_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"HighLimitPrice\": " << msg.high_limit_price(); comma = true;
+	if(comma) { os << ", "; } os << "\"LowLimitPrice\": " << msg.low_limit_price(); comma = true;
+	if(comma) { os << ", "; } os << "\"MaxPriceVariation\": " << msg.max_price_variation(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoMDEntries\": " << msg.no_md_entries(); comma = true;
+	os << "}";
 	return os;
 }
 }

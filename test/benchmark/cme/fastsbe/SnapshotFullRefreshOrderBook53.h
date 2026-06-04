@@ -23,19 +23,24 @@ class SnapshotFullRefreshOrderBook53
     		return "SnapshotFullRefreshOrderBook53"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 53; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 28;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -702,28 +707,37 @@ class SnapshotFullRefreshOrderBook53
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshOrderBook53::NoMDEntries &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.order_id_name() << ": " << g.order_id() << " ";
-		os << g.md_order_priority_name() << ": " << g.md_order_priority() << " ";
-		os << g.md_entry_px_name() << ": " << g.md_entry_px() << " ";
-		os << g.md_display_qty_name() << ": " << g.md_display_qty() << " ";
-		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDOrderPriority\": " << g.md_order_priority(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDDisplayQty\": " << g.md_display_qty(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshOrderBook53 &msg)
 {
-	os << msg.last_msg_seq_num_processed_name() << ": " << msg.last_msg_seq_num_processed() << " ";
-	os << msg.tot_num_reports_name() << ": " << msg.tot_num_reports() << " ";
-	os << msg.security_id_name() << ": " << msg.security_id() << " ";
-	os << msg.no_chunks_name() << ": " << msg.no_chunks() << " ";
-	os << msg.current_chunk_name() << ": " << msg.current_chunk() << " ";
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"LastMsgSeqNumProcessed\": " << msg.last_msg_seq_num_processed(); comma = true;
+	if(comma) { os << ", "; } os << "\"TotNumReports\": " << msg.tot_num_reports(); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityID\": " << msg.security_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoChunks\": " << msg.no_chunks(); comma = true;
+	if(comma) { os << ", "; } os << "\"CurrentChunk\": " << msg.current_chunk(); comma = true;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoMDEntries\": " << msg.no_md_entries(); comma = true;
+	os << "}";
 	return os;
 }
 }

@@ -29,19 +29,24 @@ class SnapshotFullRefresh52
     		return "SnapshotFullRefresh52"; 
     	}
     
-    	static constexpr std::size_t template_id() noexcept
+    	static constexpr std::uint16_t template_id() noexcept
     	{ 
     		return 52; 
     	}
     
-    	static constexpr std::size_t schema() noexcept
+    	static constexpr std::uint16_t schema() noexcept
     	{  
     		return 1; 
     	}
     
-    	static constexpr std::size_t version() noexcept
-    	{ 
-    		return 13; 
+    	static constexpr std::uint16_t version() noexcept
+    	{
+    		return 13;
+    	}
+    
+    	static constexpr std::uint16_t block_length() noexcept
+    	{
+    		return 59;
     	}
     
     	static constexpr const char* semantic_type() noexcept
@@ -1069,36 +1074,45 @@ class SnapshotFullRefresh52
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefresh52::NoMDEntries &group)
 {
+	os << "[";
 	for (auto i = 0; i < group.num_in_group(); i++)
 	{
+		if (i) { os << ", "; }
 		auto &g = group.get(i);
-		os << g.md_entry_px_name() << ": " << g.md_entry_px() << " ";
-		os << g.md_entry_size_name() << ": " << g.md_entry_size() << " ";
-		os << g.number_of_orders_name() << ": " << g.number_of_orders() << " ";
-		os << g.md_price_level_name() << ": " << +g.md_price_level() << " ";
-		os << g.trading_reference_date_name() << ": " << g.trading_reference_date() << " ";
-		os << g.open_close_settl_flag_name() << ": " << g.open_close_settl_flag() << " ";
-		os << g.settl_price_type_name() << ": " << SettlPriceType::to_string(g.settl_price_type()) << " ";
-		os << g.md_entry_type_name() << ": " << g.md_entry_type() << " ";
+		os << "{";
+		bool comma = false;
+		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
+		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
+		if(comma) { os << ", "; } os << "\"MDPriceLevel\": " << +g.md_price_level(); comma = true;
+		if(comma) { os << ", "; } os << "\"TradingReferenceDate\": " << g.trading_reference_date(); comma = true;
+		if(comma) { os << ", "; } os << "\"OpenCloseSettlFlag\": " << "\"" << g.open_close_settl_flag() << "\""; comma = true;
+		if(comma) { os << ", "; } os << "\"SettlPriceType\": " << SettlPriceType::to_string(g.settl_price_type()); comma = true;
+		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
+		os << "}";
 	}
+	os << "]";
 	return os;
 }
 
 template <class CharT, class Traits = std::char_traits<CharT>>
 inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefresh52 &msg)
 {
-	os << msg.last_msg_seq_num_processed_name() << ": " << msg.last_msg_seq_num_processed() << " ";
-	os << msg.tot_num_reports_name() << ": " << msg.tot_num_reports() << " ";
-	os << msg.security_id_name() << ": " << msg.security_id() << " ";
-	os << msg.rpt_seq_name() << ": " << msg.rpt_seq() << " ";
-	os << msg.transact_time_name() << ": " << msg.transact_time() << " ";
-	os << msg.last_update_time_name() << ": " << msg.last_update_time() << " ";
-	os << msg.trade_date_name() << ": " << msg.trade_date() << " ";
-	os << msg.md_security_trading_status_name() << ": " << msg.md_security_trading_status() << " ";
-	os << msg.high_limit_price_name() << ": " << msg.high_limit_price() << " ";
-	os << msg.low_limit_price_name() << ": " << msg.low_limit_price() << " ";
-	os << msg.max_price_variation_name() << ": " << msg.max_price_variation() << " ";
-	os << msg.no_md_entries_name() << ": " << msg.no_md_entries() << " ";
+	os << "{";
+	bool comma = false;
+	if(comma) { os << ", "; } os << "\"LastMsgSeqNumProcessed\": " << msg.last_msg_seq_num_processed(); comma = true;
+	if(comma) { os << ", "; } os << "\"TotNumReports\": " << msg.tot_num_reports(); comma = true;
+	if(comma) { os << ", "; } os << "\"SecurityID\": " << msg.security_id(); comma = true;
+	if(comma) { os << ", "; } os << "\"RptSeq\": " << msg.rpt_seq(); comma = true;
+	if(comma) { os << ", "; } os << "\"TransactTime\": " << msg.transact_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"LastUpdateTime\": " << msg.last_update_time(); comma = true;
+	if(comma) { os << ", "; } os << "\"TradeDate\": " << msg.trade_date(); comma = true;
+	if(comma) { os << ", "; } os << "\"MDSecurityTradingStatus\": " << "\"" << msg.md_security_trading_status() << "\""; comma = true;
+	if(comma) { os << ", "; } os << "\"HighLimitPrice\": " << msg.high_limit_price(); comma = true;
+	if(comma) { os << ", "; } os << "\"LowLimitPrice\": " << msg.low_limit_price(); comma = true;
+	if(comma) { os << ", "; } os << "\"MaxPriceVariation\": " << msg.max_price_variation(); comma = true;
+	if(comma) { os << ", "; } os << "\"NoMDEntries\": " << msg.no_md_entries(); comma = true;
+	os << "}";
 	return os;
 }
 }
