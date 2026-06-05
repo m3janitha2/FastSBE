@@ -20,9 +20,10 @@ endif()
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 include_directories(${CMAKE_CURRENT_LIST_DIR}/generated)
 
-add_executable(decode_sbe_v1 decode_sbe_v1.cpp 
+add_executable(decode_sbe_v1 decode_sbe_v1.cpp
     ${CMAKE_CURRENT_LIST_DIR}/generated/__header.h
 )
+add_test(NAME decode_sbe_v1 COMMAND decode_sbe_v1)
 
 add_custom_target(
     sbe_v1_target ALL

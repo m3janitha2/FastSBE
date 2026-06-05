@@ -31,15 +31,13 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      # Execute test defined by the CMake configuration.  
+      # Runs every registered test (encode/decode round-trips + validation).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
-      
-    - name: Verify Benchmark
-      working-directory: ${{github.workspace}}/build/test/benchmark
-      run: ./validation_test
-      
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+
     - name: Benchmark
-      working-directory: ${{github.workspace}}/build/test/benchmark
-      run: ./benchmark_test      
-      
+      working-directory: ${{github.workspace}}/build
+      # Timing suites (FastSbe vs SbeTool), one per schema; informational, not pass/fail.
+      run: |
+        ./test/benchmark/fixp/fixp_benchmark_test
+        ./test/benchmark/cme/cme_benchmark_test
