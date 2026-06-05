@@ -158,6 +158,7 @@ class SecurityStatus30
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(security_group_, value, security_group_size());
     		return *this;
@@ -166,11 +167,21 @@ class SecurityStatus30
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_security_group(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < security_group_size() ? size : security_group_size();
+    		std::memcpy(security_group_, value, length);
+    		std::memset(security_group_ + length, 0, security_group_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_security_group(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(security_group_size(), value.size());
     		std::memcpy(security_group_, value.data(), security_group_size());
@@ -236,6 +247,7 @@ class SecurityStatus30
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(asset_, value, asset_size());
     		return *this;
@@ -244,11 +256,21 @@ class SecurityStatus30
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_asset(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < asset_size() ? size : asset_size();
+    		std::memcpy(asset_, value, length);
+    		std::memset(asset_ + length, 0, asset_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_asset(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(asset_size(), value.size());
     		std::memcpy(asset_, value.data(), asset_size());

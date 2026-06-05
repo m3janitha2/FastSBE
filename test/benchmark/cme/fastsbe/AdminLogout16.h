@@ -102,6 +102,7 @@ class AdminLogout16
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(text_, value, text_size());
     		return *this;
@@ -110,11 +111,21 @@ class AdminLogout16
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_text(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < text_size() ? size : text_size();
+    		std::memcpy(text_, value, length);
+    		std::memset(text_ + length, 0, text_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_text(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(text_size(), value.size());
     		std::memcpy(text_, value.data(), text_size());

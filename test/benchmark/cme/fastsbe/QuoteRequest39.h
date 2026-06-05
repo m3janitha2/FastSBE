@@ -156,6 +156,7 @@ class QuoteRequest39
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(quote_req_id_, value, quote_req_id_size());
     		return *this;
@@ -164,11 +165,21 @@ class QuoteRequest39
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_quote_req_id(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < quote_req_id_size() ? size : quote_req_id_size();
+    		std::memcpy(quote_req_id_, value, length);
+    		std::memset(quote_req_id_ + length, 0, quote_req_id_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_quote_req_id(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(quote_req_id_size(), value.size());
     		std::memcpy(quote_req_id_, value.data(), quote_req_id_size());
@@ -319,6 +330,7 @@ class QuoteRequest39
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		std::memcpy(symbol_, value, symbol_size());
             		return *this;
@@ -327,11 +339,21 @@ class QuoteRequest39
             	#endif
             	}
             
+            	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+            	auto &set_symbol(const char *value, std::size_t size) noexcept
+            	{
+            		const auto length = size < symbol_size() ? size : symbol_size();
+            		std::memcpy(symbol_, value, length);
+            		std::memset(symbol_ + length, 0, symbol_size() - length);
+            		return *this;
+            	}
+            
             	auto &set_symbol(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		// auto size = std::min(symbol_size(), value.size());
             		std::memcpy(symbol_, value.data(), symbol_size());

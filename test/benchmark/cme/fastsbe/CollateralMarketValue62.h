@@ -245,6 +245,7 @@ class CollateralMarketValue62
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		std::memcpy(underlying_security_alt_id_, value, underlying_security_alt_id_size());
             		return *this;
@@ -253,11 +254,21 @@ class CollateralMarketValue62
             	#endif
             	}
             
+            	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+            	auto &set_underlying_security_alt_id(const char *value, std::size_t size) noexcept
+            	{
+            		const auto length = size < underlying_security_alt_id_size() ? size : underlying_security_alt_id_size();
+            		std::memcpy(underlying_security_alt_id_, value, length);
+            		std::memset(underlying_security_alt_id_ + length, 0, underlying_security_alt_id_size() - length);
+            		return *this;
+            	}
+            
             	auto &set_underlying_security_alt_id(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		// auto size = std::min(underlying_security_alt_id_size(), value.size());
             		std::memcpy(underlying_security_alt_id_, value.data(), underlying_security_alt_id_size());

@@ -112,6 +112,7 @@ class ExecutionReport
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(order_id_, value, order_id_size());
     		return *this;
@@ -120,11 +121,21 @@ class ExecutionReport
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_order_id(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < order_id_size() ? size : order_id_size();
+    		std::memcpy(order_id_, value, length);
+    		std::memset(order_id_ + length, 0, order_id_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_order_id(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(order_id_size(), value.size());
     		std::memcpy(order_id_, value.data(), order_id_size());
@@ -190,6 +201,7 @@ class ExecutionReport
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(exec_id_, value, exec_id_size());
     		return *this;
@@ -198,11 +210,21 @@ class ExecutionReport
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_exec_id(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < exec_id_size() ? size : exec_id_size();
+    		std::memcpy(exec_id_, value, length);
+    		std::memset(exec_id_ + length, 0, exec_id_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_exec_id(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(exec_id_size(), value.size());
     		std::memcpy(exec_id_, value.data(), exec_id_size());
@@ -350,6 +372,7 @@ class ExecutionReport
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(symbol_, value, symbol_size());
     		return *this;
@@ -358,11 +381,21 @@ class ExecutionReport
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_symbol(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < symbol_size() ? size : symbol_size();
+    		std::memcpy(symbol_, value, length);
+    		std::memset(symbol_ + length, 0, symbol_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_symbol(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(symbol_size(), value.size());
     		std::memcpy(symbol_, value.data(), symbol_size());

@@ -116,6 +116,7 @@ class NewOrderSingle
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(cl_ord_id_, value, cl_ord_id_size());
     		return *this;
@@ -124,11 +125,21 @@ class NewOrderSingle
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_cl_ord_id(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < cl_ord_id_size() ? size : cl_ord_id_size();
+    		std::memcpy(cl_ord_id_, value, length);
+    		std::memset(cl_ord_id_ + length, 0, cl_ord_id_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_cl_ord_id(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(cl_ord_id_size(), value.size());
     		std::memcpy(cl_ord_id_, value.data(), cl_ord_id_size());
@@ -194,6 +205,7 @@ class NewOrderSingle
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(account_, value, account_size());
     		return *this;
@@ -202,11 +214,21 @@ class NewOrderSingle
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_account(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < account_size() ? size : account_size();
+    		std::memcpy(account_, value, length);
+    		std::memset(account_ + length, 0, account_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_account(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(account_size(), value.size());
     		std::memcpy(account_, value.data(), account_size());
@@ -272,6 +294,7 @@ class NewOrderSingle
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(symbol_, value, symbol_size());
     		return *this;
@@ -280,11 +303,21 @@ class NewOrderSingle
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_symbol(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < symbol_size() ? size : symbol_size();
+    		std::memcpy(symbol_, value, length);
+    		std::memset(symbol_ + length, 0, symbol_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_symbol(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(symbol_size(), value.size());
     		std::memcpy(symbol_, value.data(), symbol_size());
@@ -627,6 +660,7 @@ class NewOrderSingle
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		std::memcpy(party_id_, value, party_id_size());
             		return *this;
@@ -635,11 +669,21 @@ class NewOrderSingle
             	#endif
             	}
             
+            	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+            	auto &set_party_id(const char *value, std::size_t size) noexcept
+            	{
+            		const auto length = size < party_id_size() ? size : party_id_size();
+            		std::memcpy(party_id_, value, length);
+            		std::memset(party_id_ + length, 0, party_id_size() - length);
+            		return *this;
+            	}
+            
             	auto &set_party_id(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		// auto size = std::min(party_id_size(), value.size());
             		std::memcpy(party_id_, value.data(), party_id_size());
@@ -909,6 +953,7 @@ class NewOrderSingle
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		std::memcpy(alloc_account_, value, alloc_account_size());
             		return *this;
@@ -917,11 +962,21 @@ class NewOrderSingle
             	#endif
             	}
             
+            	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+            	auto &set_alloc_account(const char *value, std::size_t size) noexcept
+            	{
+            		const auto length = size < alloc_account_size() ? size : alloc_account_size();
+            		std::memcpy(alloc_account_, value, length);
+            		std::memset(alloc_account_ + length, 0, alloc_account_size() - length);
+            		return *this;
+            	}
+            
             	auto &set_alloc_account(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		// auto size = std::min(alloc_account_size(), value.size());
             		std::memcpy(alloc_account_, value.data(), alloc_account_size());
@@ -1144,6 +1199,7 @@ class NewOrderSingle
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		std::memcpy(trading_session_id_, value, trading_session_id_size());
             		return *this;
@@ -1152,11 +1208,21 @@ class NewOrderSingle
             	#endif
             	}
             
+            	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+            	auto &set_trading_session_id(const char *value, std::size_t size) noexcept
+            	{
+            		const auto length = size < trading_session_id_size() ? size : trading_session_id_size();
+            		std::memcpy(trading_session_id_, value, length);
+            		std::memset(trading_session_id_ + length, 0, trading_session_id_size() - length);
+            		return *this;
+            	}
+            
             	auto &set_trading_session_id(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		// auto size = std::min(trading_session_id_size(), value.size());
             		std::memcpy(trading_session_id_, value.data(), trading_session_id_size());

@@ -55,6 +55,7 @@ public:
 	#if defined(__GNUG__)
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+	#pragma GCC diagnostic ignored "-Wstringop-overread"
 	#endif
 		std::memcpy(S_FIELD_NAME_, value, S_FIELD_NAME_size());
 		return *this;
@@ -63,11 +64,21 @@ public:
 	#endif
 	}
 
+	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+	auto &set_S_FIELD_NAME(const char *value, std::size_t size) noexcept
+	{
+		const auto length = size < S_FIELD_NAME_size() ? size : S_FIELD_NAME_size();
+		std::memcpy(S_FIELD_NAME_, value, length);
+		std::memset(S_FIELD_NAME_ + length, 0, S_FIELD_NAME_size() - length);
+		return *this;
+	}
+
 	auto &set_S_FIELD_NAME(std::string_view value) noexcept
 	{
 	#if defined(__GNUG__)
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+	#pragma GCC diagnostic ignored "-Wstringop-overread"
 	#endif
 		// auto size = std::min(S_FIELD_NAME_size(), value.size());
 		std::memcpy(S_FIELD_NAME_, value.data(), S_FIELD_NAME_size());

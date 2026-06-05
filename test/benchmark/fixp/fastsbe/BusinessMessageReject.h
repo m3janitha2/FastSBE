@@ -105,6 +105,7 @@ class BusinessMessageReject
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(busines_reject_ref_id_, value, busines_reject_ref_id_size());
     		return *this;
@@ -113,11 +114,21 @@ class BusinessMessageReject
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_busines_reject_ref_id(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < busines_reject_ref_id_size() ? size : busines_reject_ref_id_size();
+    		std::memcpy(busines_reject_ref_id_, value, length);
+    		std::memset(busines_reject_ref_id_ + length, 0, busines_reject_ref_id_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_busines_reject_ref_id(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(busines_reject_ref_id_size(), value.size());
     		std::memcpy(busines_reject_ref_id_, value.data(), busines_reject_ref_id_size());

@@ -517,6 +517,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(security_exchange_, value, security_exchange_size());
     		return *this;
@@ -525,11 +526,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_security_exchange(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < security_exchange_size() ? size : security_exchange_size();
+    		std::memcpy(security_exchange_, value, length);
+    		std::memset(security_exchange_ + length, 0, security_exchange_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_security_exchange(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(security_exchange_size(), value.size());
     		std::memcpy(security_exchange_, value.data(), security_exchange_size());
@@ -595,6 +606,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(security_group_, value, security_group_size());
     		return *this;
@@ -603,11 +615,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_security_group(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < security_group_size() ? size : security_group_size();
+    		std::memcpy(security_group_, value, length);
+    		std::memset(security_group_ + length, 0, security_group_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_security_group(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(security_group_size(), value.size());
     		std::memcpy(security_group_, value.data(), security_group_size());
@@ -673,6 +695,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(asset_, value, asset_size());
     		return *this;
@@ -681,11 +704,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_asset(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < asset_size() ? size : asset_size();
+    		std::memcpy(asset_, value, length);
+    		std::memset(asset_ + length, 0, asset_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_asset(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(asset_size(), value.size());
     		std::memcpy(asset_, value.data(), asset_size());
@@ -751,6 +784,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(symbol_, value, symbol_size());
     		return *this;
@@ -759,11 +793,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_symbol(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < symbol_size() ? size : symbol_size();
+    		std::memcpy(symbol_, value, length);
+    		std::memset(symbol_ + length, 0, symbol_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_symbol(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(symbol_size(), value.size());
     		std::memcpy(symbol_, value.data(), symbol_size());
@@ -907,6 +951,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(security_type_, value, security_type_size());
     		return *this;
@@ -915,11 +960,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_security_type(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < security_type_size() ? size : security_type_size();
+    		std::memcpy(security_type_, value, length);
+    		std::memset(security_type_ + length, 0, security_type_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_security_type(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(security_type_size(), value.size());
     		std::memcpy(security_type_, value.data(), security_type_size());
@@ -985,6 +1040,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(cfi_code_, value, cfi_code_size());
     		return *this;
@@ -993,11 +1049,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_cfi_code(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < cfi_code_size() ? size : cfi_code_size();
+    		std::memcpy(cfi_code_, value, length);
+    		std::memset(cfi_code_ + length, 0, cfi_code_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_cfi_code(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(cfi_code_size(), value.size());
     		std::memcpy(cfi_code_, value.data(), cfi_code_size());
@@ -1103,6 +1169,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(currency_, value, currency_size());
     		return *this;
@@ -1111,11 +1178,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_currency(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < currency_size() ? size : currency_size();
+    		std::memcpy(currency_, value, length);
+    		std::memset(currency_ + length, 0, currency_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_currency(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(currency_size(), value.size());
     		std::memcpy(currency_, value.data(), currency_size());
@@ -1181,6 +1258,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(settl_currency_, value, settl_currency_size());
     		return *this;
@@ -1189,11 +1267,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_settl_currency(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < settl_currency_size() ? size : settl_currency_size();
+    		std::memcpy(settl_currency_, value, length);
+    		std::memset(settl_currency_ + length, 0, settl_currency_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_settl_currency(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(settl_currency_size(), value.size());
     		std::memcpy(settl_currency_, value.data(), settl_currency_size());
@@ -1645,6 +1733,7 @@ class MDInstrumentDefinitionFuture54
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		std::memcpy(unit_of_measure_, value, unit_of_measure_size());
     		return *this;
@@ -1653,11 +1742,21 @@ class MDInstrumentDefinitionFuture54
     	#endif
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto &set_unit_of_measure(const char *value, std::size_t size) noexcept
+    	{
+    		const auto length = size < unit_of_measure_size() ? size : unit_of_measure_size();
+    		std::memcpy(unit_of_measure_, value, length);
+    		std::memset(unit_of_measure_ + length, 0, unit_of_measure_size() - length);
+    		return *this;
+    	}
+    
     	auto &set_unit_of_measure(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif
     		// auto size = std::min(unit_of_measure_size(), value.size());
     		std::memcpy(unit_of_measure_, value.data(), unit_of_measure_size());
@@ -2814,6 +2913,7 @@ class MDInstrumentDefinitionFuture54
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		std::memcpy(md_feed_type_, value, md_feed_type_size());
             		return *this;
@@ -2822,11 +2922,21 @@ class MDInstrumentDefinitionFuture54
             	#endif
             	}
             
+            	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+            	auto &set_md_feed_type(const char *value, std::size_t size) noexcept
+            	{
+            		const auto length = size < md_feed_type_size() ? size : md_feed_type_size();
+            		std::memcpy(md_feed_type_, value, length);
+            		std::memset(md_feed_type_ + length, 0, md_feed_type_size() - length);
+            		return *this;
+            	}
+            
             	auto &set_md_feed_type(std::string_view value) noexcept
             	{
             	#if defined(__GNUG__)
             	#pragma GCC diagnostic push
             	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+            	#pragma GCC diagnostic ignored "-Wstringop-overread"
             	#endif
             		// auto size = std::min(md_feed_type_size(), value.size());
             		std::memcpy(md_feed_type_, value.data(), md_feed_type_size());

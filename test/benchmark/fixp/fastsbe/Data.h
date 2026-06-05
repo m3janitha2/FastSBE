@@ -110,6 +110,7 @@ class Data
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif		
     		//auto length = strlen(value);
     		std::memcpy(var_data_, value, var_data_size());
@@ -119,11 +120,21 @@ class Data
     	#endif			
     	}
     
+    	// Safe: copy size bytes (capped at the field width) and NUL-pad the remainder.
+    	auto& set_var_data(const char* value, std::size_t size) noexcept
+    	{
+    		const auto length = size < var_data_size() ? size : var_data_size();
+    		std::memcpy(var_data_, value, length);
+    		std::memset(var_data_ + length, 0, var_data_size() - length);
+    		return *this;
+    	}
+    
     	auto& set_var_data(std::string_view value) noexcept
     	{
     	#if defined(__GNUG__)
     	#pragma GCC diagnostic push
     	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+    	#pragma GCC diagnostic ignored "-Wstringop-overread"
     	#endif		
     		//constexpr auto size = std::min(var_data_size(), value.size());
     		//auto size = std::min(var_data_size(), value.size());
