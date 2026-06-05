@@ -146,7 +146,7 @@ class SecurityStatus30
     		return std::string_view(security_group_, 6);
     	}
     
-    	const std::string security_group_string() const noexcept
+    	constexpr const std::string security_group_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(security_group_ + length) != '\0'; ++length);
@@ -235,7 +235,7 @@ class SecurityStatus30
     		return std::string_view(asset_, 6);
     	}
     
-    	const std::string asset_string() const noexcept
+    	constexpr const std::string asset_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(asset_ + length) != '\0'; ++length);

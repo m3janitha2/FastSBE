@@ -30,7 +30,7 @@ public:
 		return std::string_view("S_CONST_FIELD_VALUE", S_FIELD_SIZE);
 	}
 
-	const std::string S_FIELD_NAME_string() const noexcept
+	constexpr const std::string S_FIELD_NAME_string() const noexcept
 	{
 		return std::string("S_CONST_FIELD_VALUE", S_FIELD_SIZE);
 	}

@@ -87,10 +87,9 @@ class OptionalDecimalEncoding
     
     
     public:
-    	OptionalDecimalEncoding() = default;
+    	constexpr OptionalDecimalEncoding() = default;
     
-    	/*constexpr */
-    	OptionalDecimalEncoding(std::int64_t mantissa) noexcept
+    	constexpr OptionalDecimalEncoding(std::int64_t mantissa) noexcept
     		:mantissa_(mantissa)
     	{
     		

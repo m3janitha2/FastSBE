@@ -198,10 +198,9 @@ class MonthYear
     
     
     public:
-    	MonthYear() = default;
+    	constexpr MonthYear() = default;
     
-    	/*constexpr */
-    	MonthYear(std::uint16_t year, std::uint8_t month, std::uint8_t day, std::uint8_t week) noexcept
+    	constexpr MonthYear(std::uint16_t year, std::uint8_t month, std::uint8_t day, std::uint8_t week) noexcept
     		:year_(year), month_(month), day_(day), week_(week)
     	{
     		

@@ -43,7 +43,7 @@ public:
 		return std::string_view(S_FIELD_NAME_, S_FIELD_SIZE);
 	}
 
-	const std::string S_FIELD_NAME_string() const noexcept
+	constexpr const std::string S_FIELD_NAME_string() const noexcept
 	{
 		auto length = 0ULL;
 		for (; length < S_FIELD_SIZE && *(S_FIELD_NAME_ + length) != '\0'; ++length);

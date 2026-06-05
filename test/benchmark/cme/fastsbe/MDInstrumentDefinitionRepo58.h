@@ -508,7 +508,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(security_exchange_, 4);
     	}
     
-    	const std::string security_exchange_string() const noexcept
+    	constexpr const std::string security_exchange_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 4 && *(security_exchange_ + length) != '\0'; ++length);
@@ -597,7 +597,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(security_group_, 6);
     	}
     
-    	const std::string security_group_string() const noexcept
+    	constexpr const std::string security_group_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(security_group_ + length) != '\0'; ++length);
@@ -686,7 +686,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(asset_, 6);
     	}
     
-    	const std::string asset_string() const noexcept
+    	constexpr const std::string asset_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(asset_ + length) != '\0'; ++length);
@@ -775,7 +775,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(symbol_, 20);
     	}
     
-    	const std::string symbol_string() const noexcept
+    	constexpr const std::string symbol_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 20 && *(symbol_ + length) != '\0'; ++length);
@@ -942,7 +942,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(security_type_, 6);
     	}
     
-    	const std::string security_type_string() const noexcept
+    	constexpr const std::string security_type_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(security_type_ + length) != '\0'; ++length);
@@ -1031,7 +1031,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(cfi_code_, 6);
     	}
     
-    	const std::string cfi_code_string() const noexcept
+    	constexpr const std::string cfi_code_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(cfi_code_ + length) != '\0'; ++length);
@@ -1120,7 +1120,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(currency_, 3);
     	}
     
-    	const std::string currency_string() const noexcept
+    	constexpr const std::string currency_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 3 && *(currency_ + length) != '\0'; ++length);
@@ -1209,7 +1209,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(settl_currency_, 3);
     	}
     
-    	const std::string settl_currency_string() const noexcept
+    	constexpr const std::string settl_currency_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 3 && *(settl_currency_ + length) != '\0'; ++length);
@@ -1531,7 +1531,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(unit_of_measure_, 30);
     	}
     
-    	const std::string unit_of_measure_string() const noexcept
+    	constexpr const std::string unit_of_measure_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 30 && *(unit_of_measure_ + length) != '\0'; ++length);
@@ -1871,7 +1871,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(financial_instrument_full_name_, 35);
     	}
     
-    	const std::string financial_instrument_full_name_string() const noexcept
+    	constexpr const std::string financial_instrument_full_name_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 35 && *(financial_instrument_full_name_ + length) != '\0'; ++length);
@@ -1960,7 +1960,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(party_role_clearing_org_, 5);
     	}
     
-    	const std::string party_role_clearing_org_string() const noexcept
+    	constexpr const std::string party_role_clearing_org_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 5 && *(party_role_clearing_org_ + length) != '\0'; ++length);
@@ -2151,7 +2151,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(termination_type_, 8);
     	}
     
-    	const std::string termination_type_string() const noexcept
+    	constexpr const std::string termination_type_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(termination_type_ + length) != '\0'; ++length);
@@ -2373,7 +2373,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(price_quote_method_, 5);
     	}
     
-    	const std::string price_quote_method_string() const noexcept
+    	constexpr const std::string price_quote_method_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 5 && *(price_quote_method_ + length) != '\0'; ++length);
@@ -2513,7 +2513,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(risk_set_, 6);
     	}
     
-    	const std::string risk_set_string() const noexcept
+    	constexpr const std::string risk_set_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(risk_set_ + length) != '\0'; ++length);
@@ -2602,7 +2602,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(market_set_, 6);
     	}
     
-    	const std::string market_set_string() const noexcept
+    	constexpr const std::string market_set_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 6 && *(market_set_ + length) != '\0'; ++length);
@@ -2742,7 +2742,7 @@ class MDInstrumentDefinitionRepo58
     		return std::string_view(term_code_, 20);
     	}
     
-    	const std::string term_code_string() const noexcept
+    	constexpr const std::string term_code_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 20 && *(term_code_ + length) != '\0'; ++length);
@@ -2841,12 +2841,12 @@ class MDInstrumentDefinitionRepo58
     private:
     	char buffer_[N]{};
     
-    	const char *buffer() const
+    	constexpr const char *buffer() const noexcept
     	{
     		return buffer_;
     	}
     
-    	char *buffer()
+    	constexpr char *buffer() noexcept
     	{
     		return buffer_;
     	}
@@ -2960,8 +2960,8 @@ class MDInstrumentDefinitionRepo58
     	GroupSize header_{};
     
     public:
-    	NoEvents() = default;
-    	NoEvents(std::uint8_t count)
+    	constexpr NoEvents() = default;
+    	NoEvents(std::uint8_t count) noexcept
     		:header_(sizeof(NoEvents::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -2978,12 +2978,12 @@ class MDInstrumentDefinitionRepo58
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -3115,7 +3115,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(md_feed_type_, 3);
             	}
             
-            	const std::string md_feed_type_string() const noexcept
+            	constexpr const std::string md_feed_type_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 3 && *(md_feed_type_ + length) != '\0'; ++length);
@@ -3217,8 +3217,8 @@ class MDInstrumentDefinitionRepo58
     	GroupSize header_{};
     
     public:
-    	NoMDFeedTypes() = default;
-    	NoMDFeedTypes(std::uint8_t count)
+    	constexpr NoMDFeedTypes() = default;
+    	NoMDFeedTypes(std::uint8_t count) noexcept
     		:header_(sizeof(NoMDFeedTypes::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -3235,12 +3235,12 @@ class MDInstrumentDefinitionRepo58
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -3418,8 +3418,8 @@ class MDInstrumentDefinitionRepo58
     	GroupSize header_{};
     
     public:
-    	NoInstAttrib() = default;
-    	NoInstAttrib(std::uint8_t count)
+    	constexpr NoInstAttrib() = default;
+    	NoInstAttrib(std::uint8_t count) noexcept
     		:header_(sizeof(NoInstAttrib::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -3436,12 +3436,12 @@ class MDInstrumentDefinitionRepo58
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -3626,8 +3626,8 @@ class MDInstrumentDefinitionRepo58
     	GroupSize header_{};
     
     public:
-    	NoLotTypeRules() = default;
-    	NoLotTypeRules(std::uint8_t count)
+    	constexpr NoLotTypeRules() = default;
+    	NoLotTypeRules(std::uint8_t count) noexcept
     		:header_(sizeof(NoLotTypeRules::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -3644,12 +3644,12 @@ class MDInstrumentDefinitionRepo58
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -3781,7 +3781,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(underlying_symbol_, 20);
             	}
             
-            	const std::string underlying_symbol_string() const noexcept
+            	constexpr const std::string underlying_symbol_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 20 && *(underlying_symbol_ + length) != '\0'; ++length);
@@ -3948,7 +3948,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(underlying_security_alt_id_, 12);
             	}
             
-            	const std::string underlying_security_alt_id_string() const noexcept
+            	constexpr const std::string underlying_security_alt_id_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 12 && *(underlying_security_alt_id_ + length) != '\0'; ++length);
@@ -4078,7 +4078,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(underlying_financial_instrument_full_name_, 35);
             	}
             
-            	const std::string underlying_financial_instrument_full_name_string() const noexcept
+            	constexpr const std::string underlying_financial_instrument_full_name_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 35 && *(underlying_financial_instrument_full_name_ + length) != '\0'; ++length);
@@ -4167,7 +4167,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(underlying_security_type_, 6);
             	}
             
-            	const std::string underlying_security_type_string() const noexcept
+            	constexpr const std::string underlying_security_type_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 6 && *(underlying_security_type_ + length) != '\0'; ++length);
@@ -4256,7 +4256,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(underlying_country_of_issue_, 2);
             	}
             
-            	const std::string underlying_country_of_issue_string() const noexcept
+            	constexpr const std::string underlying_country_of_issue_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 2 && *(underlying_country_of_issue_ + length) != '\0'; ++length);
@@ -4345,7 +4345,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(underlying_issuer_, 25);
             	}
             
-            	const std::string underlying_issuer_string() const noexcept
+            	constexpr const std::string underlying_issuer_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 25 && *(underlying_issuer_ + length) != '\0'; ++length);
@@ -4600,8 +4600,8 @@ class MDInstrumentDefinitionRepo58
     	GroupSize header_{};
     
     public:
-    	NoUnderlyings() = default;
-    	NoUnderlyings(std::uint8_t count)
+    	constexpr NoUnderlyings() = default;
+    	NoUnderlyings(std::uint8_t count) noexcept
     		:header_(sizeof(NoUnderlyings::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -4618,12 +4618,12 @@ class MDInstrumentDefinitionRepo58
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -4844,7 +4844,7 @@ class MDInstrumentDefinitionRepo58
             		return std::string_view(related_symbol_, 20);
             	}
             
-            	const std::string related_symbol_string() const noexcept
+            	constexpr const std::string related_symbol_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 20 && *(related_symbol_ + length) != '\0'; ++length);
@@ -4946,8 +4946,8 @@ class MDInstrumentDefinitionRepo58
     	GroupSize header_{};
     
     public:
-    	NoRelatedInstruments() = default;
-    	NoRelatedInstruments(std::uint8_t count)
+    	constexpr NoRelatedInstruments() = default;
+    	NoRelatedInstruments(std::uint8_t count) noexcept
     		:header_(sizeof(NoRelatedInstruments::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -4964,12 +4964,12 @@ class MDInstrumentDefinitionRepo58
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -5269,8 +5269,8 @@ class MDInstrumentDefinitionRepo58
     	GroupSize header_{};
     
     public:
-    	NoBrokenDates() = default;
-    	NoBrokenDates(std::uint8_t count)
+    	constexpr NoBrokenDates() = default;
+    	NoBrokenDates(std::uint8_t count) noexcept
     		:header_(sizeof(NoBrokenDates::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -5287,12 +5287,12 @@ class MDInstrumentDefinitionRepo58
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}

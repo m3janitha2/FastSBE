@@ -21,7 +21,7 @@ class SettlPriceType
         ReservedBits = static_cast<value_type>(1u << 4),
         NullValue = static_cast<value_type>(1u << 7),
     };
-    static std::string to_string(value_type value)
+    static constexpr std::string to_string(value_type value)
     {
         std::string result = "[";
         bool first = true;

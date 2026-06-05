@@ -2,12 +2,12 @@
 private:
 	char buffer_[N]{};
 
-	const char *buffer() const
+	constexpr const char *buffer() const noexcept
 	{
 		return buffer_;
 	}
 
-	char *buffer()
+	constexpr char *buffer() noexcept
 	{
 		return buffer_;
 	}

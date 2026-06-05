@@ -87,10 +87,9 @@ class QtyEncoding
     
     
     public:
-    	QtyEncoding() = default;
+    	constexpr QtyEncoding() = default;
     
-    	/*constexpr */
-    	QtyEncoding(std::int32_t mantissa) noexcept
+    	constexpr QtyEncoding(std::int32_t mantissa) noexcept
     		:mantissa_(mantissa)
     	{
     		

@@ -168,12 +168,12 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     private:
     	char buffer_[N]{};
     
-    	const char *buffer() const
+    	constexpr const char *buffer() const noexcept
     	{
     		return buffer_;
     	}
     
-    	char *buffer()
+    	constexpr char *buffer() noexcept
     	{
     		return buffer_;
     	}
@@ -603,8 +603,8 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     	GroupSize header_{};
     
     public:
-    	NoMDEntries() = default;
-    	NoMDEntries(std::uint8_t count)
+    	constexpr NoMDEntries() = default;
+    	NoMDEntries(std::uint8_t count) noexcept
     		:header_(sizeof(NoMDEntries::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -621,12 +621,12 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -833,8 +833,8 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     	GroupSize8Byte header_{};
     
     public:
-    	NoOrderIDEntries() = default;
-    	NoOrderIDEntries(std::uint8_t count)
+    	constexpr NoOrderIDEntries() = default;
+    	NoOrderIDEntries(std::uint8_t count) noexcept
     		:header_(sizeof(NoOrderIDEntries::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -851,12 +851,12 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}

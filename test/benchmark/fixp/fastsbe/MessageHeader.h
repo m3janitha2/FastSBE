@@ -198,10 +198,9 @@ class MessageHeader
     
     
     public:
-    	MessageHeader() = default;
+    	constexpr MessageHeader() = default;
     
-    	/*constexpr */
-    	MessageHeader(std::uint16_t block_length, std::uint16_t template_id, std::uint16_t schema_id, std::uint16_t version) noexcept
+    	constexpr MessageHeader(std::uint16_t block_length, std::uint16_t template_id, std::uint16_t schema_id, std::uint16_t version) noexcept
     		:block_length_(block_length), template_id_(template_id), schema_id_(schema_id), version_(version)
     	{
     		

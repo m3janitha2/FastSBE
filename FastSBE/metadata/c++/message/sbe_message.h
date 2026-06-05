@@ -11,7 +11,7 @@ private:
 	Body body_;
 
 public:
-	SbeMessage() noexcept
+	constexpr SbeMessage() noexcept
 		: header_{}
 	{
 		// Set the identity fields by name; any extra header fields (e.g. the SBE

@@ -100,7 +100,7 @@ class ExecutionReport
     		return std::string_view(order_id_, 8);
     	}
     
-    	const std::string order_id_string() const noexcept
+    	constexpr const std::string order_id_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(order_id_ + length) != '\0'; ++length);
@@ -189,7 +189,7 @@ class ExecutionReport
     		return std::string_view(exec_id_, 8);
     	}
     
-    	const std::string exec_id_string() const noexcept
+    	constexpr const std::string exec_id_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(exec_id_ + length) != '\0'; ++length);
@@ -360,7 +360,7 @@ class ExecutionReport
     		return std::string_view(symbol_, 8);
     	}
     
-    	const std::string symbol_string() const noexcept
+    	constexpr const std::string symbol_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(symbol_ + length) != '\0'; ++length);
@@ -620,12 +620,12 @@ class ExecutionReport
     private:
     	char buffer_[N]{};
     
-    	const char *buffer() const
+    	constexpr const char *buffer() const noexcept
     	{
     		return buffer_;
     	}
     
-    	char *buffer()
+    	constexpr char *buffer() noexcept
     	{
     		return buffer_;
     	}
@@ -727,8 +727,8 @@ class ExecutionReport
     	GroupSizeEncoding header_{};
     
     public:
-    	FillsGrp() = default;
-    	FillsGrp(std::uint16_t count)
+    	constexpr FillsGrp() = default;
+    	FillsGrp(std::uint16_t count) noexcept
     		:header_(sizeof(FillsGrp::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -745,12 +745,12 @@ class ExecutionReport
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}

@@ -87,10 +87,9 @@ class DecimalQty
     
     
     public:
-    	DecimalQty() = default;
+    	constexpr DecimalQty() = default;
     
-    	/*constexpr */
-    	DecimalQty(std::int32_t mantissa) noexcept
+    	constexpr DecimalQty(std::int32_t mantissa) noexcept
     		:mantissa_(mantissa)
     	{
     		

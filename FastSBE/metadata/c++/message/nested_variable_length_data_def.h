@@ -3,7 +3,7 @@ private:
 	S_DIAMENTION_TYPE header_{};
 
 public:
-	S_VAR_LEN_DATA_NAME() = default;
+	constexpr S_VAR_LEN_DATA_NAME() = default;
 
 	std::basic_string_view<S_VAR_LEN_DATA_VAR_DATA_TYPE> get_str() noexcept
 	{
@@ -29,7 +29,7 @@ public:
 		return reinterpret_cast<const S_VAR_LEN_DATA_VAR_DATA_TYPE*>(buffer);
 	}
 
-	const auto S_VAR_LEN_DATA_LENGTH_NAME() const noexcept
+	constexpr const auto S_VAR_LEN_DATA_LENGTH_NAME() const noexcept
 	{
 		return header_.S_VAR_LEN_DATA_LENGTH_NAME();
 	}

@@ -3,8 +3,8 @@ private:
 	S_DIAMENTION_TYPE header_{};
 
 public:
-	S_GROUP_NAME() = default;
-	S_GROUP_NAME(S_NUM_IN_GROUP_TYPE count)
+	constexpr S_GROUP_NAME() = default;
+	S_GROUP_NAME(S_NUM_IN_GROUP_TYPE count) noexcept
 		:header_(sizeof(S_GROUP_NAME::Entry), count) {}
 
 	Entry& get(std::size_t group_id) noexcept
@@ -21,12 +21,12 @@ public:
 		return *reinterpret_cast<const Entry*>(buffer);
 	}
 
-	const auto S_BLOCK_LENGTH_NAME() const noexcept
+	constexpr const auto S_BLOCK_LENGTH_NAME() const noexcept
 	{
 		return header_.S_BLOCK_LENGTH_NAME();
 	}
 
-	const auto S_NUM_IN_GROUP_NAME() const noexcept
+	constexpr const auto S_NUM_IN_GROUP_NAME() const noexcept
 	{
 		return header_.S_NUM_IN_GROUP_NAME();
 	}

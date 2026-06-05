@@ -90,7 +90,7 @@ class AdminLogout16
     		return std::string_view(text_, 180);
     	}
     
-    	const std::string text_string() const noexcept
+    	constexpr const std::string text_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 180 && *(text_ + length) != '\0'; ++length);

@@ -144,7 +144,7 @@ class QuoteRequest39
     		return std::string_view(quote_req_id_, 23);
     	}
     
-    	const std::string quote_req_id_string() const noexcept
+    	constexpr const std::string quote_req_id_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 23 && *(quote_req_id_ + length) != '\0'; ++length);
@@ -253,12 +253,12 @@ class QuoteRequest39
     private:
     	char buffer_[N]{};
     
-    	const char *buffer() const
+    	constexpr const char *buffer() const noexcept
     	{
     		return buffer_;
     	}
     
-    	char *buffer()
+    	constexpr char *buffer() noexcept
     	{
     		return buffer_;
     	}
@@ -318,7 +318,7 @@ class QuoteRequest39
             		return std::string_view(symbol_, 20);
             	}
             
-            	const std::string symbol_string() const noexcept
+            	constexpr const std::string symbol_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 20 && *(symbol_ + length) != '\0'; ++length);
@@ -577,8 +577,8 @@ class QuoteRequest39
     	GroupSize header_{};
     
     public:
-    	NoRelatedSym() = default;
-    	NoRelatedSym(std::uint8_t count)
+    	constexpr NoRelatedSym() = default;
+    	NoRelatedSym(std::uint8_t count) noexcept
     		:header_(sizeof(NoRelatedSym::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -595,12 +595,12 @@ class QuoteRequest39
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}

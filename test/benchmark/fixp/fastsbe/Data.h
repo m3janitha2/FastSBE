@@ -98,7 +98,7 @@ class Data
     		return std::string_view(var_data_, 0);
     	}
     
-    	const std::string var_data_string() const noexcept
+    	constexpr const std::string var_data_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 0 && *(var_data_ + length) != '\0'; ++length);
@@ -147,10 +147,9 @@ class Data
     
     
     public:
-    	Data() = default;
+    	constexpr Data() = default;
     
-    	/*constexpr */
-    	Data(std::uint16_t length, std::string_view var_data) noexcept
+    	constexpr Data(std::uint16_t length, std::string_view var_data) noexcept
     		:length_(length)
     	{
     		var_data.copy(var_data_,var_data_size());

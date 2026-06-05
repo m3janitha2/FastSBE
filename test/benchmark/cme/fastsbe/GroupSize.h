@@ -106,10 +106,9 @@ class GroupSize
     
     
     public:
-    	GroupSize() = default;
+    	constexpr GroupSize() = default;
     
-    	/*constexpr */
-    	GroupSize(std::uint16_t block_length, std::uint8_t num_in_group) noexcept
+    	constexpr GroupSize(std::uint16_t block_length, std::uint8_t num_in_group) noexcept
     		:block_length_(block_length), num_in_group_(num_in_group)
     	{
     		

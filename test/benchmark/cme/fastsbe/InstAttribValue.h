@@ -43,7 +43,7 @@ class InstAttribValue
         eFIXInstrument = static_cast<value_type>(1u << 26),
         HedgeInstrument = static_cast<value_type>(1u << 27),
     };
-    static std::string to_string(value_type value)
+    static constexpr std::string to_string(value_type value)
     {
         std::string result = "[";
         bool first = true;

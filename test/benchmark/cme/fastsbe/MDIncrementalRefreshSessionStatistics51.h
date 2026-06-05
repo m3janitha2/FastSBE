@@ -168,12 +168,12 @@ class MDIncrementalRefreshSessionStatistics51
     private:
     	char buffer_[N]{};
     
-    	const char *buffer() const
+    	constexpr const char *buffer() const noexcept
     	{
     		return buffer_;
     	}
     
-    	char *buffer()
+    	constexpr char *buffer() noexcept
     	{
     		return buffer_;
     	}
@@ -515,8 +515,8 @@ class MDIncrementalRefreshSessionStatistics51
     	GroupSize header_{};
     
     public:
-    	NoMDEntries() = default;
-    	NoMDEntries(std::uint8_t count)
+    	constexpr NoMDEntries() = default;
+    	NoMDEntries(std::uint8_t count) noexcept
     		:header_(sizeof(NoMDEntries::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -533,12 +533,12 @@ class MDIncrementalRefreshSessionStatistics51
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}

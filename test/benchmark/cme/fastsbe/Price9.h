@@ -87,10 +87,9 @@ class Price9
     
     
     public:
-    	Price9() = default;
+    	constexpr Price9() = default;
     
-    	/*constexpr */
-    	Price9(std::int64_t mantissa) noexcept
+    	constexpr Price9(std::int64_t mantissa) noexcept
     		:mantissa_(mantissa)
     	{
     		

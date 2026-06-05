@@ -106,10 +106,9 @@ class GroupSizeEncoding
     
     
     public:
-    	GroupSizeEncoding() = default;
+    	constexpr GroupSizeEncoding() = default;
     
-    	/*constexpr */
-    	GroupSizeEncoding(std::uint16_t block_length, std::uint16_t num_in_group) noexcept
+    	constexpr GroupSizeEncoding(std::uint16_t block_length, std::uint16_t num_in_group) noexcept
     		:block_length_(block_length), num_in_group_(num_in_group)
     	{
     		

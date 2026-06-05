@@ -87,10 +87,9 @@ class Decimal9
     
     
     public:
-    	Decimal9() = default;
+    	constexpr Decimal9() = default;
     
-    	/*constexpr */
-    	Decimal9(std::int64_t mantissa) noexcept
+    	constexpr Decimal9(std::int64_t mantissa) noexcept
     		:mantissa_(mantissa)
     	{
     		

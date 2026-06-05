@@ -93,7 +93,7 @@ class BusinessMessageReject
     		return std::string_view(busines_reject_ref_id_, 8);
     	}
     
-    	const std::string busines_reject_ref_id_string() const noexcept
+    	constexpr const std::string busines_reject_ref_id_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(busines_reject_ref_id_ + length) != '\0'; ++length);
@@ -182,12 +182,12 @@ class BusinessMessageReject
     private:
     	char buffer_[N]{};
     
-    	const char *buffer() const
+    	constexpr const char *buffer() const noexcept
     	{
     		return buffer_;
     	}
     
-    	char *buffer()
+    	constexpr char *buffer() noexcept
     	{
     		return buffer_;
     	}
@@ -203,7 +203,7 @@ class BusinessMessageReject
     	Data header_{};
     
     public:
-    	Text() = default;
+    	constexpr Text() = default;
     
     	std::basic_string_view<char> get_str() noexcept
     	{
@@ -229,7 +229,7 @@ class BusinessMessageReject
     		return reinterpret_cast<const char*>(buffer);
     	}
     
-    	const auto length() const noexcept
+    	constexpr const auto length() const noexcept
     	{
     		return header_.length();
     	}

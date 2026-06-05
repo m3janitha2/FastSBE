@@ -104,7 +104,7 @@ class NewOrderSingle
     		return std::string_view(cl_ord_id_, 8);
     	}
     
-    	const std::string cl_ord_id_string() const noexcept
+    	constexpr const std::string cl_ord_id_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(cl_ord_id_ + length) != '\0'; ++length);
@@ -193,7 +193,7 @@ class NewOrderSingle
     		return std::string_view(account_, 8);
     	}
     
-    	const std::string account_string() const noexcept
+    	constexpr const std::string account_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(account_ + length) != '\0'; ++length);
@@ -282,7 +282,7 @@ class NewOrderSingle
     		return std::string_view(symbol_, 8);
     	}
     
-    	const std::string symbol_string() const noexcept
+    	constexpr const std::string symbol_string() const noexcept
     	{
     		auto length = 0ULL;
     		for (; length < 8 && *(symbol_ + length) != '\0'; ++length);
@@ -583,12 +583,12 @@ class NewOrderSingle
     private:
     	char buffer_[N]{};
     
-    	const char *buffer() const
+    	constexpr const char *buffer() const noexcept
     	{
     		return buffer_;
     	}
     
-    	char *buffer()
+    	constexpr char *buffer() noexcept
     	{
     		return buffer_;
     	}
@@ -648,7 +648,7 @@ class NewOrderSingle
             		return std::string_view(party_id_, 8);
             	}
             
-            	const std::string party_id_string() const noexcept
+            	constexpr const std::string party_id_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 8 && *(party_id_ + length) != '\0'; ++length);
@@ -785,8 +785,8 @@ class NewOrderSingle
     	GroupSizeEncoding header_{};
     
     public:
-    	PartiesGrp() = default;
-    	PartiesGrp(std::uint16_t count)
+    	constexpr PartiesGrp() = default;
+    	PartiesGrp(std::uint16_t count) noexcept
     		:header_(sizeof(PartiesGrp::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -803,12 +803,12 @@ class NewOrderSingle
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -941,7 +941,7 @@ class NewOrderSingle
             		return std::string_view(alloc_account_, 16);
             	}
             
-            	const std::string alloc_account_string() const noexcept
+            	constexpr const std::string alloc_account_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 16 && *(alloc_account_ + length) != '\0'; ++length);
@@ -1032,8 +1032,8 @@ class NewOrderSingle
     	GroupSizeEncoding header_{};
     
     public:
-    	AllocsGrp() = default;
-    	AllocsGrp(std::uint16_t count)
+    	constexpr AllocsGrp() = default;
+    	AllocsGrp(std::uint16_t count) noexcept
     		:header_(sizeof(AllocsGrp::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -1050,12 +1050,12 @@ class NewOrderSingle
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -1187,7 +1187,7 @@ class NewOrderSingle
             		return std::string_view(trading_session_id_, 8);
             	}
             
-            	const std::string trading_session_id_string() const noexcept
+            	constexpr const std::string trading_session_id_string() const noexcept
             	{
             		auto length = 0ULL;
             		for (; length < 8 && *(trading_session_id_ + length) != '\0'; ++length);
@@ -1238,8 +1238,8 @@ class NewOrderSingle
     	GroupSizeEncoding header_{};
     
     public:
-    	TradingSessionsGrp() = default;
-    	TradingSessionsGrp(std::uint16_t count)
+    	constexpr TradingSessionsGrp() = default;
+    	TradingSessionsGrp(std::uint16_t count) noexcept
     		:header_(sizeof(TradingSessionsGrp::Entry), count) {}
     
     	Entry& get(std::size_t group_id) noexcept
@@ -1256,12 +1256,12 @@ class NewOrderSingle
     		return *reinterpret_cast<const Entry*>(buffer);
     	}
     
-    	const auto block_length() const noexcept
+    	constexpr const auto block_length() const noexcept
     	{
     		return header_.block_length();
     	}
     
-    	const auto num_in_group() const noexcept
+    	constexpr const auto num_in_group() const noexcept
     	{
     		return header_.num_in_group();
     	}
@@ -1348,7 +1348,7 @@ class NewOrderSingle
     	Data header_{};
     
     public:
-    	Text() = default;
+    	constexpr Text() = default;
     
     	std::basic_string_view<char> get_str() noexcept
     	{
@@ -1374,7 +1374,7 @@ class NewOrderSingle
     		return reinterpret_cast<const char*>(buffer);
     	}
     
-    	const auto length() const noexcept
+    	constexpr const auto length() const noexcept
     	{
     		return header_.length();
     	}
@@ -1453,7 +1453,7 @@ class NewOrderSingle
     	Data header_{};
     
     public:
-    	ClearingFirm() = default;
+    	constexpr ClearingFirm() = default;
     
     	std::basic_string_view<char> get_str() noexcept
     	{
@@ -1479,7 +1479,7 @@ class NewOrderSingle
     		return reinterpret_cast<const char*>(buffer);
     	}
     
-    	const auto length() const noexcept
+    	constexpr const auto length() const noexcept
     	{
     		return header_.length();
     	}

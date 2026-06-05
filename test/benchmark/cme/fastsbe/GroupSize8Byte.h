@@ -110,10 +110,9 @@ class GroupSize8Byte
     
     
     public:
-    	GroupSize8Byte() = default;
+    	constexpr GroupSize8Byte() = default;
     
-    	/*constexpr */
-    	GroupSize8Byte(std::uint16_t block_length, std::uint8_t num_in_group) noexcept
+    	constexpr GroupSize8Byte(std::uint16_t block_length, std::uint8_t num_in_group) noexcept
     		:block_length_(block_length), num_in_group_(num_in_group)
     	{
     		
