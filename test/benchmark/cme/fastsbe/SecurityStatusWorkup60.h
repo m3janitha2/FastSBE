@@ -671,24 +671,24 @@ class SecurityStatusWorkup60
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoOrderIDEntries &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoOrderIDEntries &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
-    		if(comma) { os << ", "; } os << "\"Side\": " << "\"" << g.side() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"AggressorIndicator\": " << "\"" << g.aggressor_indicator() << "\""; comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
+    			if(comma) { os << ", "; } os << "\"Side\": " << "\"" << g.side() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"AggressorIndicator\": " << "\"" << g.aggressor_indicator() << "\""; comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     

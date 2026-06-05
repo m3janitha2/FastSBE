@@ -2994,23 +2994,23 @@ class MDInstrumentDefinitionFX63
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoEvents &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoEvents &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"EventType\": " << "\"" << g.event_type() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"EventTime\": " << g.event_time(); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"EventType\": " << "\"" << g.event_type() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"EventTime\": " << g.event_time(); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     
@@ -3240,23 +3240,23 @@ class MDInstrumentDefinitionFX63
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDFeedTypes &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDFeedTypes &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"MDFeedType\": " << "\"" << g.md_feed_type() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"MarketDepth\": " << +g.market_depth(); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"MDFeedType\": " << "\"" << g.md_feed_type() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"MarketDepth\": " << +g.market_depth(); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     
@@ -3441,23 +3441,23 @@ class MDInstrumentDefinitionFX63
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoInstAttrib &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoInstAttrib &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"InstAttribType\": " << +g.inst_attrib_type(); comma = true;
-    		if(comma) { os << ", "; } os << "\"InstAttribValue\": " << InstAttribValue::to_string(g.inst_attrib_value()); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"InstAttribType\": " << +g.inst_attrib_type(); comma = true;
+    			if(comma) { os << ", "; } os << "\"InstAttribValue\": " << InstAttribValue::to_string(g.inst_attrib_value()); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     
@@ -3660,23 +3660,23 @@ class MDInstrumentDefinitionFX63
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoLotTypeRules &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoLotTypeRules &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"LotType\": " << +g.lot_type(); comma = true;
-    		if(comma) { os << ", "; } os << "\"MinLotSize\": " << g.min_lot_size(); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"LotType\": " << +g.lot_type(); comma = true;
+    			if(comma) { os << ", "; } os << "\"MinLotSize\": " << g.min_lot_size(); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     
@@ -4035,26 +4035,26 @@ class MDInstrumentDefinitionFX63
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoTradingSessions &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoTradingSessions &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"TradeDate\": " << g.trade_date(); comma = true;
-    		if(comma) { os << ", "; } os << "\"SettlDate\": " << g.settl_date(); comma = true;
-    		if(comma) { os << ", "; } os << "\"MaturityDate\": " << g.maturity_date(); comma = true;
-    		if(comma) { os << ", "; } os << "\"SecurityAltID\": " << "\"" << g.security_alt_id() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"SecurityAltIDSource\": " << +g.security_alt_id_source(); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"TradeDate\": " << g.trade_date(); comma = true;
+    			if(comma) { os << ", "; } os << "\"SettlDate\": " << g.settl_date(); comma = true;
+    			if(comma) { os << ", "; } os << "\"MaturityDate\": " << g.maturity_date(); comma = true;
+    			if(comma) { os << ", "; } os << "\"SecurityAltID\": " << "\"" << g.security_alt_id() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"SecurityAltIDSource\": " << +g.security_alt_id_source(); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     

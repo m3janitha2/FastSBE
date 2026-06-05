@@ -611,29 +611,29 @@ class MDIncrementalRefreshDailyStatistics49
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
-    		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
-    		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
-    		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
-    		if(comma) { os << ", "; } os << "\"TradingReferenceDate\": " << g.trading_reference_date(); comma = true;
-    		if(comma) { os << ", "; } os << "\"SettlPriceType\": " << SettlPriceType::to_string(g.settl_price_type()); comma = true;
-    		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << "\"" << g.md_update_action() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+    			if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
+    			if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+    			if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
+    			if(comma) { os << ", "; } os << "\"TradingReferenceDate\": " << g.trading_reference_date(); comma = true;
+    			if(comma) { os << ", "; } os << "\"SettlPriceType\": " << SettlPriceType::to_string(g.settl_price_type()); comma = true;
+    			if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << "\"" << g.md_update_action() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     

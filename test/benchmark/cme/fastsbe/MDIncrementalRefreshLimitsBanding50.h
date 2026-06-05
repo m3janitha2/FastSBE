@@ -499,28 +499,28 @@ class MDIncrementalRefreshLimitsBanding50
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"HighLimitPrice\": " << g.high_limit_price(); comma = true;
-    		if(comma) { os << ", "; } os << "\"LowLimitPrice\": " << g.low_limit_price(); comma = true;
-    		if(comma) { os << ", "; } os << "\"MaxPriceVariation\": " << g.max_price_variation(); comma = true;
-    		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
-    		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
-    		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << +g.md_update_action(); comma = true;
-    		if(comma) { os << ", "; } os << "\"MDEntryType\": " << g.md_entry_type(); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"HighLimitPrice\": " << g.high_limit_price(); comma = true;
+    			if(comma) { os << ", "; } os << "\"LowLimitPrice\": " << g.low_limit_price(); comma = true;
+    			if(comma) { os << ", "; } os << "\"MaxPriceVariation\": " << g.max_price_variation(); comma = true;
+    			if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+    			if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
+    			if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << +g.md_update_action(); comma = true;
+    			if(comma) { os << ", "; } os << "\"MDEntryType\": " << g.md_entry_type(); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     

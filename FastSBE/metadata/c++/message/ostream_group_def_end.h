@@ -1,5 +1,5 @@
-		os << "}";
+			os << "}";
+		}
+		os << "]";
+		return os;
 	}
-	os << "]";
-	return os;
-}

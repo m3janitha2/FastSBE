@@ -770,24 +770,24 @@ class NewOrderSingle
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const PartiesGrp &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const PartiesGrp &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"PartyID\": " << "\"" << g.party_id() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"PartyIDSource\": " << "\"" << g.party_id_source() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"PartyRole\": " << "\"" << g.party_role() << "\""; comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"PartyID\": " << "\"" << g.party_id() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"PartyIDSource\": " << "\"" << g.party_id_source() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"PartyRole\": " << "\"" << g.party_role() << "\""; comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     
@@ -1006,23 +1006,23 @@ class NewOrderSingle
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const AllocsGrp &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const AllocsGrp &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"AllocAccount\": " << "\"" << g.alloc_account() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"AllocShares\": " << g.alloc_shares(); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"AllocAccount\": " << "\"" << g.alloc_account() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"AllocShares\": " << g.alloc_shares(); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     
@@ -1201,22 +1201,22 @@ class NewOrderSingle
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const TradingSessionsGrp &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const TradingSessionsGrp &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"TradingSessionID\": " << "\"" << g.trading_session_id() << "\""; comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"TradingSessionID\": " << "\"" << g.trading_session_id() << "\""; comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     

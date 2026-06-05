@@ -519,27 +519,27 @@ class CollateralMarketValue62
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltID\": " << "\"" << g.underlying_security_alt_id() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltIDSource\": " << "\"" << g.underlying_security_alt_id_source() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"CollateralMarketPrice\": " << g.collateral_market_price(); comma = true;
-    		if(comma) { os << ", "; } os << "\"DirtyPrice\": " << g.dirty_price(); comma = true;
-    		if(comma) { os << ", "; } os << "\"UnderlyingInstrumentGUID\": " << g.underlying_instrument_guid(); comma = true;
-    		if(comma) { os << ", "; } os << "\"MDStreamID\": " << "\"" << g.md_stream_id() << "\""; comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltID\": " << "\"" << g.underlying_security_alt_id() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"UnderlyingSecurityAltIDSource\": " << "\"" << g.underlying_security_alt_id_source() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"CollateralMarketPrice\": " << g.collateral_market_price(); comma = true;
+    			if(comma) { os << ", "; } os << "\"DirtyPrice\": " << g.dirty_price(); comma = true;
+    			if(comma) { os << ", "; } os << "\"UnderlyingInstrumentGUID\": " << g.underlying_instrument_guid(); comma = true;
+    			if(comma) { os << ", "; } os << "\"MDStreamID\": " << "\"" << g.md_stream_id() << "\""; comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     

@@ -584,26 +584,26 @@ class QuoteRequest39
     	}
     
     
-    template <class CharT, class Traits = std::char_traits<CharT>>
-    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoRelatedSym &group)
-    {
-    	os << "[";
-    	for (auto i = 0; i < group.num_in_group(); i++)
+    	template <class CharT, class Traits = std::char_traits<CharT>>
+    	friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoRelatedSym &group)
     	{
-    		if (i) { os << ", "; }
-    		auto &g = group.get(i);
-    		os << "{";
-    		bool comma = false;
-    		if(comma) { os << ", "; } os << "\"Symbol\": " << "\"" << g.symbol() << "\""; comma = true;
-    		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
-    		if(comma) { os << ", "; } os << "\"OrderQty\": " << g.order_qty(); comma = true;
-    		if(comma) { os << ", "; } os << "\"QuoteType\": " << +g.quote_type(); comma = true;
-    		if(comma) { os << ", "; } os << "\"Side\": " << +g.side(); comma = true;
-    		os << "}";
+    		os << "[";
+    		for (auto i = 0; i < group.num_in_group(); i++)
+    		{
+    			if (i) { os << ", "; }
+    			auto &g = group.get(i);
+    			os << "{";
+    			bool comma = false;
+    			if(comma) { os << ", "; } os << "\"Symbol\": " << "\"" << g.symbol() << "\""; comma = true;
+    			if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+    			if(comma) { os << ", "; } os << "\"OrderQty\": " << g.order_qty(); comma = true;
+    			if(comma) { os << ", "; } os << "\"QuoteType\": " << +g.quote_type(); comma = true;
+    			if(comma) { os << ", "; } os << "\"Side\": " << +g.side(); comma = true;
+    			os << "}";
+    		}
+    		os << "]";
+    		return os;
     	}
-    	os << "]";
-    	return os;
-    }
     };
     #pragma pack(pop)
     
