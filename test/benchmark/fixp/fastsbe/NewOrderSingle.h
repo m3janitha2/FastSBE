@@ -24,6 +24,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class NewOrderSingle
 {
     
@@ -547,7 +548,7 @@ class NewOrderSingle
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -564,7 +565,7 @@ class NewOrderSingle
     #pragma pack(push, 1)
     class PartiesGrp
     {
-    	friend NewOrderSingle;
+    	template <std::size_t> friend class NewOrderSingle;
         
         #pragma pack(push, 1)
         class Entry
@@ -768,6 +769,25 @@ class NewOrderSingle
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const PartiesGrp &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"PartyID\": " << "\"" << g.party_id() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"PartyIDSource\": " << "\"" << g.party_id_source() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"PartyRole\": " << "\"" << g.party_role() << "\""; comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -777,7 +797,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t parties_grp_size() noexcept
     	{
-    		return sizeof(PartiesGrp::Entry);
+    		return sizeof(typename PartiesGrp::Entry);
     	}
     
     	static constexpr std::size_t parties_grp_id() noexcept
@@ -817,7 +837,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + parties_grp_offset();
     		auto& group = *reinterpret_cast<PartiesGrp*>(buf);
-    		group.header_.set_block_length(sizeof(PartiesGrp::Entry));
+    		group.header_.set_block_length(sizeof(typename PartiesGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -827,7 +847,7 @@ class NewOrderSingle
     #pragma pack(push, 1)
     class AllocsGrp
     {
-    	friend NewOrderSingle;
+    	template <std::size_t> friend class NewOrderSingle;
         
         #pragma pack(push, 1)
         class Entry
@@ -985,6 +1005,24 @@ class NewOrderSingle
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const AllocsGrp &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"AllocAccount\": " << "\"" << g.alloc_account() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"AllocShares\": " << g.alloc_shares(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -994,7 +1032,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t allocs_grp_size() noexcept
     	{
-    		return sizeof(AllocsGrp::Entry);
+    		return sizeof(typename AllocsGrp::Entry);
     	}
     
     	static constexpr std::size_t allocs_grp_id() noexcept
@@ -1034,7 +1072,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + allocs_grp_offset();
     		auto& group = *reinterpret_cast<AllocsGrp*>(buf);
-    		group.header_.set_block_length(sizeof(AllocsGrp::Entry));
+    		group.header_.set_block_length(sizeof(typename AllocsGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -1044,7 +1082,7 @@ class NewOrderSingle
     #pragma pack(push, 1)
     class TradingSessionsGrp
     {
-    	friend NewOrderSingle;
+    	template <std::size_t> friend class NewOrderSingle;
         
         #pragma pack(push, 1)
         class Entry
@@ -1162,6 +1200,23 @@ class NewOrderSingle
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const TradingSessionsGrp &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"TradingSessionID\": " << "\"" << g.trading_session_id() << "\""; comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -1171,7 +1226,7 @@ class NewOrderSingle
     public:
     	static constexpr std::size_t trading_sessions_grp_size() noexcept
     	{
-    		return sizeof(TradingSessionsGrp::Entry);
+    		return sizeof(typename TradingSessionsGrp::Entry);
     	}
     
     	static constexpr std::size_t trading_sessions_grp_id() noexcept
@@ -1211,7 +1266,7 @@ class NewOrderSingle
     	{
     		auto* buf = buffer() + trading_sessions_grp_offset();
     		auto& group = *reinterpret_cast<TradingSessionsGrp*>(buf);
-    		group.header_.set_block_length(sizeof(TradingSessionsGrp::Entry));
+    		group.header_.set_block_length(sizeof(typename TradingSessionsGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -1221,7 +1276,7 @@ class NewOrderSingle
     #pragma pack(push, 1)
     class Text
     {
-    	friend NewOrderSingle;
+    	template <std::size_t> friend class NewOrderSingle;
     
     private:
     	Data header_{};
@@ -1326,7 +1381,7 @@ class NewOrderSingle
     #pragma pack(push, 1)
     class ClearingFirm
     {
-    	friend NewOrderSingle;
+    	template <std::size_t> friend class NewOrderSingle;
     
     private:
     	Data header_{};
@@ -1429,62 +1484,8 @@ class NewOrderSingle
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::PartiesGrp &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"PartyID\": " << "\"" << g.party_id() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"PartyIDSource\": " << "\"" << g.party_id_source() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"PartyRole\": " << "\"" << g.party_role() << "\""; comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::AllocsGrp &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"AllocAccount\": " << "\"" << g.alloc_account() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"AllocShares\": " << g.alloc_shares(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle::TradingSessionsGrp &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"TradingSessionID\": " << "\"" << g.trading_session_id() << "\""; comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::NewOrderSingle<N> &msg)
 {
 	os << "{";
 	bool comma = false;

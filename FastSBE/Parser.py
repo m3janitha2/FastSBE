@@ -689,6 +689,12 @@ class Parser:
 				, num_groups_type = dimension[2]['type']\
 				, num_var_data_field_type = dimension[3]['type'])
 
+		# The group operator<< was accumulated in ostream_var; move it inside the
+		# still-open group class as a hidden friend. The message is a template, so a
+		# namespace-scope operator on the nested type Msg<N>::Group could not deduce N.
+		handler.content += msg_gen.field_gen.indentation.indent(handler.ostream_var)
+		handler.ostream_var = ''
+
 
 	def parse_group(self, msg_gen, handler, message_name, group, previous_field_name):
 		group_name = group.attrib['name']
@@ -767,7 +773,7 @@ class Parser:
 					is_group_section = True
 					previous_field_name = ""
 					msg_gen.field_gen.gen_trailing_padding(message.attrib.get('blockLength'))
-					msg_gen.field_gen.gen_buffer_def(1024)					
+					msg_gen.field_gen.gen_buffer_def()					
 					
 				previous_field_name = self.parse_group(msg_gen, handler, message_name, element\
 					, previous_field_name)
@@ -781,7 +787,7 @@ class Parser:
 					else:					
 						previous_field_name = ""
 						msg_gen.field_gen.gen_trailing_padding(message.attrib.get('blockLength'))
-						msg_gen.field_gen.gen_buffer_def(1024)
+						msg_gen.field_gen.gen_buffer_def()
 						is_fixed_length_section = False
 
 				previous_field_name = self.parse_data(msg_gen, handler, message_name, element\

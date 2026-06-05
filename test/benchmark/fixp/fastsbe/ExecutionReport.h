@@ -20,6 +20,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class ExecutionReport
 {
     
@@ -584,7 +585,7 @@ class ExecutionReport
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -601,7 +602,7 @@ class ExecutionReport
     #pragma pack(push, 1)
     class FillsGrp
     {
-    	friend ExecutionReport;
+    	template <std::size_t> friend class ExecutionReport;
         
         #pragma pack(push, 1)
         class Entry
@@ -721,6 +722,24 @@ class ExecutionReport
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const FillsGrp &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"FillPx\": " << g.fill_px(); comma = true;
+    		if(comma) { os << ", "; } os << "\"FillQty\": " << g.fill_qty(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -730,7 +749,7 @@ class ExecutionReport
     public:
     	static constexpr std::size_t fills_grp_size() noexcept
     	{
-    		return sizeof(FillsGrp::Entry);
+    		return sizeof(typename FillsGrp::Entry);
     	}
     
     	static constexpr std::size_t fills_grp_id() noexcept
@@ -770,7 +789,7 @@ class ExecutionReport
     	{
     		auto* buf = buffer() + fills_grp_offset();
     		auto& group = *reinterpret_cast<FillsGrp*>(buf);
-    		group.header_.set_block_length(sizeof(FillsGrp::Entry));
+    		group.header_.set_block_length(sizeof(typename FillsGrp::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -778,26 +797,8 @@ class ExecutionReport
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ExecutionReport::FillsGrp &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"FillPx\": " << g.fill_px(); comma = true;
-		if(comma) { os << ", "; } os << "\"FillQty\": " << g.fill_qty(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ExecutionReport &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ExecutionReport<N> &msg)
 {
 	os << "{";
 	bool comma = false;

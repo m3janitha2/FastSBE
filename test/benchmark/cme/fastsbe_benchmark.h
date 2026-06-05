@@ -20,7 +20,7 @@ namespace fastsbe
 {
     void encode_MDIncrementalRefreshBook46_from_struct(char *buffer, MDIncrementalRefreshBook46Data &values, bool display)
     {
-        auto &msg = *reinterpret_cast<fastsbe::MDIncrementalRefreshBook46 *>(buffer);
+        auto &msg = *reinterpret_cast<fastsbe::MDIncrementalRefreshBook46<> *>(buffer);
 
         msg.set_transact_time(values.TransactTime)
             .set_match_event_indicator(static_cast<MatchEventIndicator::value_type>(values.MatchEventIndicator));
@@ -59,7 +59,7 @@ namespace fastsbe
 
     void decode_MDIncrementalRefreshBook46(char *buffer, bool display)
     {
-        auto &msg = *reinterpret_cast<fastsbe::MDIncrementalRefreshBook46 *>(buffer);
+        auto &msg = *reinterpret_cast<fastsbe::MDIncrementalRefreshBook46<> *>(buffer);
 
         auto TransactTime = msg.transact_time();
         benchmark::DoNotOptimize(TransactTime);

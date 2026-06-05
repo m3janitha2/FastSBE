@@ -34,7 +34,7 @@ namespace sbetool
     TEST(string, const_empty_string)
     {
         const TestMessage msg{};
-        const_cast<TestMessage &>(msg).set_cl_ord_id("");
+        const_cast<TestMessage<>&>(msg).set_cl_ord_id("");
 
         EXPECT_EQ(std::string(msg.cl_ord_id()), std::string(""));
         // string_view of field length
@@ -62,7 +62,7 @@ namespace sbetool
     {
         TestMessage msg{};
         auto ClOrdId = random_string(7);
-        const_cast<TestMessage &>(msg).set_cl_ord_id(ClOrdId);
+        const_cast<TestMessage<>&>(msg).set_cl_ord_id(ClOrdId);
 
         EXPECT_EQ(std::string(msg.cl_ord_id()), ClOrdId);
         auto ClOrdId_view = ClOrdId;
@@ -87,7 +87,7 @@ namespace sbetool
     {
         TestMessage msg{};
         auto ClOrdId = random_string(8);
-        const_cast<TestMessage &>(msg).set_cl_ord_id(ClOrdId);
+        const_cast<TestMessage<>&>(msg).set_cl_ord_id(ClOrdId);
 
         EXPECT_EQ(msg.cl_ord_id_view(), std::string_view(ClOrdId));
         EXPECT_EQ(msg.cl_ord_id_string(), ClOrdId);

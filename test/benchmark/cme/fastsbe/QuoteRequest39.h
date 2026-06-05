@@ -13,6 +13,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class QuoteRequest39
 {
     
@@ -239,7 +240,7 @@ class QuoteRequest39
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -256,7 +257,7 @@ class QuoteRequest39
     #pragma pack(push, 1)
     class NoRelatedSym
     {
-    	friend QuoteRequest39;
+    	template <std::size_t> friend class QuoteRequest39;
         
         #pragma pack(push, 1)
         class Entry
@@ -582,6 +583,27 @@ class QuoteRequest39
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoRelatedSym &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"Symbol\": " << "\"" << g.symbol() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"OrderQty\": " << g.order_qty(); comma = true;
+    		if(comma) { os << ", "; } os << "\"QuoteType\": " << +g.quote_type(); comma = true;
+    		if(comma) { os << ", "; } os << "\"Side\": " << +g.side(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -591,7 +613,7 @@ class QuoteRequest39
     public:
     	static constexpr std::size_t no_related_sym_size() noexcept
     	{
-    		return sizeof(NoRelatedSym::Entry);
+    		return sizeof(typename NoRelatedSym::Entry);
     	}
     
     	static constexpr std::size_t no_related_sym_id() noexcept
@@ -631,7 +653,7 @@ class QuoteRequest39
     	{
     		auto* buf = buffer() + no_related_sym_offset();
     		auto& group = *reinterpret_cast<NoRelatedSym*>(buf);
-    		group.header_.set_block_length(sizeof(NoRelatedSym::Entry));
+    		group.header_.set_block_length(sizeof(typename NoRelatedSym::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -639,29 +661,8 @@ class QuoteRequest39
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::QuoteRequest39::NoRelatedSym &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"Symbol\": " << "\"" << g.symbol() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"OrderQty\": " << g.order_qty(); comma = true;
-		if(comma) { os << ", "; } os << "\"QuoteType\": " << +g.quote_type(); comma = true;
-		if(comma) { os << ", "; } os << "\"Side\": " << +g.side(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::QuoteRequest39 &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::QuoteRequest39<N> &msg)
 {
 	os << "{";
 	bool comma = false;

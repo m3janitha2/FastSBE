@@ -17,6 +17,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class MDIncrementalRefreshTradeSummaryLongQty65
 {
     
@@ -165,7 +166,7 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -182,7 +183,7 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     #pragma pack(push, 1)
     class NoMDEntries
     {
-    	friend MDIncrementalRefreshTradeSummaryLongQty65;
+    	template <std::size_t> friend class MDIncrementalRefreshTradeSummaryLongQty65;
         
         #pragma pack(push, 1)
         class Entry
@@ -630,6 +631,31 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
+    		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
+    		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDTradeEntryID\": " << g.md_trade_entry_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"AggressorSide\": " << "\"" << g.aggressor_side() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << "\"" << g.md_update_action() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"MDEntryType\": " << g.md_entry_type(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -639,7 +665,7 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     public:
     	static constexpr std::size_t no_md_entries_size() noexcept
     	{
-    		return sizeof(NoMDEntries::Entry);
+    		return sizeof(typename NoMDEntries::Entry);
     	}
     
     	static constexpr std::size_t no_md_entries_id() noexcept
@@ -679,7 +705,7 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     	{
     		auto* buf = buffer() + no_md_entries_offset();
     		auto& group = *reinterpret_cast<NoMDEntries*>(buf);
-    		group.header_.set_block_length(sizeof(NoMDEntries::Entry));
+    		group.header_.set_block_length(sizeof(typename NoMDEntries::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -689,7 +715,7 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     #pragma pack(push, 1)
     class NoOrderIDEntries
     {
-    	friend MDIncrementalRefreshTradeSummaryLongQty65;
+    	template <std::size_t> friend class MDIncrementalRefreshTradeSummaryLongQty65;
         
         #pragma pack(push, 1)
         class Entry
@@ -835,6 +861,24 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoOrderIDEntries &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"LastQty\": " << g.last_qty(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -844,7 +888,7 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     public:
     	static constexpr std::size_t no_order_id_entries_size() noexcept
     	{
-    		return sizeof(NoOrderIDEntries::Entry);
+    		return sizeof(typename NoOrderIDEntries::Entry);
     	}
     
     	static constexpr std::size_t no_order_id_entries_id() noexcept
@@ -884,7 +928,7 @@ class MDIncrementalRefreshTradeSummaryLongQty65
     	{
     		auto* buf = buffer() + no_order_id_entries_offset();
     		auto& group = *reinterpret_cast<NoOrderIDEntries*>(buf);
-    		group.header_.set_block_length(sizeof(NoOrderIDEntries::Entry));
+    		group.header_.set_block_length(sizeof(typename NoOrderIDEntries::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -892,51 +936,8 @@ class MDIncrementalRefreshTradeSummaryLongQty65
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshTradeSummaryLongQty65::NoMDEntries &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
-		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
-		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDTradeEntryID\": " << g.md_trade_entry_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"AggressorSide\": " << "\"" << g.aggressor_side() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << "\"" << g.md_update_action() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"MDEntryType\": " << g.md_entry_type(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshTradeSummaryLongQty65::NoOrderIDEntries &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"LastQty\": " << g.last_qty(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshTradeSummaryLongQty65 &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshTradeSummaryLongQty65<N> &msg)
 {
 	os << "{";
 	bool comma = false;

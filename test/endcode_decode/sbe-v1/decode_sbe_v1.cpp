@@ -6,5 +6,5 @@
 int main()
 {
     test::sbe::NewOrderSingle msg;
-    test::sbe::SbeMessage<test::sbe::NewOrderSingle> message;
+    test::sbe::SbeMessage<test::sbe::NewOrderSingle<>> message;
 }

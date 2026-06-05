@@ -18,6 +18,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class MDIncrementalRefreshBook46
 {
     
@@ -166,7 +167,7 @@ class MDIncrementalRefreshBook46
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -183,7 +184,7 @@ class MDIncrementalRefreshBook46
     #pragma pack(push, 1)
     class NoMDEntries
     {
-    	friend MDIncrementalRefreshBook46;
+    	template <std::size_t> friend class MDIncrementalRefreshBook46;
         
         #pragma pack(push, 1)
         class Entry
@@ -655,6 +656,31 @@ class MDIncrementalRefreshBook46
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
+    		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
+    		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDPriceLevel\": " << +g.md_price_level(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << "\"" << g.md_update_action() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"TradeableSize\": " << g.tradeable_size(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -664,7 +690,7 @@ class MDIncrementalRefreshBook46
     public:
     	static constexpr std::size_t no_md_entries_size() noexcept
     	{
-    		return sizeof(NoMDEntries::Entry);
+    		return sizeof(typename NoMDEntries::Entry);
     	}
     
     	static constexpr std::size_t no_md_entries_id() noexcept
@@ -704,7 +730,7 @@ class MDIncrementalRefreshBook46
     	{
     		auto* buf = buffer() + no_md_entries_offset();
     		auto& group = *reinterpret_cast<NoMDEntries*>(buf);
-    		group.header_.set_block_length(sizeof(NoMDEntries::Entry));
+    		group.header_.set_block_length(sizeof(typename NoMDEntries::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -714,7 +740,7 @@ class MDIncrementalRefreshBook46
     #pragma pack(push, 1)
     class NoOrderIDEntries
     {
-    	friend MDIncrementalRefreshBook46;
+    	template <std::size_t> friend class MDIncrementalRefreshBook46;
         
         #pragma pack(push, 1)
         class Entry
@@ -1003,6 +1029,27 @@ class MDIncrementalRefreshBook46
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoOrderIDEntries &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDOrderPriority\": " << g.md_order_priority(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDDisplayQty\": " << g.md_display_qty(); comma = true;
+    		if(comma) { os << ", "; } os << "\"ReferenceID\": " << +g.reference_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"OrderUpdateAction\": " << "\"" << g.order_update_action() << "\""; comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -1012,7 +1059,7 @@ class MDIncrementalRefreshBook46
     public:
     	static constexpr std::size_t no_order_id_entries_size() noexcept
     	{
-    		return sizeof(NoOrderIDEntries::Entry);
+    		return sizeof(typename NoOrderIDEntries::Entry);
     	}
     
     	static constexpr std::size_t no_order_id_entries_id() noexcept
@@ -1052,7 +1099,7 @@ class MDIncrementalRefreshBook46
     	{
     		auto* buf = buffer() + no_order_id_entries_offset();
     		auto& group = *reinterpret_cast<NoOrderIDEntries*>(buf);
-    		group.header_.set_block_length(sizeof(NoOrderIDEntries::Entry));
+    		group.header_.set_block_length(sizeof(typename NoOrderIDEntries::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -1060,54 +1107,8 @@ class MDIncrementalRefreshBook46
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBook46::NoMDEntries &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
-		if(comma) { os << ", "; } os << "\"SecurityID\": " << g.security_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"RptSeq\": " << g.rpt_seq(); comma = true;
-		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDPriceLevel\": " << +g.md_price_level(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << "\"" << g.md_update_action() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"TradeableSize\": " << g.tradeable_size(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBook46::NoOrderIDEntries &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDOrderPriority\": " << g.md_order_priority(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDDisplayQty\": " << g.md_display_qty(); comma = true;
-		if(comma) { os << ", "; } os << "\"ReferenceID\": " << +g.reference_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"OrderUpdateAction\": " << "\"" << g.order_update_action() << "\""; comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBook46 &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDIncrementalRefreshBook46<N> &msg)
 {
 	os << "{";
 	bool comma = false;

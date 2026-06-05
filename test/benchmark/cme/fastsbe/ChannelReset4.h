@@ -13,6 +13,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class ChannelReset4
 {
     
@@ -157,7 +158,7 @@ class ChannelReset4
     	}
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -174,7 +175,7 @@ class ChannelReset4
     #pragma pack(push, 1)
     class NoMDEntries
     {
-    	friend ChannelReset4;
+    	template <std::size_t> friend class ChannelReset4;
         
         #pragma pack(push, 1)
         class Entry
@@ -319,6 +320,25 @@ class ChannelReset4
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << +g.md_update_action(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDEntryType\": " << g.md_entry_type(); comma = true;
+    		if(comma) { os << ", "; } os << "\"ApplID\": " << g.appl_id(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -328,7 +348,7 @@ class ChannelReset4
     public:
     	static constexpr std::size_t no_md_entries_size() noexcept
     	{
-    		return sizeof(NoMDEntries::Entry);
+    		return sizeof(typename NoMDEntries::Entry);
     	}
     
     	static constexpr std::size_t no_md_entries_id() noexcept
@@ -368,7 +388,7 @@ class ChannelReset4
     	{
     		auto* buf = buffer() + no_md_entries_offset();
     		auto& group = *reinterpret_cast<NoMDEntries*>(buf);
-    		group.header_.set_block_length(sizeof(NoMDEntries::Entry));
+    		group.header_.set_block_length(sizeof(typename NoMDEntries::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -376,27 +396,8 @@ class ChannelReset4
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ChannelReset4::NoMDEntries &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"MDUpdateAction\": " << +g.md_update_action(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDEntryType\": " << g.md_entry_type(); comma = true;
-		if(comma) { os << ", "; } os << "\"ApplID\": " << g.appl_id(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ChannelReset4 &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::ChannelReset4<N> &msg)
 {
 	os << "{";
 	bool comma = false;

@@ -50,6 +50,7 @@ class FieldGen:
 	buffer_def_ct                   = read_template('metadata/c++/message/buffer_def.h')
 
 	ostream_field_def_begin_ct      = read_template('metadata/c++/message/ostream_field_def_begin.h')
+	ostream_message_def_begin_ct    = read_template('metadata/c++/message/ostream_message_def_begin.h')
 	ostream_field_def_end_ct        = read_template('metadata/c++/message/ostream_field_def_end.h')
 	ostream_field_def_ct            = read_template('metadata/c++/message/ostream_field_def.h')
 	ostream_group_def_begin_ct      = read_template('metadata/c++/message/ostream_group_def_begin.h')
@@ -132,7 +133,10 @@ class FieldGen:
 
 
 	def gen_ostream_field_def_begin(self):
-		field_def = self.ostream_field_def_begin_ct\
+		# a message is a class template, so its operator<< takes Msg<N>; a composite
+		# is a plain class and uses the unparameterized signature.
+		template = self.ostream_message_def_begin_ct if self.is_message else self.ostream_field_def_begin_ct
+		field_def = template\
 			.replace('S_NAMESPACE', self.namespace)\
 			.replace('S_MESSAGE_NAME', self.message_name)
 		self.handler.ostream += field_def
@@ -591,19 +595,19 @@ class FieldGen:
 		self.handler.content += self.indentation.indent(field_def)
 
 
-	def gen_buffer_def(self, field_size):
-		field_def = self.buffer_def_ct\
-			.replace('S_FIELD_SIZE', str(field_size))
-		self.handler.content += self.indentation.indent(field_def)
+	def gen_buffer_def(self):
+		# the buffer length is the message's template parameter N, not a fixed size
+		self.handler.content += self.indentation.indent(self.buffer_def_ct)
 		logging.debug('gen_buffer_def')
 
 
-	def __init__(self, handler, indentation, message_name, class_gen, namespace):
+	def __init__(self, handler, indentation, message_name, class_gen, namespace, is_message = False):
 		self.handler = handler
 		self.indentation = indentation
 		self.namespace = namespace
 		self.message_name = message_name
 		self.class_gen = class_gen
+		self.is_message = is_message
 
 		# byte cursor and current field offset, maintained by layout_field
 		self.current_offset = 0
@@ -629,10 +633,13 @@ class MessageGen:
 
 		logging.debug('create MessageGen:%s ', message_name)
 		self.indentation = Indentation(0)
+		# a message is a class template parameterized by its group-buffer size N;
+		# a composite (descriptor=False) is a plain class.
+		template_prefix = "template <std::size_t N = 1>\n" if descriptor else ''
 		self.class_gen = ClassGen(handler = self.handler, indentation = self.indentation\
-			, class_name = message_name)
+			, class_name = message_name, template_prefix = template_prefix)
 		self.field_gen = FieldGen(handler = self.handler, indentation = self.indentation\
-			, message_name = message_name, class_gen = self.class_gen, namespace = namespace)
+			, message_name = message_name, class_gen = self.class_gen, namespace = namespace, is_message = descriptor)
 
 		# composites pass descriptor=False: template_id/schema/version would
 		# collide with same-named composite fields (e.g. MessageHeader.version).

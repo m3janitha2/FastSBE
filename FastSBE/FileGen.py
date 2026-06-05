@@ -57,12 +57,15 @@ class ClassGen:
 	"""
 
 	# whole-struct pack only; a per-member #pragma pack would be a no-op.
-	class_ct		= "\n#pragma pack(push, 1)\nclass {s_class_name}\n{{\n"
+	class_ct		= "\n#pragma pack(push, 1)\n{s_template_prefix}class {s_class_name}\n{{\n"
 	class_end_ct	= "};\n#pragma pack(pop)\n"
 
 
 	def gen_class_begin(self):
-		class_str = self.class_ct.format(s_class_name = self.class_name)
+		# template_prefix turns a class into a class template (messages carry the
+		# group-buffer size N); empty for plain classes. It sits between the pack
+		# pragma and 'class' - a #pragma may not appear between template<> and class.
+		class_str = self.class_ct.format(s_template_prefix = self.template_prefix, s_class_name = self.class_name)
 		self.handler.content += self.indentation.indent(class_str)
 
 
@@ -70,10 +73,11 @@ class ClassGen:
 		self.handler.content += self.indentation.indent(self.class_end_ct)
 
 
-	def __init__(self, handler, indentation, class_name):
+	def __init__(self, handler, indentation, class_name, template_prefix = ''):
 		self.handler = handler
 		self.indentation = indentation
 		self.class_name = class_name
+		self.template_prefix = template_prefix
 
 		logging.debug('create ClassGen: %s', self.class_name)
 		self.gen_class_begin()

@@ -13,6 +13,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class BusinessMessageReject
 {
     
@@ -168,7 +169,7 @@ class BusinessMessageReject
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -185,7 +186,7 @@ class BusinessMessageReject
     #pragma pack(push, 1)
     class Text
     {
-    	friend BusinessMessageReject;
+    	template <std::size_t> friend class BusinessMessageReject;
     
     private:
     	Data header_{};
@@ -288,8 +289,8 @@ class BusinessMessageReject
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::BusinessMessageReject &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::BusinessMessageReject<N> &msg)
 {
 	os << "{";
 	bool comma = false;

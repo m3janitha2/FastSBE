@@ -19,6 +19,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class SnapshotFullRefreshTCPLongQty68
 {
     
@@ -334,7 +335,7 @@ class SnapshotFullRefreshTCPLongQty68
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -351,7 +352,7 @@ class SnapshotFullRefreshTCPLongQty68
     #pragma pack(push, 1)
     class NoMDEntries
     {
-    	friend SnapshotFullRefreshTCPLongQty68;
+    	template <std::size_t> friend class SnapshotFullRefreshTCPLongQty68;
         
         #pragma pack(push, 1)
         class Entry
@@ -666,6 +667,28 @@ class SnapshotFullRefreshTCPLongQty68
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDEntries &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
+    		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MDPriceLevel\": " << +g.md_price_level(); comma = true;
+    		if(comma) { os << ", "; } os << "\"OpenCloseSettlFlag\": " << "\"" << g.open_close_settl_flag() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -675,7 +698,7 @@ class SnapshotFullRefreshTCPLongQty68
     public:
     	static constexpr std::size_t no_md_entries_size() noexcept
     	{
-    		return sizeof(NoMDEntries::Entry);
+    		return sizeof(typename NoMDEntries::Entry);
     	}
     
     	static constexpr std::size_t no_md_entries_id() noexcept
@@ -715,7 +738,7 @@ class SnapshotFullRefreshTCPLongQty68
     	{
     		auto* buf = buffer() + no_md_entries_offset();
     		auto& group = *reinterpret_cast<NoMDEntries*>(buf);
-    		group.header_.set_block_length(sizeof(NoMDEntries::Entry));
+    		group.header_.set_block_length(sizeof(typename NoMDEntries::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -723,30 +746,8 @@ class SnapshotFullRefreshTCPLongQty68
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshTCPLongQty68::NoMDEntries &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"MDEntryPx\": " << g.md_entry_px(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDEntrySize\": " << g.md_entry_size(); comma = true;
-		if(comma) { os << ", "; } os << "\"NumberOfOrders\": " << g.number_of_orders(); comma = true;
-		if(comma) { os << ", "; } os << "\"MDPriceLevel\": " << +g.md_price_level(); comma = true;
-		if(comma) { os << ", "; } os << "\"OpenCloseSettlFlag\": " << "\"" << g.open_close_settl_flag() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"MDEntryType\": " << "\"" << g.md_entry_type() << "\""; comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshTCPLongQty68 &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SnapshotFullRefreshTCPLongQty68<N> &msg)
 {
 	os << "{";
 	bool comma = false;

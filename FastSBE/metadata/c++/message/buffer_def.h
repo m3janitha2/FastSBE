@@ -1,6 +1,6 @@
 
 private:
-	char buffer_[S_FIELD_SIZE]{};
+	char buffer_[N]{};
 
 	const char *buffer() const
 	{

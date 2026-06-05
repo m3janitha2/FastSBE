@@ -55,7 +55,7 @@ namespace cme
               OrderIDEntries(random_number<std::size_t>(0, 10)) {}
     };
 
-    void encode_body(MDIncrementalRefreshBook46Data &values, MDIncrementalRefreshBook46 &msg)
+    void encode_body(MDIncrementalRefreshBook46Data &values, MDIncrementalRefreshBook46<> &msg)
     {
         msg.set_transact_time(values.TransactTime)
             .set_match_event_indicator(static_cast<MatchEventIndicator::value_type>(values.MatchEventIndicator));
@@ -91,20 +91,20 @@ namespace cme
 
     void encode_message(MDIncrementalRefreshBook46Data &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46 *>(buffer);
+        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46<> *>(buffer);
         encode_body(values, msg);
         print_message(msg);
     }
 
     void encode_message_with_header(MDIncrementalRefreshBook46Data &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<SbeMessage<MDIncrementalRefreshBook46> *>(buffer);
+        auto &msg = *reinterpret_cast<SbeMessage<MDIncrementalRefreshBook46<>> *>(buffer);
         msg = {};   // reinterpret_cast runs no ctor; assign a default to stamp the header
         encode_body(values, msg.body());
         print_message(msg);
     }
 
-    void decode_body(MDIncrementalRefreshBook46Data &values, MDIncrementalRefreshBook46 &msg)
+    void decode_body(MDIncrementalRefreshBook46Data &values, MDIncrementalRefreshBook46<> &msg)
     {
         EXPECT_EQ(msg.transact_time(), values.TransactTime);
         EXPECT_EQ(msg.match_event_indicator(), static_cast<MatchEventIndicator::value_type>(values.MatchEventIndicator));
@@ -143,7 +143,7 @@ namespace cme
 
     void decode_message(MDIncrementalRefreshBook46Data &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46 *>(buffer);
+        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46<> *>(buffer);
         decode_body(values, msg);
         print_message(msg);
     }
@@ -151,12 +151,12 @@ namespace cme
     void decode_message_with_header(MDIncrementalRefreshBook46Data &values, char *buffer)
     {
         // a received message is just a view over the wire bytes - construct nothing
-        auto &msg = *reinterpret_cast<SbeMessage<MDIncrementalRefreshBook46> *>(buffer);
+        auto &msg = *reinterpret_cast<SbeMessage<MDIncrementalRefreshBook46<>> *>(buffer);
 
-        EXPECT_EQ(msg.header().block_length(), MDIncrementalRefreshBook46::block_length());
-        EXPECT_EQ(msg.header().template_id(), MDIncrementalRefreshBook46::template_id());
-        EXPECT_EQ(msg.header().schema_id(), MDIncrementalRefreshBook46::schema());
-        EXPECT_EQ(msg.header().version(), MDIncrementalRefreshBook46::version());
+        EXPECT_EQ(msg.header().block_length(), MDIncrementalRefreshBook46<>::block_length());
+        EXPECT_EQ(msg.header().template_id(), MDIncrementalRefreshBook46<>::template_id());
+        EXPECT_EQ(msg.header().schema_id(), MDIncrementalRefreshBook46<>::schema());
+        EXPECT_EQ(msg.header().version(), MDIncrementalRefreshBook46<>::version());
 
         decode_body(values, msg.body());
         print_message(msg);
@@ -185,7 +185,7 @@ namespace cme
     // header from the body's compile-time descriptor.
     TEST(SbeMessage, header_initialized_from_descriptor)
     {
-        using Body = MDIncrementalRefreshBook46;
+        using Body = MDIncrementalRefreshBook46<>;
         SbeMessage<Body> msg{};
 
         EXPECT_EQ(msg.header().block_length(), Body::block_length());

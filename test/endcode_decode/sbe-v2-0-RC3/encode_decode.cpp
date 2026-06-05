@@ -70,7 +70,7 @@ namespace sbetool
               TradingSessionsGrps(random_number<std::size_t>(0, 10)) {}
     };
 
-    void encode_body(NewOrderSingleData &values, NewOrderSingle &msg)
+    void encode_body(NewOrderSingleData &values, NewOrderSingle<> &msg)
     {
         msg.set_cl_ord_id(values.ClOrdId)
             .set_account(values.Account)
@@ -115,20 +115,20 @@ namespace sbetool
 
     void encode_message(NewOrderSingleData &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
+        auto &msg = *reinterpret_cast<NewOrderSingle<> *>(buffer);
         encode_body(values, msg);
         print_message(msg);
     }
 
     void encode_message_with_header(NewOrderSingleData &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<SbeMessage<NewOrderSingle> *>(buffer);
+        auto &msg = *reinterpret_cast<SbeMessage<NewOrderSingle<>> *>(buffer);
         msg = {};   // reinterpret_cast runs no ctor; assign a default to stamp the header
         encode_body(values, msg.body());
         print_message(msg);
     }
 
-    void decode_body(NewOrderSingleData &values, NewOrderSingle &msg)
+    void decode_body(NewOrderSingleData &values, NewOrderSingle<> &msg)
     {
         EXPECT_EQ(msg.cl_ord_id(), values.ClOrdId);
         EXPECT_EQ(msg.account(), values.Account);
@@ -192,7 +192,7 @@ namespace sbetool
 
     void decode_message(NewOrderSingleData &values, char *buffer)
     {
-        auto &msg = *reinterpret_cast<NewOrderSingle *>(buffer);
+        auto &msg = *reinterpret_cast<NewOrderSingle<> *>(buffer);
         decode_body(values, msg);
         print_message(msg);
     }
@@ -200,12 +200,12 @@ namespace sbetool
     void decode_message_with_header(NewOrderSingleData &values, char *buffer)
     {
         // a received message is just a view over the wire bytes - construct nothing
-        auto &msg = *reinterpret_cast<SbeMessage<NewOrderSingle> *>(buffer);
+        auto &msg = *reinterpret_cast<SbeMessage<NewOrderSingle<>> *>(buffer);
 
-        EXPECT_EQ(msg.header().block_length(), NewOrderSingle::block_length());
-        EXPECT_EQ(msg.header().template_id(), NewOrderSingle::template_id());
-        EXPECT_EQ(msg.header().schema_id(), NewOrderSingle::schema());
-        EXPECT_EQ(msg.header().version(), NewOrderSingle::version());
+        EXPECT_EQ(msg.header().block_length(), NewOrderSingle<>::block_length());
+        EXPECT_EQ(msg.header().template_id(), NewOrderSingle<>::template_id());
+        EXPECT_EQ(msg.header().schema_id(), NewOrderSingle<>::schema());
+        EXPECT_EQ(msg.header().version(), NewOrderSingle<>::version());
 
         decode_body(values, msg.body());
         print_message(msg);

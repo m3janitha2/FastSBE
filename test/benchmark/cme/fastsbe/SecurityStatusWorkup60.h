@@ -19,6 +19,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class SecurityStatusWorkup60
 {
     
@@ -479,7 +480,7 @@ class SecurityStatusWorkup60
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -496,7 +497,7 @@ class SecurityStatusWorkup60
     #pragma pack(push, 1)
     class NoOrderIDEntries
     {
-    	friend SecurityStatusWorkup60;
+    	template <std::size_t> friend class SecurityStatusWorkup60;
         
         #pragma pack(push, 1)
         class Entry
@@ -669,6 +670,25 @@ class SecurityStatusWorkup60
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoOrderIDEntries &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
+    		if(comma) { os << ", "; } os << "\"Side\": " << "\"" << g.side() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"AggressorIndicator\": " << "\"" << g.aggressor_indicator() << "\""; comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -678,7 +698,7 @@ class SecurityStatusWorkup60
     public:
     	static constexpr std::size_t no_order_id_entries_size() noexcept
     	{
-    		return sizeof(NoOrderIDEntries::Entry);
+    		return sizeof(typename NoOrderIDEntries::Entry);
     	}
     
     	static constexpr std::size_t no_order_id_entries_id() noexcept
@@ -718,7 +738,7 @@ class SecurityStatusWorkup60
     	{
     		auto* buf = buffer() + no_order_id_entries_offset();
     		auto& group = *reinterpret_cast<NoOrderIDEntries*>(buf);
-    		group.header_.set_block_length(sizeof(NoOrderIDEntries::Entry));
+    		group.header_.set_block_length(sizeof(typename NoOrderIDEntries::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -726,27 +746,8 @@ class SecurityStatusWorkup60
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SecurityStatusWorkup60::NoOrderIDEntries &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"OrderID\": " << g.order_id(); comma = true;
-		if(comma) { os << ", "; } os << "\"Side\": " << "\"" << g.side() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"AggressorIndicator\": " << "\"" << g.aggressor_indicator() << "\""; comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SecurityStatusWorkup60 &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::SecurityStatusWorkup60<N> &msg)
 {
 	os << "{";
 	bool comma = false;

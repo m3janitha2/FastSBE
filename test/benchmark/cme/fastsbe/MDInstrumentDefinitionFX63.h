@@ -32,6 +32,7 @@ namespace fastsbe
 {
 
 #pragma pack(push, 1)
+template <std::size_t N = 1>
 class MDInstrumentDefinitionFX63
 {
     
@@ -2843,7 +2844,7 @@ class MDInstrumentDefinitionFX63
     
     
     private:
-    	char buffer_[1024]{};
+    	char buffer_[N]{};
     
     	const char *buffer() const
     	{
@@ -2860,7 +2861,7 @@ class MDInstrumentDefinitionFX63
     #pragma pack(push, 1)
     class NoEvents
     {
-    	friend MDInstrumentDefinitionFX63;
+    	template <std::size_t> friend class MDInstrumentDefinitionFX63;
         
         #pragma pack(push, 1)
         class Entry
@@ -2992,6 +2993,24 @@ class MDInstrumentDefinitionFX63
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoEvents &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"EventType\": " << "\"" << g.event_type() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"EventTime\": " << g.event_time(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -3001,7 +3020,7 @@ class MDInstrumentDefinitionFX63
     public:
     	static constexpr std::size_t no_events_size() noexcept
     	{
-    		return sizeof(NoEvents::Entry);
+    		return sizeof(typename NoEvents::Entry);
     	}
     
     	static constexpr std::size_t no_events_id() noexcept
@@ -3041,7 +3060,7 @@ class MDInstrumentDefinitionFX63
     	{
     		auto* buf = buffer() + no_events_offset();
     		auto& group = *reinterpret_cast<NoEvents*>(buf);
-    		group.header_.set_block_length(sizeof(NoEvents::Entry));
+    		group.header_.set_block_length(sizeof(typename NoEvents::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -3051,7 +3070,7 @@ class MDInstrumentDefinitionFX63
     #pragma pack(push, 1)
     class NoMDFeedTypes
     {
-    	friend MDInstrumentDefinitionFX63;
+    	template <std::size_t> friend class MDInstrumentDefinitionFX63;
         
         #pragma pack(push, 1)
         class Entry
@@ -3220,6 +3239,24 @@ class MDInstrumentDefinitionFX63
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoMDFeedTypes &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"MDFeedType\": " << "\"" << g.md_feed_type() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"MarketDepth\": " << +g.market_depth(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -3229,7 +3266,7 @@ class MDInstrumentDefinitionFX63
     public:
     	static constexpr std::size_t no_md_feed_types_size() noexcept
     	{
-    		return sizeof(NoMDFeedTypes::Entry);
+    		return sizeof(typename NoMDFeedTypes::Entry);
     	}
     
     	static constexpr std::size_t no_md_feed_types_id() noexcept
@@ -3269,7 +3306,7 @@ class MDInstrumentDefinitionFX63
     	{
     		auto* buf = buffer() + no_md_feed_types_offset();
     		auto& group = *reinterpret_cast<NoMDFeedTypes*>(buf);
-    		group.header_.set_block_length(sizeof(NoMDFeedTypes::Entry));
+    		group.header_.set_block_length(sizeof(typename NoMDFeedTypes::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -3279,7 +3316,7 @@ class MDInstrumentDefinitionFX63
     #pragma pack(push, 1)
     class NoInstAttrib
     {
-    	friend MDInstrumentDefinitionFX63;
+    	template <std::size_t> friend class MDInstrumentDefinitionFX63;
         
         #pragma pack(push, 1)
         class Entry
@@ -3403,6 +3440,24 @@ class MDInstrumentDefinitionFX63
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoInstAttrib &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"InstAttribType\": " << +g.inst_attrib_type(); comma = true;
+    		if(comma) { os << ", "; } os << "\"InstAttribValue\": " << InstAttribValue::to_string(g.inst_attrib_value()); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -3412,7 +3467,7 @@ class MDInstrumentDefinitionFX63
     public:
     	static constexpr std::size_t no_inst_attrib_size() noexcept
     	{
-    		return sizeof(NoInstAttrib::Entry);
+    		return sizeof(typename NoInstAttrib::Entry);
     	}
     
     	static constexpr std::size_t no_inst_attrib_id() noexcept
@@ -3452,7 +3507,7 @@ class MDInstrumentDefinitionFX63
     	{
     		auto* buf = buffer() + no_inst_attrib_offset();
     		auto& group = *reinterpret_cast<NoInstAttrib*>(buf);
-    		group.header_.set_block_length(sizeof(NoInstAttrib::Entry));
+    		group.header_.set_block_length(sizeof(typename NoInstAttrib::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -3462,7 +3517,7 @@ class MDInstrumentDefinitionFX63
     #pragma pack(push, 1)
     class NoLotTypeRules
     {
-    	friend MDInstrumentDefinitionFX63;
+    	template <std::size_t> friend class MDInstrumentDefinitionFX63;
         
         #pragma pack(push, 1)
         class Entry
@@ -3604,6 +3659,24 @@ class MDInstrumentDefinitionFX63
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoLotTypeRules &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"LotType\": " << +g.lot_type(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MinLotSize\": " << g.min_lot_size(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -3613,7 +3686,7 @@ class MDInstrumentDefinitionFX63
     public:
     	static constexpr std::size_t no_lot_type_rules_size() noexcept
     	{
-    		return sizeof(NoLotTypeRules::Entry);
+    		return sizeof(typename NoLotTypeRules::Entry);
     	}
     
     	static constexpr std::size_t no_lot_type_rules_id() noexcept
@@ -3653,7 +3726,7 @@ class MDInstrumentDefinitionFX63
     	{
     		auto* buf = buffer() + no_lot_type_rules_offset();
     		auto& group = *reinterpret_cast<NoLotTypeRules*>(buf);
-    		group.header_.set_block_length(sizeof(NoLotTypeRules::Entry));
+    		group.header_.set_block_length(sizeof(typename NoLotTypeRules::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -3663,7 +3736,7 @@ class MDInstrumentDefinitionFX63
     #pragma pack(push, 1)
     class NoTradingSessions
     {
-    	friend MDInstrumentDefinitionFX63;
+    	template <std::size_t> friend class MDInstrumentDefinitionFX63;
         
         #pragma pack(push, 1)
         class Entry
@@ -3961,6 +4034,27 @@ class MDInstrumentDefinitionFX63
     		return header_.num_in_group();
     	}
     
+    
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    friend std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const NoTradingSessions &group)
+    {
+    	os << "[";
+    	for (auto i = 0; i < group.num_in_group(); i++)
+    	{
+    		if (i) { os << ", "; }
+    		auto &g = group.get(i);
+    		os << "{";
+    		bool comma = false;
+    		if(comma) { os << ", "; } os << "\"TradeDate\": " << g.trade_date(); comma = true;
+    		if(comma) { os << ", "; } os << "\"SettlDate\": " << g.settl_date(); comma = true;
+    		if(comma) { os << ", "; } os << "\"MaturityDate\": " << g.maturity_date(); comma = true;
+    		if(comma) { os << ", "; } os << "\"SecurityAltID\": " << "\"" << g.security_alt_id() << "\""; comma = true;
+    		if(comma) { os << ", "; } os << "\"SecurityAltIDSource\": " << +g.security_alt_id_source(); comma = true;
+    		os << "}";
+    	}
+    	os << "]";
+    	return os;
+    }
     };
     #pragma pack(pop)
     
@@ -3970,7 +4064,7 @@ class MDInstrumentDefinitionFX63
     public:
     	static constexpr std::size_t no_trading_sessions_size() noexcept
     	{
-    		return sizeof(NoTradingSessions::Entry);
+    		return sizeof(typename NoTradingSessions::Entry);
     	}
     
     	static constexpr std::size_t no_trading_sessions_id() noexcept
@@ -4010,7 +4104,7 @@ class MDInstrumentDefinitionFX63
     	{
     		auto* buf = buffer() + no_trading_sessions_offset();
     		auto& group = *reinterpret_cast<NoTradingSessions*>(buf);
-    		group.header_.set_block_length(sizeof(NoTradingSessions::Entry));
+    		group.header_.set_block_length(sizeof(typename NoTradingSessions::Entry));
     		group.header_.set_num_in_group(count);
     		return group;	
     	}
@@ -4018,101 +4112,8 @@ class MDInstrumentDefinitionFX63
 };
 #pragma pack(pop)
 
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63::NoEvents &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"EventType\": " << "\"" << g.event_type() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"EventTime\": " << g.event_time(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63::NoMDFeedTypes &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"MDFeedType\": " << "\"" << g.md_feed_type() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"MarketDepth\": " << +g.market_depth(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63::NoInstAttrib &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"InstAttribType\": " << +g.inst_attrib_type(); comma = true;
-		if(comma) { os << ", "; } os << "\"InstAttribValue\": " << InstAttribValue::to_string(g.inst_attrib_value()); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63::NoLotTypeRules &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"LotType\": " << +g.lot_type(); comma = true;
-		if(comma) { os << ", "; } os << "\"MinLotSize\": " << g.min_lot_size(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63::NoTradingSessions &group)
-{
-	os << "[";
-	for (auto i = 0; i < group.num_in_group(); i++)
-	{
-		if (i) { os << ", "; }
-		auto &g = group.get(i);
-		os << "{";
-		bool comma = false;
-		if(comma) { os << ", "; } os << "\"TradeDate\": " << g.trade_date(); comma = true;
-		if(comma) { os << ", "; } os << "\"SettlDate\": " << g.settl_date(); comma = true;
-		if(comma) { os << ", "; } os << "\"MaturityDate\": " << g.maturity_date(); comma = true;
-		if(comma) { os << ", "; } os << "\"SecurityAltID\": " << "\"" << g.security_alt_id() << "\""; comma = true;
-		if(comma) { os << ", "; } os << "\"SecurityAltIDSource\": " << +g.security_alt_id_source(); comma = true;
-		os << "}";
-	}
-	os << "]";
-	return os;
-}
-
-template <class CharT, class Traits = std::char_traits<CharT>>
-inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63 &msg)
+template <std::size_t N, class CharT, class Traits = std::char_traits<CharT>>
+inline std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, const fastsbe::MDInstrumentDefinitionFX63<N> &msg)
 {
 	os << "{";
 	bool comma = false;

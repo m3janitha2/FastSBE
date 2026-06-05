@@ -18,7 +18,7 @@ namespace fastsbe
 {
     void encode_NewOrderSingle_from_struct(char *buffer, NewOrderSingleData &values, bool display)
     {
-        auto &msg = *reinterpret_cast<fastsbe::NewOrderSingle *>(buffer);
+        auto &msg = *reinterpret_cast<fastsbe::NewOrderSingle<> *>(buffer);
 
         msg.set_cl_ord_id(values.ClOrdId.c_str())
             .set_account(values.Account.c_str())
@@ -67,7 +67,7 @@ namespace fastsbe
 
     void decode_NewOrderSingle(char *buffer, bool display)
     {
-        auto &msg = *reinterpret_cast<fastsbe::NewOrderSingle *>(buffer);
+        auto &msg = *reinterpret_cast<fastsbe::NewOrderSingle<> *>(buffer);
 
         auto clodr_id = msg.cl_ord_id();
         benchmark::DoNotOptimize(clodr_id);
