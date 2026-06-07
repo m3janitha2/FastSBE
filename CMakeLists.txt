@@ -44,6 +44,40 @@ include(FindPythonInterp)
 
 enable_testing()
 
+# ---------------------------------------------------------------------------
+# CME SBE templates are CME's third-party IP and are not vendored in this repo;
+# they are fetched on demand at configure time. FTP is the default source
+# because CME's HTTPS host (www.cmegroup.com) sits behind a CDN that returns
+# 403 to non-browser clients, whereas ftp.cmegroup.com serves the same file
+# unprotected.
+#
+#   change the source:    -DCME_TEMPLATE_URL=<url>
+#   use a local copy      (skips the download; e.g. pinned / air-gapped CI):
+#                         -DCME_TEMPLATE_FILE=/path/to/templates_FixBinary.xml
+# ---------------------------------------------------------------------------
+set(CME_TEMPLATE_URL
+    "ftp://ftp.cmegroup.com/SBEFix/Production/Templates/templates_FixBinary.xml"
+    CACHE STRING "Source URL for the CME MDP 3.0 SBE template schema")
+set(CME_TEMPLATE_FILE
+    "${CMAKE_BINARY_DIR}/cme_templates/templates_FixBinary.xml"
+    CACHE FILEPATH "CME SBE template; downloaded from CME_TEMPLATE_URL if absent")
+
+if(NOT EXISTS "${CME_TEMPLATE_FILE}")
+    message(STATUS "Fetching CME SBE template: ${CME_TEMPLATE_URL}")
+    file(DOWNLOAD "${CME_TEMPLATE_URL}" "${CME_TEMPLATE_FILE}"
+         STATUS _cme_dl TLS_VERIFY ON SHOW_PROGRESS)
+    list(GET _cme_dl 0 _cme_dl_code)
+    if(NOT _cme_dl_code EQUAL 0)
+        list(GET _cme_dl 1 _cme_dl_msg)
+        file(REMOVE "${CME_TEMPLATE_FILE}")  # never leave a partial file behind
+        message(FATAL_ERROR
+            "Could not download the CME SBE template (${_cme_dl_code}: ${_cme_dl_msg}).\n"
+            "  URL: ${CME_TEMPLATE_URL}\n"
+            "If your network blocks FTP, download it manually and re-configure with\n"
+            "  -DCME_TEMPLATE_FILE=/path/to/templates_FixBinary.xml")
+    endif()
+endif()
+
 add_subdirectory(test)
 #add_subdirectory(example)
 

@@ -1,6 +1,6 @@
 message("CMAKE_CURRENT_LIST_DIR is ${CMAKE_CURRENT_LIST_DIR}")
 
-# CME MDP 3.0 v13: regenerate the codec from cme-mdp3-v13.xml on every build
+# CME MDP 3.0: regenerate the codec from the fetched CME template on every build
 # (generated/ is not committed) and round-trip MDIncrementalRefreshBook46 in
 # encode_decode.cpp.
 
@@ -9,7 +9,7 @@ include(FindPythonInterp)
 set(fast_sbe_dir "${PROJECT_SOURCE_DIR}/FastSBE")
 set(py_cmd "${fast_sbe_dir}/FastSBE.py")
 set(log_file "${CMAKE_CURRENT_LIST_DIR}/log.txt")
-set(schema_file "${CMAKE_CURRENT_LIST_DIR}/cme-mdp3-v13.xml")
+set(schema_file "${CME_TEMPLATE_FILE}")  # fetched on demand (see top-level CMakeLists)
 set(out_folder "${CMAKE_CURRENT_LIST_DIR}/generated")
 set(override_namespace "cme")
 

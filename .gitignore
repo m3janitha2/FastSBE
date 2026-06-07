@@ -1,4 +1,18 @@
+# Editors / IDE
 .vs/
 .vscode/
-out/
+
+# Build output
 build/
+out/
+
+# Python generator bytecode cache
+__pycache__/
+
+# Generated SBE codecs and generator logs: produced at build time, not committed.
+generated/
+test/benchmark/*/fastsbe/
+log.txt
+
+# CME SBE templates are third-party IP: fetched on demand.
+templates_FixBinary.xml

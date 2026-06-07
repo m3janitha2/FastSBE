@@ -6,7 +6,7 @@ include_directories(${PROJECT_SOURCE_DIR}/test/utility)
 set (fast_sbe_dir "${PROJECT_SOURCE_DIR}/FastSBE")
 set (py_cmd "${fast_sbe_dir}/FastSBE.py")
 set (log_file "${CMAKE_CURRENT_LIST_DIR}/log.txt")
-set (schema_file "${CMAKE_CURRENT_LIST_DIR}/cme-mdp3-v13.xml")
+set (schema_file "${CME_TEMPLATE_FILE}")  # fetched on demand (see top-level CMakeLists)
 set (out_folder "${CMAKE_CURRENT_LIST_DIR}/fastsbe")
 set (override_namespace "fastsbe")
 
