@@ -21,12 +21,12 @@ public:
 		return *reinterpret_cast<const Entry*>(buffer);
 	}
 
-	constexpr const auto S_BLOCK_LENGTH_NAME() const noexcept
+	constexpr auto S_BLOCK_LENGTH_NAME() const noexcept
 	{
 		return header_.S_BLOCK_LENGTH_NAME();
 	}
 
-	constexpr const auto S_NUM_IN_GROUP_NAME() const noexcept
+	constexpr auto S_NUM_IN_GROUP_NAME() const noexcept
 	{
 		return header_.S_NUM_IN_GROUP_NAME();
 	}

@@ -29,7 +29,7 @@ public:
 		return reinterpret_cast<const S_VAR_LEN_DATA_VAR_DATA_TYPE*>(buffer);
 	}
 
-	constexpr const auto S_VAR_LEN_DATA_LENGTH_NAME() const noexcept
+	constexpr auto S_VAR_LEN_DATA_LENGTH_NAME() const noexcept
 	{
 		return header_.S_VAR_LEN_DATA_LENGTH_NAME();
 	}
