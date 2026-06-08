@@ -34,7 +34,6 @@ add_custom_command(
 add_executable(fixp_benchmark_test benchmark_test.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fastsbe/__header.h
 )
-target_link_libraries(fixp_benchmark_test GTest::gtest GTest::gtest_main)
 target_link_libraries(fixp_benchmark_test benchmark::benchmark)
 
 add_executable(fixp_validation_test validation_test.cpp)
