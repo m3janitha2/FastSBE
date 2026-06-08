@@ -21,7 +21,7 @@ struct MDIncrementalRefreshBook46Data
         std::uint32_t RptSeq{random_number<std::uint32_t>()};
         std::int32_t NumberOfOrders{random_number<std::int32_t>()};
         std::uint8_t MDPriceLevel{random_number<std::uint8_t>()};
-        std::uint8_t MDUpdateAction{random_enum_underlying_type<std::uint8_t>(0, 5)};  // MDUpdateAction
+        std::uint8_t MDUpdateAction{random_enum_underlying_type<std::uint8_t>(0, 5)};
         char MDEntryType{random_enum_underlying_type<char>('0', '1')};                 // MDEntryTypeBook
         std::int32_t TradeableSize{random_number<std::int32_t>()};
     };
@@ -33,7 +33,7 @@ struct MDIncrementalRefreshBook46Data
         std::uint64_t MDOrderPriority{random_number<std::uint64_t>()};
         std::int32_t MDDisplayQty{random_number<std::int32_t>()};
         std::uint8_t ReferenceID{random_number<std::uint8_t>()};
-        std::uint8_t OrderUpdateAction{random_enum_underlying_type<std::uint8_t>(0, 2)};  // OrderUpdateAction
+        std::uint8_t OrderUpdateAction{random_enum_underlying_type<std::uint8_t>(0, 2)};
     };
     std::vector<OrderIDEntry> OrderIDEntries{};
 

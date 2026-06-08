@@ -39,7 +39,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty_u64(), std::numeric_limits<std::uint64_t>::min());
         composite.set_order_qty_u64(std::numeric_limits<std::uint64_t>::max() - 1);
         EXPECT_EQ(composite.order_qty_u64(), std::numeric_limits<std::uint64_t>::max() - 1);
-        // null
         composite.set_order_qty_u64(std::numeric_limits<std::uint64_t>::max());
         EXPECT_EQ(composite.order_qty_u64(), std::numeric_limits<std::uint64_t>::max());
     }
@@ -68,7 +67,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty64(), std::numeric_limits<std::int64_t>::min());
         composite.set_order_qty64(std::numeric_limits<std::int64_t>::max());
         EXPECT_EQ(composite.order_qty64(), std::numeric_limits<std::int64_t>::max());
-        // null
         composite.set_order_qty64(std::numeric_limits<std::int64_t>::max());
         EXPECT_EQ(composite.order_qty64(), std::numeric_limits<std::int64_t>::max());
     }
@@ -97,7 +95,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty_u32(), std::numeric_limits<std::uint32_t>::min());
         composite.set_order_qty_u32(std::numeric_limits<std::uint32_t>::max() - 1);
         EXPECT_EQ(composite.order_qty_u32(), std::numeric_limits<std::uint32_t>::max() - 1);
-        // null
         composite.set_order_qty_u32(std::numeric_limits<std::uint32_t>::max());
         EXPECT_EQ(composite.order_qty_u32(), std::numeric_limits<std::uint32_t>::max());
     }
@@ -126,7 +123,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty32(), std::numeric_limits<std::int32_t>::min());
         composite.set_order_qty32(std::numeric_limits<std::int32_t>::max());
         EXPECT_EQ(composite.order_qty32(), std::numeric_limits<std::int32_t>::max());
-        // null
         composite.set_order_qty32(std::numeric_limits<std::int32_t>::max());
         EXPECT_EQ(composite.order_qty32(), std::numeric_limits<std::int32_t>::max());
     }
@@ -155,7 +151,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty_u16(), std::numeric_limits<std::uint16_t>::min());
         composite.set_order_qty_u16(std::numeric_limits<std::uint16_t>::max() - 1);
         EXPECT_EQ(composite.order_qty_u16(), std::numeric_limits<std::uint16_t>::max() - 1);
-        // null
         composite.set_order_qty_u16(std::numeric_limits<std::uint16_t>::max());
         EXPECT_EQ(composite.order_qty_u16(), std::numeric_limits<std::uint16_t>::max());
     }
@@ -184,7 +179,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty16(), std::numeric_limits<std::int16_t>::min());
         composite.set_order_qty16(std::numeric_limits<std::int16_t>::max());
         EXPECT_EQ(composite.order_qty16(), std::numeric_limits<std::int16_t>::max());
-        // null
         composite.set_order_qty16(std::numeric_limits<std::int16_t>::max());
         EXPECT_EQ(composite.order_qty16(), std::numeric_limits<std::int16_t>::max());
     }
@@ -213,7 +207,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty_u8(), std::numeric_limits<std::uint8_t>::min());
         composite.set_order_qty_u8(std::numeric_limits<std::uint8_t>::max() - 1);
         EXPECT_EQ(composite.order_qty_u8(), std::numeric_limits<std::uint8_t>::max() - 1);
-        // null
         composite.set_order_qty_u8(std::numeric_limits<std::uint8_t>::max());
         EXPECT_EQ(composite.order_qty_u8(), std::numeric_limits<std::uint8_t>::max());
     }
@@ -242,7 +235,6 @@ namespace sbetool
         EXPECT_EQ(composite.order_qty8(), std::numeric_limits<std::int8_t>::min());
         composite.set_order_qty8(std::numeric_limits<std::int8_t>::max());
         EXPECT_EQ(composite.order_qty8(), std::numeric_limits<std::int8_t>::max());
-        // null
         composite.set_order_qty8(std::numeric_limits<std::int8_t>::max());
         EXPECT_EQ(composite.order_qty8(), std::numeric_limits<std::int8_t>::max());
     }
@@ -271,7 +263,6 @@ namespace sbetool
         EXPECT_EQ(composite.optional_order_qty_u64(), std::numeric_limits<std::uint64_t>::min());
         composite.set_optional_order_qty_u64(std::numeric_limits<std::uint64_t>::max() - 1);
         EXPECT_EQ(composite.optional_order_qty_u64(), std::numeric_limits<std::uint64_t>::max() - 1);
-        // null
         composite.set_optional_order_qty_u64(std::numeric_limits<std::uint64_t>::max());
         EXPECT_EQ(composite.optional_order_qty_u64(), std::numeric_limits<std::uint64_t>::max());
     }

@@ -59,7 +59,6 @@ namespace fastsbe
         msg.AppendText(values.Text.c_str(), values.Text.length());
         msg.AppendClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
 
-        // benchmark::DoNotOptimize(msg);
 
         if (display)
             print_message(msg);

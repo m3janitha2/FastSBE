@@ -9,7 +9,6 @@ namespace sbetool
 {
     static constexpr const std::size_t field_offset{48};
 
-    // guaranteed to be null terminated
     TEST(string, field_info)
     {
         TestMessage msg{};
@@ -19,15 +18,12 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_name(), "ClOrdId");
     }
 
-    // guaranteed to be null terminated
     TEST(string, empty_string)
     {
         TestMessage msg{};
         msg.set_cl_ord_id("");
         EXPECT_EQ(std::string(msg.cl_ord_id()), std::string(""));
-        // string_view of field length
         EXPECT_EQ(msg.cl_ord_id_view().at(0), '\0');
-        // null terminated string
         EXPECT_EQ(msg.cl_ord_id_string(), std::string(""));
     }
 
@@ -37,14 +33,11 @@ namespace sbetool
         const_cast<TestMessage<>&>(msg).set_cl_ord_id("");
 
         EXPECT_EQ(std::string(msg.cl_ord_id()), std::string(""));
-        // string_view of field length
         EXPECT_EQ(msg.cl_ord_id_view().at(0), '\0');
-        // null terminated string
         EXPECT_EQ(msg.cl_ord_id_string(), std::string(""));
     }
 
     // always set field_length – 1 characters in string fields for efficient decoding.
-    // guaranteed to be null terminated
     TEST(string, max_length_minus_one)
     {
         TestMessage msg{};
@@ -77,8 +70,8 @@ namespace sbetool
         auto ClOrdId = random_string(8);
         msg.set_cl_ord_id(ClOrdId);
 
-        // unsafe. string is not null terminated
-        // EXPECT_EQ(std::string(msg.cl_ord_id()), ClOrdId);
+        // At max length there is no NUL terminator, so cl_ord_id() (a raw
+        // pointer) cannot be wrapped in std::string; use the bounded view.
         EXPECT_EQ(msg.cl_ord_id_view(), std::string_view(ClOrdId));
         EXPECT_EQ(msg.cl_ord_id_string(), ClOrdId);
     }
@@ -101,9 +94,7 @@ namespace sbetool
             msg.set_cl_ord_id(ClOrdId);
 
             EXPECT_EQ(std::string(msg.cl_ord_id()), std::string(""));
-            // string_view of field length
             EXPECT_EQ(msg.cl_ord_id_view().at(0), '\0');
-            // null terminated string
             EXPECT_EQ(msg.cl_ord_id_string(), std::string(""));
         }
         {

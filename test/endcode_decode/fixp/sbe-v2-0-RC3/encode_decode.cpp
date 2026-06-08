@@ -18,8 +18,8 @@ namespace sbetool
         std::cout << "[----------]" << std::endl;
     }
 
-    /* string encoding: Array of char of specified length, delimited by NUL character if a string is shorter than the length specified for a field.*/
-    /* use max length as (length -1) in encoding to make it always null terminated */
+    // String fields are fixed-length and NUL-padded; the test uses length-1
+    // random strings so every value stays NUL-terminated.
     struct NewOrderSingleData
     {
         std::string ClOrdId{random_length_string(7).c_str()};
@@ -133,11 +133,9 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id(), values.ClOrdId);
         EXPECT_EQ(msg.account(), values.Account);
         EXPECT_EQ(msg.symbol(), values.Symbol);
-        /*EXPECT_EQ(msg.side(), values.Side);*/
 
         auto &TransactTime = msg.transact_time();
         EXPECT_EQ(TransactTime.time(), values.TransactTime.time);
-        /*EXPECT_EQ(TransactTime.unit(), TimeUnit::Value::nanosecond);*/
 
         auto &OrderQty = msg.order_qty();
         EXPECT_EQ(OrderQty.mantissa(), values.OrderQty.mantissa);
@@ -157,8 +155,6 @@ namespace sbetool
             auto &party = PartiesGrp.get(i);
             auto &party_t = values.PartiesGrps[i];
             EXPECT_EQ(party.party_id(), party_t.PartyID);
-            /*EXPECT_EQ(party.party_id_source(), party_t.PartyIDSource);*/
-            /*EXPECT_EQ(party.party_role(), party_t.PartyRole);*/
         }
 
         auto &AllocsGrp = msg.allocs_grp();

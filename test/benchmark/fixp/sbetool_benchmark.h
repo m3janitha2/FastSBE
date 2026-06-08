@@ -61,7 +61,6 @@ namespace sbetool
         msg.putText(values.Text.c_str(), values.Text.length());
         msg.putClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
 
-        // benchmark::DoNotOptimize(msg);
 
         if (display)
             print_message2(msg);

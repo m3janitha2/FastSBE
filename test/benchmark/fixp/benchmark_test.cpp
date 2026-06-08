@@ -65,15 +65,5 @@ BENCHMARK_F(SbeToolFixture, BM_Encode_NewOrderSingle_from_struct)(benchmark::Sta
    }
 }
 
-// BENCHMARK_F(SbeToolFixture, BM_encode_get_values_from_NewOrderSinglData)(benchmark::State& st)
-// {
-//    for (auto _ : st) 
-//    {
-//         benchmark_get_from_cancel_replace_data(data);
-//    }
-// }
 
 BENCHMARK_MAIN();
-
-
-

@@ -9,7 +9,6 @@ namespace sbetool
 {
     static constexpr const std::size_t field_offset{0};
 
-    // guaranteed to be null terminated
     TEST(composite_string, field_info)
     {
         TestMessage msg{};
@@ -20,7 +19,6 @@ namespace sbetool
         EXPECT_EQ(composite.cl_ord_id_name(), "ClOrdId");
     }
 
-    // guaranteed to be null terminated
     TEST(composite_string, empty_string)
     {
         TestMessage msg{};
@@ -28,9 +26,7 @@ namespace sbetool
 
         composite.set_cl_ord_id("");
         EXPECT_EQ(std::string(composite.cl_ord_id()), std::string(""));
-        // string_view of field length
         EXPECT_EQ(composite.cl_ord_id_view().at(0), '\0');
-        // null terminated string
         EXPECT_EQ(composite.cl_ord_id_string(), std::string(""));
     }
 
@@ -41,14 +37,11 @@ namespace sbetool
         const_cast<TestComposite &>(composite).set_cl_ord_id("");
 
         EXPECT_EQ(std::string(composite.cl_ord_id()), std::string(""));
-        // string_view of field length
         EXPECT_EQ(composite.cl_ord_id_view().at(0), '\0');
-        // null terminated string
         EXPECT_EQ(composite.cl_ord_id_string(), std::string(""));
     }
 
-    // always set field_length – 1 characters in string fields for efficient decoding.
-    // guaranteed to be null terminated
+    // Use field_length-1 characters so the stored value keeps a NUL terminator.
     TEST(composite_string, max_length_minus_one)
     {
         TestMessage msg{};
@@ -87,8 +80,8 @@ namespace sbetool
         auto ClOrdId = random_string(8);
         composite.set_cl_ord_id(ClOrdId);
 
-        // unsafe. string is not null terminated
-        // EXPECT_EQ(std::string(composite.cl_ord_id()), ClOrdId);
+        // At max length there is no NUL terminator, so cl_ord_id() (a raw
+        // pointer) cannot be wrapped in std::string; use the bounded view.
         EXPECT_EQ(composite.cl_ord_id_view(), std::string_view(ClOrdId));
         EXPECT_EQ(composite.cl_ord_id_string(), ClOrdId);
     }
@@ -115,9 +108,7 @@ namespace sbetool
             composite.set_cl_ord_id(ClOrdId);
 
             EXPECT_EQ(std::string(composite.cl_ord_id()), std::string(""));
-            // string_view of field length
             EXPECT_EQ(composite.cl_ord_id_view().at(0), '\0');
-            // null terminated string
             EXPECT_EQ(composite.cl_ord_id_string(), std::string(""));
         }
         {
