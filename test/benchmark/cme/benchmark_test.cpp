@@ -5,8 +5,8 @@
 #include <benchmark/benchmark.h>
 
 #include <MDIncrementalRefreshBook46Data.h>
-#include <fastsbe_benchmark.h>
-#include <sbetool_benchmark.h>
+#include <benchmark_fastsbe.h>
+#include <benchmark_sbetool.h>
 
 // Data is built once per fixture; SetUp() encodes a buffer so the decode
 // benchmark has something to read. Each benchmark loop body contains only the

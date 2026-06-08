@@ -4,8 +4,8 @@
 #include <gtest/gtest.h>
 
 #include <MDIncrementalRefreshBook46Data.h>
-#include <fastsbe_benchmark.h> // fastsbe encode + fastsbe::MDIncrementalRefreshBook46
-#include <sbetool_benchmark.h> // sbetool encode + mktdata::MDIncrementalRefreshBook46
+#include <benchmark_fastsbe.h> // fastsbe encode + fastsbe::MDIncrementalRefreshBook46
+#include <benchmark_sbetool.h> // sbetool encode + mktdata::MDIncrementalRefreshBook46
 
 // Cross-codec interop: a buffer produced by one codec must decode, field for
 // field, with the other. This is what proves fastsbe stays wire-compatible with

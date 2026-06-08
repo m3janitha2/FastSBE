@@ -5,8 +5,8 @@
 #include <gtest/gtest.h>
 
 #include <NewOrderSingleData.h>
-#include <fastsbe_benchmark.h> // fastsbe encode + fastsbe::NewOrderSingle
-#include <sbetool_benchmark.h> // sbetool encode + sbetool::NewOrderSingle
+#include <benchmark_fastsbe.h> // fastsbe encode + fastsbe::NewOrderSingle
+#include <benchmark_sbetool.h> // sbetool encode + sbetool::NewOrderSingle
 
 // Cross-codec interop: a buffer produced by one codec must decode, field for
 // field, with the other. This is what proves fastsbe stays wire-compatible with

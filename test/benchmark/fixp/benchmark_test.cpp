@@ -5,8 +5,8 @@
 #include <benchmark/benchmark.h>
 
 #include <NewOrderSingleData.h>
-#include <fastsbe_benchmark.h>
-#include <sbetool_benchmark.h>
+#include <benchmark_fastsbe.h>
+#include <benchmark_sbetool.h>
 
 
 class FastSBEFixture : public benchmark::Fixture 
