@@ -202,6 +202,22 @@ namespace cme
 
         print_message(msg);
     }
+
+    // encoded_size() is the message's on-wire body length: the root block plus
+    // each group's dimension header and entries. Cross-check it against an
+    // independent computation from the encoded group counts.
+    TEST_F(EncodeDecodeFixture, encoded_size_matches_body)
+    {
+        auto &msg = *reinterpret_cast<MDIncrementalRefreshBook46<> *>(buffer_);
+        encode_body(values_, msg);
+
+        using Book = MDIncrementalRefreshBook46<>;
+        const std::size_t expected =
+            Book::block_length()
+            + sizeof(GroupSize) + values_.MDEntries.size() * Book::no_md_entries_size()
+            + sizeof(GroupSize8Byte) + values_.OrderIDEntries.size() * Book::no_order_id_entries_size();
+        EXPECT_EQ(msg.encoded_size(), expected);
+    }
 }
 
 int main(int argc, char **argv)

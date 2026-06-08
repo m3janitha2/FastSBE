@@ -229,6 +229,27 @@ namespace sbetool
         encode_message_with_header(values_, buffer_);
         decode_message_with_header(values_, buffer_);
     }
+
+    // encoded_size() must be the exact distance to the next message: a second
+    // message encoded at buffer + encoded_size() must round-trip without
+    // disturbing the first (groups and variable-length data included).
+    TEST_F(EncodeDecodeFixture, encoded_size_is_distance_to_next_message)
+    {
+        char buffer[8192]{};
+        NewOrderSingleData first_values{};
+        NewOrderSingleData second_values{};
+
+        auto &first = *reinterpret_cast<NewOrderSingle<> *>(buffer);
+        encode_body(first_values, first);
+        const std::size_t size = first.encoded_size();
+
+        auto &second = *reinterpret_cast<NewOrderSingle<> *>(buffer + size);
+        encode_body(second_values, second);
+
+        decode_body(first_values, *reinterpret_cast<NewOrderSingle<> *>(buffer));
+        decode_body(second_values,
+                    *reinterpret_cast<NewOrderSingle<> *>(buffer + size));
+    }
 }
 
 int main(int argc, char **argv)
