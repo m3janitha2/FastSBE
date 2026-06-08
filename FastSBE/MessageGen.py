@@ -40,9 +40,9 @@ class FieldGen:
 
 
 	nested_group_def_ct             = read_template('metadata/c++/message/nested_group_def.h')
-	nested_group_def_ct_4           = read_template('metadata/c++/message/nested_group_def_4.h')
+	nested_group_def_ct_extended           = read_template('metadata/c++/message/nested_group_def_extended.h')
 	group_def_ct                    = read_template('metadata/c++/message/group_def.h')
-	group_def_ct_4                  = read_template('metadata/c++/message/group_def_4.h')
+	group_def_ct_extended                  = read_template('metadata/c++/message/group_def_extended.h')
 
 	nested_variable_length_data_def_ct      = read_template('metadata/c++/message/nested_variable_length_data_def.h')
 	variable_length_data_def_ct             = read_template('metadata/c++/message/variable_length_data_def.h')
@@ -492,10 +492,10 @@ class FieldGen:
 		self.handler.user_includes.append(dimension_type)
 		logging.debug('gen_nested_group_def: %s', group_name)
 
-	def gen_nested_group_def_4(self, group_name\
+	def gen_nested_group_def_extended(self, group_name\
 		, dimension_type, block_length_name, num_in_group_name\
 		, num_in_group_type, num_groups_type, num_var_data_field_type):
-		field_def = self.nested_group_def_ct_4\
+		field_def = self.nested_group_def_ct_extended\
 			.replace('S_GROUP_NAME', group_name).replace('S_GROUP_SNAKE', to_snake_case(group_name))\
 			.replace('S_DIAMENTION_TYPE', dimension_type)\
 			.replace('S_BLOCK_LENGTH_NAME', to_snake_case(block_length_name))\
@@ -505,7 +505,7 @@ class FieldGen:
 			.replace('S_NUM_VAR_DATA_FIELDS_TYPE', num_var_data_field_type)             
 		self.handler.content += self.indentation.indent(field_def)
 		self.handler.user_includes.append(dimension_type)
-		logging.debug('gen_nested_group_def_4: %s', group_name)        
+		logging.debug('gen_nested_group_def_extended: %s', group_name)        
 
 
 	def gen_group_def(self, group_name, previous_group_name, group_id\
@@ -523,12 +523,12 @@ class FieldGen:
 		self.gen_ostream_field_def(group_name)
 		logging.debug('gen_group_def: %s', group_name)
 
-	def gen_group_def_4(self, group_name, previous_group_name, group_id\
+	def gen_group_def_extended(self, group_name, previous_group_name, group_id\
 		, dimension_type, block_length_name
 		, num_in_group_name, num_in_group_type\
 		, num_groups_name, num_groups_type\
 		, num_var_data_fields_name, num_var_data_fields_type):
-		field_def = self.group_def_ct_4\
+		field_def = self.group_def_ct_extended\
 			.replace('S_GROUP_NAME', group_name).replace('S_GROUP_SNAKE', to_snake_case(group_name))\
 			.replace('S_GROUP_ID', group_id)\
 			.replace('S_GROUP_OFFSET', self.get_group_offset(str(previous_group_name)))\
@@ -542,7 +542,7 @@ class FieldGen:
 			.replace('S_NUM_VAR_DATA_FIELDS_TYPE', num_var_data_fields_type)                            
 		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(group_name)
-		logging.debug('gen_group_def_4: %s', group_name)
+		logging.debug('gen_group_def_extended: %s', group_name)
 
 
 	def gen_nested_variable_length_data_def(self, variable_length_data_name\

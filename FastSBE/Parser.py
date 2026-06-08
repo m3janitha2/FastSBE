@@ -683,7 +683,7 @@ class Parser:
 				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type'])
 
 		elif(dimension_type_count == 4):
-			msg_gen.field_gen.gen_nested_group_def_4(group_name = group_name, dimension_type = to_pascal_case(dimension_type)\
+			msg_gen.field_gen.gen_nested_group_def_extended(group_name = group_name, dimension_type = to_pascal_case(dimension_type)\
 				, block_length_name = dimension[0]['name']\
 				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type']\
 				, num_groups_type = dimension[2]['type']\
@@ -712,7 +712,7 @@ class Parser:
 				, dimension_type = to_pascal_case(dimension_type), block_length_name = 'blockLength'\
 				, num_in_group_name = 'numInGroup', num_in_group_type = 'std::uint16_t')
 		elif(dimension_type_count == 4):
-			msg_gen.field_gen.gen_group_def_4(group_name = group_name
+			msg_gen.field_gen.gen_group_def_extended(group_name = group_name
 				, previous_group_name = previous_field_name, group_id = group_id\
 				, dimension_type = to_pascal_case(dimension_type), block_length_name = dimension[0]['name']\
 				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type']\
