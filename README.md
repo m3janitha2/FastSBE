@@ -11,7 +11,7 @@ Built for low-latency systems:
 - **O(1) random access to repeating-group entries.** Entry `i` is reached as `base + i * block_length` — one multiply, no iteration over predecessors.
 - **No runtime machinery.** Header-only, no virtual calls, `constexpr`/`noexcept` throughout. A whole message — header, fixed block, and groups — is one contiguous, heap-free object you can stack-allocate.
 - **Encode mirrors decode.** Setters write straight into the buffer and groups are sized in place; there is no separate serialization pass.
-- **Faster than the reference `sbe-tool`** on both encode and decode — see [Performance](#performance).
+- **Faster than the reference `sbe-tool`** — up to ~9× on decode and ~1.3-2.6× on encode (see [Performance](#performance)).
 
 ## Limitations
 
@@ -20,23 +20,13 @@ Built for low-latency systems:
 
 ## Performance
 
-Figures below come from the GitHub Actions CMake workflow.
+Measured by the benchmark suite (`build_and_test.sh -b`) against the reference `sbe-tool`, same machine and message (lower is better):
 
-```console
-2022-11-03T00:51:53+00:00
-Running ./benchmark_test
-Run on (2 X 2394.45 MHz CPU s)
-CPU Caches:
-  L1 Data 32 KiB (x2)
-  L1 Instruction 32 KiB (x2)
-  L2 Unified 256 KiB (x2)
-  L3 Unified 30720 KiB (x1)
-Load Average: 1.22, 0.76, 0.31
-----------------------------------------------------------------------------------------------
-Benchmark                                                    Time             CPU   Iterations
-----------------------------------------------------------------------------------------------
-FastSBEFixture/BM_Decode_NewOrderSingle                   23.4 ns         23.4 ns     30990496
-SbeToolFixture/BM_Decode_NewOrderSingle                   85.3 ns         85.3 ns      8025875
-FastSBEFixture/BM_Encode_NewOrderSingle_from_struct       43.9 ns         43.9 ns     15479654
-SbeToolFixture/BM_Encode_NewOrderSingle_from_struct        122 ns          121 ns      5462472
-```
+| Message | Operation | FastSBE | sbe-tool | Speedup |
+| --- | --- | ---: | ---: | ---: |
+| `NewOrderSingle` (flat) | decode | 14.2 ns | 44.4 ns | ~3.1× |
+| `NewOrderSingle` (flat) | encode | 31.8 ns | 40.8 ns | ~1.3× |
+| `MDIncrementalRefreshBook46` (repeating groups) | decode | 14.4 ns | 131 ns | ~9.1× |
+| `MDIncrementalRefreshBook46` (repeating groups) | encode | 60.7 ns | 158 ns | ~2.6× |
+
+Decoding gains most from the zero-copy view, and the gap widens with message complexity: a book message with repeating groups decodes ~9× faster than `sbe-tool`.
