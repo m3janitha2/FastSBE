@@ -7,7 +7,7 @@ include_directories(${PROJECT_SOURCE_DIR}/test/utility)
 set (fast_sbe_dir "${PROJECT_SOURCE_DIR}/FastSBE")
 set (py_cmd "${fast_sbe_dir}/FastSBE.py")
 set (log_file "${CMAKE_CURRENT_LIST_DIR}/log.txt")
-set (schema_file "${CMAKE_CURRENT_LIST_DIR}/example-schema-sbe-v1.xml")
+set (schema_file "${CMAKE_CURRENT_LIST_DIR}/example-schema.xml")
 set (out_folder "${CMAKE_CURRENT_LIST_DIR}/fastsbe")
 set (override_namespace "fastsbe")
 
