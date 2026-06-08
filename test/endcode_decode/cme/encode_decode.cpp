@@ -5,19 +5,13 @@
 
 #include <gtest/gtest.h>
 #include <random_gen.h>
+#include <print_message.h>
 
 #include <MDIncrementalRefreshBook46.h>
 #include <SbeMessage.h>
 
 namespace cme
 {
-    template <typename Msg>
-    inline void print_message(Msg &msg)
-    {
-        std::cout << "[ MESSEGE  ]" << std::endl;
-        std::cout << msg << std::endl;
-        std::cout << "[----------]" << std::endl;
-    }
 
     // Enum / set fields are held as their underlying type so the member names
     // can match the schema without colliding with the generated type names.

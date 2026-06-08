@@ -3,16 +3,9 @@
 #include <benchmark/benchmark.h>
 
 #include <random_gen.h>
+#include <print_message.h>
 #include <fastsbe/NewOrderSingle.h>
 #include <NewOrderSingleData.h>
-
-template <typename Msg>
-inline void print_message(Msg &msg)
-{
-    std::cout << "[ MESSEGE  ]" << std::endl;
-    std::cout << msg << std::endl;
-    std::cout << "[----------]" << std::endl;
-}
 
 namespace fastsbe
 {
@@ -59,7 +52,6 @@ namespace fastsbe
         msg.AppendText(values.Text.c_str(), values.Text.length());
         msg.AppendClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
 
-
         if (display)
             print_message(msg);
     }
@@ -71,11 +63,11 @@ namespace fastsbe
         auto clodr_id = msg.cl_ord_id();
         benchmark::DoNotOptimize(clodr_id);
         auto Account = msg.account();
-        benchmark::DoNotOptimize(clodr_id);
+        benchmark::DoNotOptimize(Account);
         auto Symbol = msg.symbol();
         benchmark::DoNotOptimize(Symbol);
         auto Side = msg.side();
-        benchmark::DoNotOptimize(Symbol);
+        benchmark::DoNotOptimize(Side);
         auto TransactTime = msg.transact_time();
         benchmark::DoNotOptimize(TransactTime);
 

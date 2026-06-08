@@ -5,16 +5,9 @@
 #include <benchmark/benchmark.h>
 
 #include <random_gen.h>
+#include <print_message.h>
 #include <fastsbe/MDIncrementalRefreshBook46.h>
 #include <MDIncrementalRefreshBook46Data.h>
-
-template <typename Msg>
-inline void print_message(Msg &msg)
-{
-    std::cout << "[ MESSEGE  ]" << std::endl;
-    std::cout << msg << std::endl;
-    std::cout << "[----------]" << std::endl;
-}
 
 namespace fastsbe
 {

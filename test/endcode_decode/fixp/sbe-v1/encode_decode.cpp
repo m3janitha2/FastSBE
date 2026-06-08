@@ -2,19 +2,13 @@
 
 #include <gtest/gtest.h>
 #include <random_gen.h>
+#include <print_message.h>
 
 #include <NewOrderSingle.h>
 #include <SbeMessage.h>
 
 namespace test::sbe
 {
-    template <typename Msg>
-    inline void print_message(Msg &msg)
-    {
-        std::cout << "[ MESSEGE  ]" << std::endl;
-        std::cout << msg << std::endl;
-        std::cout << "[----------]" << std::endl;
-    }
 
     // NewOrderSingle is a fixed-size message: nine root fields, no repeating
     // groups or variable-length data.

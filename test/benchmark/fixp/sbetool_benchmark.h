@@ -3,15 +3,8 @@
 #include <benchmark/benchmark.h>
 
 #include <random_gen.h>
+#include <print_message.h>
 #include <sbetool/NewOrderSingle.h>
-
-template <typename Msg>
-inline void print_message2(Msg &msg)
-{
-    std::cout << "[ MESSEGE  ]" << std::endl;
-    std::cout << msg << std::endl;
-    std::cout << "[----------]" << std::endl;
-}
 
 namespace sbetool
 {
@@ -61,9 +54,8 @@ namespace sbetool
         msg.putText(values.Text.c_str(), values.Text.length());
         msg.putClearingFirm(values.ClearingFirm.c_str(), values.ClearingFirm.length());
 
-
         if (display)
-            print_message2(msg);
+            print_message(msg);
     }
 
     void decode_NewOrderSingle(char *buffer, std::size_t length, bool display)
@@ -74,11 +66,11 @@ namespace sbetool
         auto clodr_id = msg.clOrdId();
         benchmark::DoNotOptimize(clodr_id);
         auto Account = msg.account();
-        benchmark::DoNotOptimize(clodr_id);
+        benchmark::DoNotOptimize(Account);
         auto Symbol = msg.symbol();
         benchmark::DoNotOptimize(Symbol);
         auto Side = msg.side();
-        benchmark::DoNotOptimize(Symbol);
+        benchmark::DoNotOptimize(Side);
         auto TransactTime = msg.transactTime();
         benchmark::DoNotOptimize(TransactTime);
 
@@ -143,6 +135,6 @@ namespace sbetool
         benchmark::DoNotOptimize(ClearingFirm);
 
         if (display)
-            print_message2(msg);
+            print_message(msg);
     }
 }

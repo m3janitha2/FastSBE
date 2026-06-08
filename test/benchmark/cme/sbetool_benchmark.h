@@ -5,16 +5,9 @@
 #include <benchmark/benchmark.h>
 
 #include <random_gen.h>
+#include <print_message.h>
 #include <sbetool/MDIncrementalRefreshBook46.h>
 #include <MDIncrementalRefreshBook46Data.h>
-
-template <typename Msg>
-inline void print_message2(Msg &msg)
-{
-    std::cout << "[ MESSEGE  ]" << std::endl;
-    std::cout << msg << std::endl;
-    std::cout << "[----------]" << std::endl;
-}
 
 // The sbe-tool codec lives in namespace mktdata (the schema's package); the
 // helpers stay in namespace sbetool so the benchmark calls match fixp's.
@@ -56,7 +49,7 @@ namespace sbetool
         }
 
         if (display)
-            print_message2(msg);
+            print_message(msg);
     }
 
     void decode_MDIncrementalRefreshBook46(char *buffer, std::size_t length, bool display)
@@ -110,6 +103,6 @@ namespace sbetool
         }
 
         if (display)
-            print_message2(msg);
+            print_message(msg);
     }
 }

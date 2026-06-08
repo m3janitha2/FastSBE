@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <random_gen.h>
+#include <print_message.h>
 
 #include <BusinessMessageReject.h>
 #include <ExecutionReportTrade.h>
@@ -10,13 +11,6 @@
 
 namespace sbetool
 {
-    template <typename Msg>
-    inline void print_message(Msg &msg)
-    {
-        std::cout << "[ MESSEGE  ]" << std::endl;
-        std::cout << msg << std::endl;
-        std::cout << "[----------]" << std::endl;
-    }
 
     // String fields are fixed-length and NUL-padded; the test uses length-1
     // random strings so every value stays NUL-terminated.
@@ -241,6 +235,7 @@ namespace sbetool
 
         auto &second = *reinterpret_cast<NewOrderSingle<> *>(buffer + size);
         encode_body(second_values, second);
+        ASSERT_LE(size + second.encoded_size(), sizeof(buffer));
 
         decode_body(first_values, *reinterpret_cast<NewOrderSingle<> *>(buffer));
         decode_body(second_values,
