@@ -47,6 +47,9 @@ class FieldGen:
 	nested_variable_length_data_def_ct      = read_template('metadata/c++/message/nested_variable_length_data_def.h')
 	variable_length_data_def_ct             = read_template('metadata/c++/message/variable_length_data_def.h')
 
+	encoded_size_def_ct                     = read_template('metadata/c++/message/encoded_size_def.h')
+	encoded_size_fixed_def_ct               = read_template('metadata/c++/message/encoded_size_fixed_def.h')
+
 	buffer_def_ct                   = read_template('metadata/c++/message/buffer_def.h')
 
 	ostream_field_def_begin_ct      = read_template('metadata/c++/message/ostream_field_def_begin.h')
@@ -130,6 +133,18 @@ class FieldGen:
 			return '0'
 		else:
 			return to_snake_case(previous_field_name) + '_offset() + ' + 'sizeof(' + previous_field_name + '::header_) + ' + to_snake_case(previous_field_name) + '_data_length()'
+
+	def gen_encoded_size(self, last_element_name):
+		# encoded_size() = the message body's on-wire length: the root block plus
+		# every repeating group and variable-length field. A fixed-only message
+		# gets a compile-time block_length(); otherwise it is block_length() plus
+		# the offset just past the last variable-length element - the same
+		# accumulation get_group_offset() uses to place the element after it.
+		if(last_element_name == ""):
+			method = self.encoded_size_fixed_def_ct
+		else:
+			method = self.encoded_size_def_ct.replace('S_ENCODED_SIZE_EXPR', self.get_group_offset(last_element_name))
+		self.handler.content += self.indentation.indent(method)
 
 
 	def gen_ostream_field_def_begin(self):

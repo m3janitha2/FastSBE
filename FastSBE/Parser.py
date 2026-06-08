@@ -793,6 +793,13 @@ class Parser:
 				previous_field_name = self.parse_data(msg_gen, handler, message_name, element\
 					, previous_field_name)
 
+		# previous_field_name is the last group / variable-length field once a
+		# variable section exists; otherwise the body is fixed-size.
+		if(is_group_section or is_var_data_section):
+			msg_gen.field_gen.gen_encoded_size(previous_field_name)
+		else:
+			msg_gen.field_gen.gen_encoded_size("")
+
 		msg_gen.field_gen.gen_ostream_end()
 
 
