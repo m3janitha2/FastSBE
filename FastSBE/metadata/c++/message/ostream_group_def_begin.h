@@ -8,4 +8,3 @@
 			if (i) { os << ", "; }
 			auto &g = group.get(i);
 			os << "{";
-			bool comma = false;

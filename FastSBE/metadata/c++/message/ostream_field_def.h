@@ -1,1 +1,1 @@
-	if(comma) { os << ", "; } os << "\"S_FIELD_SCHEMA\": " << S_FIELD_VALUE; comma = true;
+	os << "S_FIELD_SEP\"S_FIELD_SCHEMA\": " << S_FIELD_VALUE;

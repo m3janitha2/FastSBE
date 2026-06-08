@@ -150,6 +150,7 @@ class FieldGen:
 	def gen_ostream_field_def_begin(self):
 		# a message is a class template, so its operator<< takes Msg<N>; a composite
 		# is a plain class and uses the unparameterized signature.
+		self.ostream_first = True
 		template = self.ostream_message_def_begin_ct if self.is_message else self.ostream_field_def_begin_ct
 		field_def = template\
 			.replace('S_NAMESPACE', self.namespace)\
@@ -192,7 +193,10 @@ class FieldGen:
 	def gen_ostream_field_def(self, field_name, mode = 'plain', set_type = None):
 		snake = to_snake_case(field_name)
 		value = self.gen_ostream_value('msg.' + snake + '()', mode, set_type)
+		sep = '' if self.ostream_first else ', '
+		self.ostream_first = False
 		field_def = self.ostream_field_def_ct\
+			.replace('S_FIELD_SEP', sep)\
 			.replace('S_MESSAGE_NAME', self.message_name)\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_VALUE', value)\
@@ -210,6 +214,7 @@ class FieldGen:
 
 
 	def gen_ostream_group_def_begin(self, group_name, message_name):
+		self.ostream_var_first = True
 		field_def = self.ostream_group_def_begin_ct\
 			.replace('S_NAMESPACE', self.namespace)\
 			.replace('S_MESSAGE_NAME', message_name)\
@@ -230,7 +235,10 @@ class FieldGen:
 	def gen_ostream_group_field_def(self, field_name, group_name, mode = 'plain', set_type = None):
 		snake = to_snake_case(field_name)
 		value = self.gen_ostream_value('g.' + snake + '()', mode, set_type)
+		sep = '' if self.ostream_var_first else ', '
+		self.ostream_var_first = False
 		field_def = self.ostream_group_field_def_ct\
+			.replace('S_FIELD_SEP', sep)\
 			.replace('S_MESSAGE_NAME', self.message_name)\
 			.replace('S_GROUP_NAME', self.message_name)\
 			.replace('S_FIELD_SCHEMA', field_name)\
@@ -241,7 +249,10 @@ class FieldGen:
 		logging.debug('gen_ostream_def')
 
 	def gen_ostream_variable_length_data_def(self, field_name):
+		sep = '' if self.ostream_first else ', '
+		self.ostream_first = False
 		field_def = self.ostream_variable_length_data_def_ct\
+			.replace('S_FIELD_SEP', sep)\
 			.replace('S_MESSAGE_NAME', self.message_name)\
 			.replace('S_FIELD_SCHEMA', field_name)\
 			.replace('S_FIELD_NAME', to_snake_case(field_name))
