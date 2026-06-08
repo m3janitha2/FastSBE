@@ -11,6 +11,8 @@ namespace sbetool
     template<typename... T>
     std::size_t offset()
     {
+        // OrderQtyU64's offset in TestMessage = 48-byte TestComposite block + ClOrdId[8] + 3 one-byte enums.
+        // offset<Ts...>() folds in each preceding field's size, so the type pack reads as the field list.
         static constexpr const std::size_t field_offset{59};
         return (field_offset + ... + sizeof(T));
     }
@@ -65,8 +67,8 @@ namespace sbetool
         EXPECT_EQ(msg.order_qty64(), std::numeric_limits<std::int64_t>::min());
         msg.set_order_qty64(std::numeric_limits<std::int64_t>::max());
         EXPECT_EQ(msg.order_qty64(), std::numeric_limits<std::int64_t>::max());
-        msg.set_order_qty64(std::numeric_limits<std::int64_t>::max());
-        EXPECT_EQ(msg.order_qty64(), std::numeric_limits<std::int64_t>::max());
+        msg.set_order_qty64(std::numeric_limits<std::int64_t>::max() - 1);
+        EXPECT_EQ(msg.order_qty64(), std::numeric_limits<std::int64_t>::max() - 1);
     }
 
     TEST(numeric, field_info_uint32)
@@ -119,8 +121,8 @@ namespace sbetool
         EXPECT_EQ(msg.order_qty32(), std::numeric_limits<std::int32_t>::min());
         msg.set_order_qty32(std::numeric_limits<std::int32_t>::max());
         EXPECT_EQ(msg.order_qty32(), std::numeric_limits<std::int32_t>::max());
-        msg.set_order_qty32(std::numeric_limits<std::int32_t>::max());
-        EXPECT_EQ(msg.order_qty32(), std::numeric_limits<std::int32_t>::max());
+        msg.set_order_qty32(std::numeric_limits<std::int32_t>::max() - 1);
+        EXPECT_EQ(msg.order_qty32(), std::numeric_limits<std::int32_t>::max() - 1);
     } 
 
     TEST(numeric, field_info_uint16)
@@ -173,8 +175,8 @@ namespace sbetool
         EXPECT_EQ(msg.order_qty16(), std::numeric_limits<std::int16_t>::min());
         msg.set_order_qty16(std::numeric_limits<std::int16_t>::max());
         EXPECT_EQ(msg.order_qty16(), std::numeric_limits<std::int16_t>::max());
-        msg.set_order_qty16(std::numeric_limits<std::int16_t>::max());
-        EXPECT_EQ(msg.order_qty16(), std::numeric_limits<std::int16_t>::max());
+        msg.set_order_qty16(std::numeric_limits<std::int16_t>::max() - 1);
+        EXPECT_EQ(msg.order_qty16(), std::numeric_limits<std::int16_t>::max() - 1);
     }    
 
     TEST(numeric, field_info_uint8)
@@ -227,8 +229,8 @@ namespace sbetool
         EXPECT_EQ(msg.order_qty8(), std::numeric_limits<std::int8_t>::min());
         msg.set_order_qty8(std::numeric_limits<std::int8_t>::max());
         EXPECT_EQ(msg.order_qty8(), std::numeric_limits<std::int8_t>::max());
-        msg.set_order_qty8(std::numeric_limits<std::int8_t>::max());
-        EXPECT_EQ(msg.order_qty8(), std::numeric_limits<std::int8_t>::max());
+        msg.set_order_qty8(std::numeric_limits<std::int8_t>::max() - 1);
+        EXPECT_EQ(msg.order_qty8(), std::numeric_limits<std::int8_t>::max() - 1);
     }  
 
     TEST(numeric, optional_field_info_uint64)
@@ -264,7 +266,7 @@ namespace sbetool
         TestMessage msg{};
         EXPECT_EQ(msg.const_order_qty64_size(), 0);
         EXPECT_EQ(msg.const_order_qty64_offset(), (offset<std::uint64_t, std::int64_t, std::uint32_t, std::int32_t
-            , std::uint16_t, std::int16_t, std::uint8_t, std::int8_t, std::uint64_t>()));
+            , std::uint16_t, std::int16_t, std::uint8_t, std::int8_t, std::uint64_t>())); // last arg = preceding OptionalOrderQtyU64 size; const itself adds 0
         EXPECT_EQ(msg.const_order_qty64_id(), 389);
         EXPECT_EQ(msg.const_order_qty64_name(), "ConstOrderQty64");
     }

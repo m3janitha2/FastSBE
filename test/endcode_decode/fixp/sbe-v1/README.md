@@ -1,7 +1,7 @@
-## FastSBE
+# sbe-v1 example schema
 
-This example schema extended from https://github.com/FIXTradingCommunity/fix-simple-binary-encoding/tree/master/v1-0-STANDARD
+Extends the FIX SBE v1.0 example schema:
+https://github.com/FIXTradingCommunity/fix-simple-binary-encoding/tree/master/v1-0-STANDARD
 
-tests implimented only for v2-0-RC3 as of now
-
-
+`NewOrderSingle` here is fixed-size (no repeating groups or variable-length
+data), exercised by the `sbe_v1_encode_decode` round-trip test.

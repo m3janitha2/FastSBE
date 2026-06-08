@@ -14,5 +14,5 @@ generated/
 test/benchmark/*/fastsbe/
 log.txt
 
-# CME SBE templates are third-party IP: fetched on demand.
+# CME SBE templates are third-party: fetched on demand.
 templates_FixBinary.xml

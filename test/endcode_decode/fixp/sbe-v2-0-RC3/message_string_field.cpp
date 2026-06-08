@@ -7,12 +7,12 @@
 
 namespace sbetool
 {
-    static constexpr const std::size_t field_offset{48};
+    static constexpr const std::size_t field_offset{48}; // ClOrdId sits right after the 48-byte TestComposite block
 
     TEST(string, field_info)
     {
         TestMessage msg{};
-        EXPECT_EQ(msg.cl_ord_id_size(), 8);
+        EXPECT_EQ(msg.cl_ord_id_size(), 8); // idString = char[8]
         EXPECT_EQ(msg.cl_ord_id_offset(), field_offset);
         EXPECT_EQ(msg.cl_ord_id_id(), 11);
         EXPECT_EQ(msg.cl_ord_id_name(), "ClOrdId");
@@ -53,7 +53,7 @@ namespace sbetool
 
     TEST(string, const_max_length_minus_one)
     {
-        TestMessage msg{};
+        const TestMessage msg{};
         auto ClOrdId = random_string(7);
         const_cast<TestMessage<>&>(msg).set_cl_ord_id(ClOrdId);
 
@@ -78,7 +78,7 @@ namespace sbetool
 
     TEST(string, const_max_length)
     {
-        TestMessage msg{};
+        const TestMessage msg{};
         auto ClOrdId = random_string(8);
         const_cast<TestMessage<>&>(msg).set_cl_ord_id(ClOrdId);
 
@@ -123,7 +123,7 @@ namespace sbetool
     {
         TestMessage msg{};
         EXPECT_EQ(msg.const_cl_ord_id_size(), 0);
-        EXPECT_EQ(msg.const_cl_ord_id_offset(), field_offset + 8);
+        EXPECT_EQ(msg.const_cl_ord_id_offset(), field_offset + 8); // +8 past ClOrdId char[8] -> 56
         EXPECT_EQ(msg.const_cl_ord_id_id(), 1);
         EXPECT_EQ(msg.const_cl_ord_id_name(), "ConstClOrdId");
     }

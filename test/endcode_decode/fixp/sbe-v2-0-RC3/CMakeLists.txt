@@ -24,9 +24,6 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/generated)
 file( GLOB TEST_SOURCES *.cpp)
 foreach( test_sourcefile ${TEST_SOURCES} )
     get_filename_component(EXECUTABLE_NAME ${test_sourcefile} NAME_WE)
-    string( REPLACE ".cpp" "" ${EXECUTABLE_NAME} ${test_sourcefile} )
-    #add_executable( ${test_name} ${test_sourcefile} )
-    message("add_executable ${EXECUTABLE_NAME} ${test_sourcefile}") 
     add_executable(${EXECUTABLE_NAME} ${test_sourcefile} 
         ${CMAKE_CURRENT_LIST_DIR}/generated/__header.h
     )    

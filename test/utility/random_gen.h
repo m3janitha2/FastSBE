@@ -11,8 +11,11 @@ inline T random_number(T s = std::numeric_limits<T>::min(), T e = std::numeric_l
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<T> distrib(s, e);
-    return distrib(gen);
+    // std::uniform_int_distribution is UB for 1-byte types; widen then narrow.
+    using Wide = std::conditional_t<std::is_signed_v<T>, std::int16_t, std::uint16_t>;
+    using Dist = std::conditional_t<(sizeof(T) == 1), Wide, T>;
+    std::uniform_int_distribution<Dist> distrib(s, e);
+    return static_cast<T>(distrib(gen));
 }
 
 inline char random_char(char start = ' ', char end = '~')

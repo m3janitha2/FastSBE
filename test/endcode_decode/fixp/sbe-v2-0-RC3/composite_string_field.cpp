@@ -7,14 +7,14 @@
 
 namespace sbetool
 {
-    static constexpr const std::size_t field_offset{0};
+    static constexpr const std::size_t field_offset{0}; // ClOrdId is the first TestComposite member
 
     TEST(composite_string, field_info)
     {
         TestMessage msg{};
         auto &composite = msg.test_composite();
 
-        EXPECT_EQ(composite.cl_ord_id_size(), 8);
+        EXPECT_EQ(composite.cl_ord_id_size(), 8); // idString = char[8]
         EXPECT_EQ(composite.cl_ord_id_offset(), field_offset);
         EXPECT_EQ(composite.cl_ord_id_name(), "ClOrdId");
     }
@@ -59,8 +59,8 @@ namespace sbetool
 
     TEST(composite_string, const_max_length_minus_one)
     {
-        TestMessage msg{};
-        auto &composite = msg.test_composite();
+        const TestMessage msg{};
+        const auto &composite = msg.test_composite();
 
         auto ClOrdId = random_string(7);
         const_cast<TestComposite &>(composite).set_cl_ord_id(ClOrdId);
@@ -88,8 +88,8 @@ namespace sbetool
 
     TEST(composite_string, const_max_length)
     {
-        TestMessage msg{};
-        auto &composite = msg.test_composite();
+        const TestMessage msg{};
+        const auto &composite = msg.test_composite();
 
         auto ClOrdId = random_string(8);
         const_cast<TestComposite &>(composite).set_cl_ord_id(ClOrdId);
@@ -143,7 +143,7 @@ namespace sbetool
         auto &composite = msg.test_composite();
 
         EXPECT_EQ(composite.const_cl_ord_id_size(), 0);
-        EXPECT_EQ(composite.const_cl_ord_id_offset(), field_offset + 8);
+        EXPECT_EQ(composite.const_cl_ord_id_offset(), field_offset + 8); // +8 past ClOrdId char[8]
         EXPECT_EQ(composite.const_cl_ord_id_name(), "ConstClOrdId");
     }
 
