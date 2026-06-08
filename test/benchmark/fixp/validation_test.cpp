@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <cstdint>
+#include <iostream>
 #include <string>
 
 #include <gtest/gtest.h>
@@ -139,4 +140,26 @@ TEST(FixpInterop, fastsbe_encode_sbetool_decode)
         ASSERT_LE(reinterpret_cast<fastsbe::NewOrderSingle<> *>(buffer)->encoded_size(), sizeof(buffer));
         verify_sbetool(buffer, sizeof(buffer), data);
     }
+}
+
+// Encodes one message with each codec and prints both operator<< renderings so
+// the two JSON formats can be eyeballed side by side.
+TEST(FixpInterop, DumpBothJson)
+{
+    Data data{1, 1, 1};
+
+    char fastsbe_buffer[4096]{};
+    fastsbe::encode_NewOrderSingle_from_struct(fastsbe_buffer, data, false);
+    std::cout << "FastSBE : "
+              << *reinterpret_cast<fastsbe::NewOrderSingle<> *>(fastsbe_buffer)
+              << "\n";
+
+    char sbetool_buffer[4096]{};
+    sbetool::encode_NewOrderSingle_from_struct(sbetool_buffer,
+                                               sizeof(sbetool_buffer), data,
+                                               false);
+    sbetool::NewOrderSingle msg;
+    msg.wrapForDecode(sbetool_buffer, 0, msg.sbeBlockLength(),
+                      msg.sbeSchemaVersion(), sizeof(sbetool_buffer));
+    std::cout << "SbeTool : " << msg << "\n";
 }
