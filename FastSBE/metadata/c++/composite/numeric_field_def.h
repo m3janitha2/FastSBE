@@ -20,17 +20,17 @@ public:
 	
 	static constexpr S_FIELD_TYPE S_FIELD_NAME_min_value() noexcept
 	{ 
-		return S_FIELD_MIN; 
+		return static_cast<S_FIELD_TYPE>(S_FIELD_MIN);
 	}
 	
 	static constexpr S_FIELD_TYPE S_FIELD_NAME_max_value() noexcept
 	{
-		return S_FIELD_MAX;
+		return static_cast<S_FIELD_TYPE>(S_FIELD_MAX);
 	}
 	
 	static constexpr S_FIELD_TYPE S_FIELD_NAME_null_value() noexcept
 	{
-		return S_FIELD_NULL;
+		return static_cast<S_FIELD_TYPE>(S_FIELD_NULL);
 	}
 
 	constexpr S_FIELD_TYPE S_FIELD_NAME() const noexcept

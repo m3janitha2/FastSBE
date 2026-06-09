@@ -47,7 +47,7 @@ public:
 
 	auto& set_S_FIELD_NAME(const char* value) noexcept
 	{
-	#if defined(__GNUG__)
+	#if defined(__GNUC__) && !defined(__clang__)
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wstringop-overflow"
 	#pragma GCC diagnostic ignored "-Wstringop-overread"
@@ -55,7 +55,7 @@ public:
 		//auto length = strlen(value);
 		std::memcpy(S_FIELD_NAME_, value, S_FIELD_NAME_size());
 		return *this;
-	#if defined(__GNUG__)
+	#if defined(__GNUC__) && !defined(__clang__)
 	#pragma GCC diagnostic pop
 	#endif			
 	}
@@ -71,7 +71,7 @@ public:
 
 	auto& set_S_FIELD_NAME(std::string_view value) noexcept
 	{
-	#if defined(__GNUG__)
+	#if defined(__GNUC__) && !defined(__clang__)
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wstringop-overflow"
 	#pragma GCC diagnostic ignored "-Wstringop-overread"
@@ -80,7 +80,7 @@ public:
 		//auto size = std::min(S_FIELD_NAME_size(), value.size());
 		std::memcpy(S_FIELD_NAME_, value.data(), S_FIELD_NAME_size());
 		return *this;
-	#if defined(__GNUG__)
+	#if defined(__GNUC__) && !defined(__clang__)
 	#pragma GCC diagnostic pop
 	#endif			
 	}
