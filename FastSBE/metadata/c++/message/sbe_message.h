@@ -22,22 +22,22 @@ public:
 			.set_version(Body::version());
 	}
 
-	constexpr MessageHeader& header() noexcept
+	[[nodiscard]] constexpr MessageHeader& header() noexcept
 	{
 		return header_;
 	}
 
-	constexpr const MessageHeader& header() const noexcept
+	[[nodiscard]] constexpr const MessageHeader& header() const noexcept
 	{
 		return header_;
 	}
 
-	constexpr Body& body() noexcept
+	[[nodiscard]] constexpr Body& body() noexcept
 	{
 		return body_;
 	}
 
-	constexpr const Body& body() const noexcept
+	[[nodiscard]] constexpr const Body& body() const noexcept
 	{
 		return body_;
 	}

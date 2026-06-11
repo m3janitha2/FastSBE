@@ -3,42 +3,42 @@ private:
 	S_FIELD_TYPE S_FIELD_NAME_{};
 
 public:
-	static constexpr std::size_t S_FIELD_NAME_size() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_size() noexcept
 	{
 		return sizeof(S_FIELD_TYPE);
 	}
 
-	static constexpr std::size_t S_FIELD_NAME_offset() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_offset() noexcept
 	{ 
 		return S_FIELD_OFFSET; 
 	}
 
-	static constexpr std::size_t S_FIELD_NAME_id() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_id() noexcept
 	{ 
 		return S_FIELD_ID; 
 	}
 	
-	static constexpr const char* S_FIELD_NAME_name() noexcept
+	[[nodiscard]] static constexpr const char* S_FIELD_NAME_name() noexcept
 	{ 
 		return "S_FIELD_SCHEMA"; 
 	}
 	
-	static constexpr S_FIELD_TYPE S_FIELD_NAME_min_value() noexcept
+	[[nodiscard]] static constexpr S_FIELD_TYPE S_FIELD_NAME_min_value() noexcept
 	{ 
 		return static_cast<S_FIELD_TYPE>(S_FIELD_MIN);
 	}
 	
-	static constexpr S_FIELD_TYPE S_FIELD_NAME_max_value() noexcept
+	[[nodiscard]] static constexpr S_FIELD_TYPE S_FIELD_NAME_max_value() noexcept
 	{
 		return static_cast<S_FIELD_TYPE>(S_FIELD_MAX);
 	}
 	
-	static constexpr S_FIELD_TYPE S_FIELD_NAME_null_value() noexcept
+	[[nodiscard]] static constexpr S_FIELD_TYPE S_FIELD_NAME_null_value() noexcept
 	{
 		return static_cast<S_FIELD_TYPE>(S_FIELD_NULL);
 	}
 
-	constexpr S_FIELD_TYPE S_FIELD_NAME() const noexcept
+	[[nodiscard]] constexpr S_FIELD_TYPE S_FIELD_NAME() const noexcept
 	{ 
 		return S_FIELD_NAME_;
 	}

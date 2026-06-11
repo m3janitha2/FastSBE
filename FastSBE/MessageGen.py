@@ -173,26 +173,44 @@ class FieldGen:
 		# how a field's value is rendered in the JSON stream operator:
 		#   cast   - promote int8/uint8 with unary + so it prints as a number
 		#   set    - decode the bitset to a JSON array of choice names
-		#   quoted - wrap in double quotes (enum name or string value)
+		#   quoted - wrap in double quotes (enum / constant name, NUL-terminated)
+		#   string - char-array field, quoted; must go through the _string()
+		#            accessor: the raw char* is not NUL-terminated when the
+		#            value fills the field, so operator<< would print past it
+		#   char   - single-char field, quoted; a NUL value renders as ""
+		#            instead of emitting a control byte
 		if(mode == 'cast'):
 			return '+' + accessor
 		if(mode == 'set'):
 			return set_type + '::to_string(' + accessor + ')'
-		if(mode == 'quoted'):
+		if(mode == 'char'):
+			return ('"\\"" << (' + accessor + " == '\\0' ? std::string() : std::string(1, "
+				+ accessor + ')) << "\\""')
+		if(mode in ('quoted', 'string')):
 			return '"\\"" << ' + accessor + ' << "\\""'
 		return accessor
 
 	@staticmethod
+	def ostream_accessor(prefix, snake, mode):
+		# char-array fields print via the bounded, NUL-trimmed _string()
+		# accessor; every other mode reads the plain getter.
+		suffix = '_string()' if mode == 'string' else '()'
+		return prefix + snake + suffix
+
+	@staticmethod
 	def numeric_ostream_mode(field_type):
 		# int8/uint8 are (un)signed char, so operator<< would print them as a
-		# character; promote those to int. Wider integers stream fine as-is.
+		# character; promote those to int. A plain char field is a one-char
+		# string in JSON terms, so quote it. Wider integers stream as-is.
+		if(field_type == Metadata.c_field_types['char']):
+			return 'char'
 		if(field_type in (Metadata.c_field_types['int8'], Metadata.c_field_types['uint8'])):
 			return 'cast'
 		return 'plain'
 
 	def gen_ostream_field_def(self, field_name, mode = 'plain', set_type = None):
 		snake = to_snake_case(field_name)
-		value = self.gen_ostream_value('msg.' + snake + '()', mode, set_type)
+		value = self.gen_ostream_value(self.ostream_accessor('msg.', snake, mode), mode, set_type)
 		sep = '' if self.ostream_first else ', '
 		self.ostream_first = False
 		field_def = self.ostream_field_def_ct\
@@ -234,7 +252,7 @@ class FieldGen:
 
 	def gen_ostream_group_field_def(self, field_name, group_name, mode = 'plain', set_type = None):
 		snake = to_snake_case(field_name)
-		value = self.gen_ostream_value('g.' + snake + '()', mode, set_type)
+		value = self.gen_ostream_value(self.ostream_accessor('g.', snake, mode), mode, set_type)
 		sep = '' if self.ostream_var_first else ', '
 		self.ostream_var_first = False
 		field_def = self.ostream_group_field_def_ct\
@@ -426,7 +444,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field(field_name, is_group, group_name, 'quoted')
+		self.gen_ostream_field(field_name, is_group, group_name, 'string')
 		logging.debug('gen_message_string_field_def: %s', field_name)
 
 	def gen_composite_string_field_def(self, message_name, field_type, field_name\
@@ -439,7 +457,7 @@ class FieldGen:
 			.replace('S_FIELD_NAME', to_snake_case(field_name))\
 			.replace('S_FIELD_SIZE', field_size)
 		self.handler.content += self.indentation.indent(field_def)
-		self.gen_ostream_field_def(field_name, 'quoted')
+		self.gen_ostream_field_def(field_name, 'string')
 		self.handler.field_type_and_name.append([field_type, field_name])
 		logging.debug('gen_composite_string_field_def: %s', field_name)
 

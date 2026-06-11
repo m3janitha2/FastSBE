@@ -5,31 +5,31 @@ private:
 public:
 	constexpr S_VAR_LEN_DATA_NAME() = default;
 
-	std::basic_string_view<S_VAR_LEN_DATA_VAR_DATA_TYPE> get_str() noexcept
+	[[nodiscard]] std::basic_string_view<S_VAR_LEN_DATA_VAR_DATA_TYPE> get_str() noexcept
 	{
 		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(S_DIAMENTION_TYPE);
 		return {reinterpret_cast<S_VAR_LEN_DATA_VAR_DATA_TYPE*>(buffer), this->header_.S_VAR_LEN_DATA_LENGTH_NAME()};
 	}
 
-	const std::basic_string_view<S_VAR_LEN_DATA_VAR_DATA_TYPE> get_str() const noexcept
+	[[nodiscard]] const std::basic_string_view<S_VAR_LEN_DATA_VAR_DATA_TYPE> get_str() const noexcept
 	{
 		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(S_DIAMENTION_TYPE);
 		return {reinterpret_cast<const S_VAR_LEN_DATA_VAR_DATA_TYPE*>(buffer), this->header_.S_VAR_LEN_DATA_LENGTH_NAME()};
 	}
 
-	S_VAR_LEN_DATA_VAR_DATA_TYPE* get() noexcept
+	[[nodiscard]] S_VAR_LEN_DATA_VAR_DATA_TYPE* get() noexcept
 	{
 		auto* buffer = reinterpret_cast<char*>(&this->header_) + sizeof(S_DIAMENTION_TYPE);
 		return reinterpret_cast<S_VAR_LEN_DATA_VAR_DATA_TYPE*>(buffer);
 	}
 
-	const S_VAR_LEN_DATA_VAR_DATA_TYPE* get() const noexcept
+	[[nodiscard]] const S_VAR_LEN_DATA_VAR_DATA_TYPE* get() const noexcept
 	{
 		auto* buffer = reinterpret_cast<const char*>(&this->header_) + sizeof(S_DIAMENTION_TYPE);
 		return reinterpret_cast<const S_VAR_LEN_DATA_VAR_DATA_TYPE*>(buffer);
 	}
 
-	constexpr auto S_VAR_LEN_DATA_LENGTH_NAME() const noexcept
+	[[nodiscard]] constexpr auto S_VAR_LEN_DATA_LENGTH_NAME() const noexcept
 	{
 		return header_.S_VAR_LEN_DATA_LENGTH_NAME();
 	}

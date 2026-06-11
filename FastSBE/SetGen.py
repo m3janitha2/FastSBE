@@ -49,7 +49,7 @@ class SetGen:
 	def gen_to_string(self):
 		# render the active choices as a JSON array, e.g. ["LastTradeMsg", "EndOfEvent"]
 		self.indentation.increment()
-		body = 'static constexpr std::string to_string(value_type value)\n'
+		body = '[[nodiscard]] static constexpr std::string to_string(value_type value)\n'
 		body += '{\n'
 		body += '    std::string result = "[";\n'
 		body += '    bool first = true;\n'
@@ -68,7 +68,7 @@ class SetGen:
 
 	def gen_operator_or(self):
 		op = (
-			"\nconstexpr S_SET_NAME::Choice operator|("
+			"\n[[nodiscard]] constexpr S_SET_NAME::Choice operator|("
 			"S_SET_NAME::Choice a, S_SET_NAME::Choice b) noexcept\n"
 			"{\n"
 			"\treturn static_cast<S_SET_NAME::Choice>(\n"

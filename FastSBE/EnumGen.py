@@ -113,7 +113,7 @@ class EnumGen:
 	class EnumToStrFunctionGen:
 		"""Emit the enum's static to_string(Value) function."""
 
-		fuction_begin_ct = "\npublic:\nstatic constexpr const char* to_string(Value value) noexcept\n{{"
+		fuction_begin_ct = "\npublic:\n[[nodiscard]] static constexpr const char* to_string(Value value) noexcept\n{{"
 		fuction_end_ct = "}\n"
 
 

@@ -3,39 +3,39 @@ private:
 	S_VAR_LEN_DATA_NAME S_VAR_LEN_SNAKE_{};
 
 public:
-	static constexpr std::size_t S_VAR_LEN_SNAKE_size() noexcept
+	[[nodiscard]] static constexpr std::size_t S_VAR_LEN_SNAKE_size() noexcept
 	{
 		return 0;
 	}
 
-	static constexpr std::size_t S_VAR_LEN_SNAKE_id() noexcept
+	[[nodiscard]] static constexpr std::size_t S_VAR_LEN_SNAKE_id() noexcept
 	{ 
 		return S_VAR_LEN_DATA_ID; 
 	}
 	
-	static constexpr const char* S_VAR_LEN_SNAKE_name() noexcept
+	[[nodiscard]] static constexpr const char* S_VAR_LEN_SNAKE_name() noexcept
 	{ 
 		return "S_VAR_LEN_DATA_NAME"; 
 	}
 
-	std::size_t S_VAR_LEN_SNAKE_offset() const noexcept
+	[[nodiscard]] std::size_t S_VAR_LEN_SNAKE_offset() const noexcept
 	{
 		return S_VAR_LEN_DATA_OFFSET;
 	}
 
-	std::size_t S_VAR_LEN_SNAKE_data_length() const noexcept
+	[[nodiscard]] std::size_t S_VAR_LEN_SNAKE_data_length() const noexcept
 	{
 		auto& data = S_VAR_LEN_SNAKE();
 		return data.header_.S_VAR_LEN_DATA_LENGTH_NAME();
 	}
 	
-	const S_VAR_LEN_DATA_NAME& S_VAR_LEN_SNAKE() const noexcept
+	[[nodiscard]] const S_VAR_LEN_DATA_NAME& S_VAR_LEN_SNAKE() const noexcept
 	{ 
 		const auto* buf = buffer() + S_VAR_LEN_SNAKE_offset();
 		return *reinterpret_cast<const S_VAR_LEN_DATA_NAME*>(buf);
 	}
 	
-	S_VAR_LEN_DATA_NAME& S_VAR_LEN_SNAKE() noexcept
+	[[nodiscard]] S_VAR_LEN_DATA_NAME& S_VAR_LEN_SNAKE() noexcept
 	{
 		auto* buf = buffer() + S_VAR_LEN_SNAKE_offset();
 		return *reinterpret_cast<S_VAR_LEN_DATA_NAME*>(buf);

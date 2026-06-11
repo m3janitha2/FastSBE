@@ -3,42 +3,44 @@ private:
 	char S_FIELD_NAME_[S_FIELD_SIZE]{};
 
 public:
-	static constexpr std::size_t S_FIELD_NAME_size() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_size() noexcept
 	{
 		return S_FIELD_SIZE;
 	}
 
-	static constexpr std::size_t S_FIELD_NAME_offset() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_offset() noexcept
 	{ 
 		return S_FIELD_OFFSET; 
 	}
 	
-	static constexpr const char* S_FIELD_NAME_name() noexcept
+	[[nodiscard]] static constexpr const char* S_FIELD_NAME_name() noexcept
 	{ 
 		return "S_FIELD_SCHEMA"; 
 	}
 
-	constexpr char* S_FIELD_NAME() noexcept
-	{ 
+	// Not NUL-terminated when the value fills the field; use _view()/_string()
+	// for a bounded read.
+	[[nodiscard]] constexpr char* S_FIELD_NAME() noexcept
+	{
 		return S_FIELD_NAME_;
 	}
 
-	constexpr const char* S_FIELD_NAME() const noexcept
-	{ 
+	[[nodiscard]] constexpr const char* S_FIELD_NAME() const noexcept
+	{
 		return S_FIELD_NAME_;
 	}
 
-	constexpr std::string_view S_FIELD_NAME_view() noexcept
+	[[nodiscard]] constexpr std::string_view S_FIELD_NAME_view() noexcept
 	{ 
 		return std::string_view(S_FIELD_NAME_, S_FIELD_SIZE);
 	}
 
-	constexpr const std::string_view S_FIELD_NAME_view() const noexcept
+	[[nodiscard]] constexpr const std::string_view S_FIELD_NAME_view() const noexcept
 	{ 
 		return std::string_view(S_FIELD_NAME_, S_FIELD_SIZE);
 	}
 
-	constexpr const std::string S_FIELD_NAME_string() const noexcept
+	[[nodiscard]] constexpr const std::string S_FIELD_NAME_string() const noexcept
 	{
 		auto length = 0ULL;
 		for (; length < S_FIELD_SIZE && *(S_FIELD_NAME_ + length) != '\0'; ++length);

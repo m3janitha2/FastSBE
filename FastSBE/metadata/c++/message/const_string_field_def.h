@@ -1,36 +1,36 @@
 
 public:
-	static constexpr std::size_t S_FIELD_NAME_size() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_size() noexcept
 	{
 		return 0;
 	}
 
-	static constexpr std::size_t S_FIELD_NAME_offset() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_offset() noexcept
 	{
 		return S_FIELD_OFFSET;
 	}
 
-	static constexpr std::size_t S_FIELD_NAME_id() noexcept
+	[[nodiscard]] static constexpr std::size_t S_FIELD_NAME_id() noexcept
 	{
 		return S_FIELD_ID;
 	}
 
-	static constexpr const char *S_FIELD_NAME_name() noexcept
+	[[nodiscard]] static constexpr const char *S_FIELD_NAME_name() noexcept
 	{
 		return "S_FIELD_SCHEMA";
 	}
 
-	constexpr const char *S_FIELD_NAME() const noexcept
+	[[nodiscard]] constexpr const char *S_FIELD_NAME() const noexcept
 	{
 		return "S_CONST_FIELD_VALUE";
 	}
 
-	constexpr const std::string_view S_FIELD_NAME_view() const noexcept
+	[[nodiscard]] constexpr const std::string_view S_FIELD_NAME_view() const noexcept
 	{
 		return std::string_view("S_CONST_FIELD_VALUE", S_FIELD_SIZE);
 	}
 
-	constexpr const std::string S_FIELD_NAME_string() const noexcept
+	[[nodiscard]] constexpr const std::string S_FIELD_NAME_string() const noexcept
 	{
 		return std::string("S_CONST_FIELD_VALUE", S_FIELD_SIZE);
 	}
