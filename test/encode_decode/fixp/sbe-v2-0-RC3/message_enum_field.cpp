@@ -10,11 +10,11 @@ namespace sbetool
     template <typename... T>
     std::size_t offset()
     {
-        static constexpr const std::size_t field_offset{56};
+        static constexpr const std::size_t field_offset{58}; // after the 50-byte TestComposite + ClOrdId[8]
         return (field_offset + ... + sizeof(T));
     }
 
-    TEST(enums, field_info)
+    TEST(message_enum, field_info)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.party_id_source_size(), 1);
@@ -24,7 +24,7 @@ namespace sbetool
         EXPECT_EQ(msg.party_id_source_null_value(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(enums, field_values)
+    TEST(message_enum, field_values)
     {
         TestMessage msg{};
         msg.set_party_id_source(PartyIDSourceEnum::Value::BIC);
@@ -35,15 +35,24 @@ namespace sbetool
         EXPECT_EQ(msg.party_id_source(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(enums, to_string)
+    TEST(message_enum, to_string)
     {
         TestMessage msg{};
         EXPECT_EQ(PartyIDSourceEnum::to_string(PartyIDSourceEnum::Value::BIC), "BIC");
         EXPECT_EQ(PartyIDSourceEnum::to_string(PartyIDSourceEnum::Value::Proprietary), "Proprietary");
         EXPECT_EQ(PartyIDSourceEnum::to_string(PartyIDSourceEnum::Value::nullValue), "nullValue");
-    }   
+    }
 
-    TEST(enums, optional_field_info)
+    // a wire value outside the declared choices must fall back to "Invalid"
+    // (never a null pointer or garbage) - e.g. a default-constructed PartyRole
+    // is 0, which PartyRoleEnum does not define.
+    TEST(message_enum, to_string_unknown_value_is_invalid)
+    {
+        EXPECT_EQ(PartyIDSourceEnum::to_string(static_cast<PartyIDSourceEnum::Value>('X')), "Invalid");
+        EXPECT_EQ(PartyRoleEnum::to_string(static_cast<PartyRoleEnum::Value>(0)), "Invalid");
+    }
+
+    TEST(message_enum, optional_field_info)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.optional_party_id_source_size(), 1);
@@ -53,7 +62,7 @@ namespace sbetool
         EXPECT_EQ(msg.optional_party_id_source_null_value(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(enums, optional_field_values)
+    TEST(message_enum, optional_field_values)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.optional_party_id_source(), PartyIDSourceEnum::Value::nullValue);
@@ -66,7 +75,7 @@ namespace sbetool
         EXPECT_EQ(msg.optional_party_id_source(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(enums, const_field_info)
+    TEST(message_enum, const_field_info)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.const_party_id_source_size(), 0);
@@ -75,13 +84,13 @@ namespace sbetool
         EXPECT_EQ(msg.const_party_id_source_name(), "ConstPartyIDSource");
     }
 
-    TEST(enums, const_field_values)
+    TEST(message_enum, const_field_values)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.const_party_id_source(), PartyIDSourceEnum::Value::Proprietary);
     } 
 
-    TEST(numeric_enums, field_info)
+    TEST(message_numeric_enum, field_info)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.party_role_size(), 1);
@@ -91,7 +100,7 @@ namespace sbetool
         EXPECT_EQ(msg.party_role_null_value(), PartyRoleEnum::Value::nullValue);
     }
 
-    TEST(numeric_enums, field_values)
+    TEST(message_numeric_enum, field_values)
     {
         TestMessage msg{};
 

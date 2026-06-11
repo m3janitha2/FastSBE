@@ -10,11 +10,11 @@ namespace sbetool
     template <typename... T>
     std::size_t offset()
     {
-        static constexpr const std::size_t field_offset{8};
+        static constexpr const std::size_t field_offset{8}; // PartyIDSource follows ClOrdId[8]
         return (field_offset + ... + sizeof(T));
     }
 
-    TEST(composite_enums, field_info)
+    TEST(composite_enum, field_info)
     {
         TestMessage msg{};
         auto &composite = msg.test_composite();
@@ -24,7 +24,7 @@ namespace sbetool
         EXPECT_EQ(composite.party_id_source_null_value(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(composite_enums, field_values)
+    TEST(composite_enum, field_values)
     {
         TestMessage msg{};
         auto &composite = msg.test_composite();
@@ -39,7 +39,7 @@ namespace sbetool
         EXPECT_EQ(composite.party_id_source(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(composite_enums, optional_field_info)
+    TEST(composite_enum, optional_field_info)
     {
         TestMessage msg{};
         auto &composite = msg.test_composite();
@@ -50,7 +50,7 @@ namespace sbetool
         EXPECT_EQ(composite.optional_party_id_source_null_value(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(composite_enums, optional_field_values)
+    TEST(composite_enum, optional_field_values)
     {
         TestMessage msg{};
         auto &composite = msg.test_composite();
@@ -67,7 +67,7 @@ namespace sbetool
         EXPECT_EQ(composite.optional_party_id_source(), PartyIDSourceEnum::Value::nullValue);
     }
 
-    TEST(composite_enums, const_field_info)
+    TEST(composite_enum, const_field_info)
     {
         TestMessage msg{};
         auto &composite = msg.test_composite();
@@ -77,11 +77,34 @@ namespace sbetool
         EXPECT_EQ(composite.const_party_id_source_name(), "ConstPartyIDSource");
     }
 
-    TEST(composite_enums, const_field_values)
+    TEST(composite_enum, const_field_values)
     {
         TestMessage msg{};
         auto &composite = msg.test_composite();
 
+        EXPECT_EQ(composite.const_party_id_source(), PartyIDSourceEnum::Value::Proprietary);
+    }
+
+    TEST(composite_enum, setter_returns_composite_for_chaining)
+    {
+        TestMessage msg{};
+        auto &composite = msg.test_composite();
+
+        EXPECT_EQ(&composite.set_party_id_source(PartyIDSourceEnum::Value::BIC), &composite);
+        composite.set_party_id_source(PartyIDSourceEnum::Value::BIC)
+            .set_optional_party_id_source(PartyIDSourceEnum::Value::Proprietary);
+        EXPECT_EQ(composite.party_id_source(), PartyIDSourceEnum::Value::BIC);
+        EXPECT_EQ(composite.optional_party_id_source(), PartyIDSourceEnum::Value::Proprietary);
+    }
+
+    TEST(composite_enum, const_object_read)
+    {
+        TestMessage msg{};
+        msg.test_composite().set_party_id_source(PartyIDSourceEnum::Value::BIC);
+
+        const auto &cmsg = msg; // TestMessage is a class template; bind via auto
+        const auto &composite = cmsg.test_composite();
+        EXPECT_EQ(composite.party_id_source(), PartyIDSourceEnum::Value::BIC);
         EXPECT_EQ(composite.const_party_id_source(), PartyIDSourceEnum::Value::Proprietary);
     }
 }

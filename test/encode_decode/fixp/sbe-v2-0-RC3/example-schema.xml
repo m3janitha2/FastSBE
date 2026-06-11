@@ -55,7 +55,7 @@
             <type name="time" primitiveType="uint64" />
             <type name="unit" primitiveType="uint8" presence="constant" valueRef="TimeUnit.nanosecond" />
         </composite>
-        <composite name="TestComposite" description="UTC timestamp with nanosecond precision">
+        <composite name="TestComposite" description="Covers every member kind: string, enum, set, char, numerics, optional and constant">
             <type name="ClOrdId" length="8" primitiveType="char" semanticType="String" />
             <type name="ConstClOrdId" length="8" primitiveType="char" semanticType="String" presence="constant">ABCDEFGH</type>
             <type name="PartyIDSource" type="PartyIDSourceEnum" semanticType="char" />
@@ -71,7 +71,9 @@
             <type name="OrderQty8" primitiveType="int8" semanticType="Qty" />
             <type name="OptionalOrderQtyU64" primitiveType="uint64" semanticType="Qty" presence="optional"/>
             <type name="ConstOrderQty64" primitiveType="int64" semanticType="Qty" presence="constant">42545</type>
-        </composite>        
+            <type name="PartyChar" primitiveType="char" semanticType="char" />
+            <type name="EventSet" type="OrderEventSet" semanticType="MultipleCharValue" />
+        </composite>
         <enum name="TimeUnit" encodingType="uint8">
             <validValue name="second">0</validValue>
             <validValue name="millisecond">3</validValue>
@@ -125,6 +127,18 @@
             <validValue name="BrokerOfCredit">2</validValue>
             <validValue name="ClientID">3</validValue>
         </enum>
+        <set name="OrderEventSet" encodingType="uint8">
+            <choice name="New">0</choice>
+            <choice name="Filled">1</choice>
+            <choice name="Cancelled">2</choice>
+        </set>
+        <type name="CharType" primitiveType="char" semanticType="char"/>
+        <!-- layout-test composite (unreferenced by messages): a CME-style
+             decimal with an explicit offset gap, exercising composite padding -->
+        <composite name="PaddedComposite">
+            <type name="mantissa" primitiveType="int64" />
+            <type name="exponent" primitiveType="int8" offset="12" />
+        </composite>
     </types>
     <messages>
         <sbe:message name="BusinessMessageReject" id="97" blockLength="9" semanticType="j">
@@ -173,24 +187,28 @@
             <data name="Text" id="58" type="DATA" semanticType="data" />
             <data name="ClearingFirm" id="439" type="DATA" semanticType="data" />
         </sbe:message>
-        <sbe:message name="TestMessage" id="100" blockLength="97" semanticType="D">
+        <sbe:message name="TestMessage" id="100" blockLength="111" semanticType="D">
             <field name="TestComposite" id="38" type="TestComposite" offset="0" semanticType="Qty" />
-            <field name="ClOrdId" id="11" type="idString" offset="48" semanticType="String" />
-            <field name="ConstClOrdId" id="1" type="idString" offset="56" semanticType="String" presence="constant">ABCDEFGH</field>
-            <field name="PartyIDSource" id="447" type="PartyIDSourceEnum" offset="56" semanticType="char" />
-            <field name="OptionalPartyIDSource" id="448" type="PartyIDSourceEnum" offset="57" semanticType="char" presence="optional" nullValue="250"/>
-            <field name="ConstPartyIDSource" id="449" type="PartyIDSourceEnum" offset="58" semanticType="char" presence="constant" valueRef="PartyIDSourceEnum.Proprietary"/>
-            <field name="PartyRole" id="452" type="PartyRoleEnum" offset="58" semanticType="uint8" />
-            <field name="OrderQtyU64" id="38" type="QuantityU64" offset="59" semanticType="Qty" />
-            <field name="OrderQty64" id="381" type="Quantity64" offset="67" semanticType="Qty" />
-            <field name="OrderQtyU32" id="382" type="QuantityU32" offset="75" semanticType="Qty" />
-            <field name="OrderQty32" id="383" type="Quantity32" offset="79" semanticType="Qty" />
-            <field name="OrderQtyU16" id="384" type="QuantityU16" offset="83" semanticType="Qty" />
-            <field name="OrderQty16" id="385" type="Quantity16" offset="85" semanticType="Qty" />
-            <field name="OrderQtyU8" id="386" type="QuantityU8" offset="87" semanticType="Qty" />
-            <field name="OrderQty8" id="387" type="Quantity8" offset="88" semanticType="Qty" />
-            <field name="OptionalOrderQtyU64" id="388" type="QuantityU64" offset="89" semanticType="Qty" presence="optional"/>
-            <field name="ConstOrderQty64" id="389" type="Quantity64" offset="97" semanticType="Qty" presence="constant">42545</field>
+            <field name="ClOrdId" id="11" type="idString" offset="50" semanticType="String" />
+            <field name="ConstClOrdId" id="1" type="idString" offset="58" semanticType="String" presence="constant">ABCDEFGH</field>
+            <field name="PartyIDSource" id="447" type="PartyIDSourceEnum" offset="58" semanticType="char" />
+            <field name="OptionalPartyIDSource" id="448" type="PartyIDSourceEnum" offset="59" semanticType="char" presence="optional" nullValue="250"/>
+            <field name="ConstPartyIDSource" id="449" type="PartyIDSourceEnum" offset="60" semanticType="char" presence="constant" valueRef="PartyIDSourceEnum.Proprietary"/>
+            <field name="PartyRole" id="452" type="PartyRoleEnum" offset="60" semanticType="uint8" />
+            <field name="OrderQtyU64" id="38" type="QuantityU64" offset="61" semanticType="Qty" />
+            <field name="OrderQty64" id="381" type="Quantity64" offset="69" semanticType="Qty" />
+            <field name="OrderQtyU32" id="382" type="QuantityU32" offset="77" semanticType="Qty" />
+            <field name="OrderQty32" id="383" type="Quantity32" offset="81" semanticType="Qty" />
+            <field name="OrderQtyU16" id="384" type="QuantityU16" offset="85" semanticType="Qty" />
+            <field name="OrderQty16" id="385" type="Quantity16" offset="87" semanticType="Qty" />
+            <field name="OrderQtyU8" id="386" type="QuantityU8" offset="89" semanticType="Qty" />
+            <field name="OrderQty8" id="387" type="Quantity8" offset="90" semanticType="Qty" />
+            <field name="OptionalOrderQtyU64" id="388" type="QuantityU64" offset="91" semanticType="Qty" presence="optional"/>
+            <field name="ConstOrderQty64" id="389" type="Quantity64" offset="99" semanticType="Qty" presence="constant">42545</field>
+            <field name="EventChar" id="900" type="CharType" offset="99" semanticType="char" />
+            <field name="EventSet" id="901" type="OrderEventSet" offset="100" semanticType="MultipleCharValue" />
+            <!-- explicit offset gap (after EventSet at 100): exercises offset-honoring via pre-padding -->
+            <field name="GapField" id="902" type="QuantityU8" offset="110" semanticType="Qty" />
         </sbe:message>
     </messages>
 </sbe:messageSchema>

@@ -7,9 +7,9 @@
 
 namespace sbetool
 {
-    static constexpr const std::size_t field_offset{48}; // ClOrdId sits right after the 48-byte TestComposite block
+    static constexpr const std::size_t field_offset{50}; // ClOrdId sits right after the 50-byte TestComposite block
 
-    TEST(string, field_info)
+    TEST(message_string, field_info)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.cl_ord_id_size(), 8); // idString = char[8]
@@ -18,7 +18,7 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_name(), "ClOrdId");
     }
 
-    TEST(string, empty_string)
+    TEST(message_string, empty_string)
     {
         TestMessage msg{};
         msg.set_cl_ord_id("");
@@ -27,7 +27,7 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_string(), std::string(""));
     }
 
-    TEST(string, const_empty_string)
+    TEST(message_string, const_empty_string)
     {
         const TestMessage msg{};
         const_cast<TestMessage<>&>(msg).set_cl_ord_id("");
@@ -37,8 +37,8 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_string(), std::string(""));
     }
 
-    // always set field_length – 1 characters in string fields for efficient decoding.
-    TEST(string, max_length_minus_one)
+    // Use field_length-1 characters so the stored value keeps a NUL terminator.
+    TEST(message_string, max_length_minus_one)
     {
         TestMessage msg{};
         auto ClOrdId = random_string(7);
@@ -51,7 +51,7 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_string(), ClOrdId);
     }
 
-    TEST(string, const_max_length_minus_one)
+    TEST(message_string, const_max_length_minus_one)
     {
         const TestMessage msg{};
         auto ClOrdId = random_string(7);
@@ -64,7 +64,7 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_string(), ClOrdId);
     }
 
-    TEST(string, max_length)
+    TEST(message_string, max_length)
     {
         TestMessage msg{};
         auto ClOrdId = random_string(8);
@@ -76,7 +76,7 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_string(), ClOrdId);
     }
 
-    TEST(string, const_max_length)
+    TEST(message_string, const_max_length)
     {
         const TestMessage msg{};
         auto ClOrdId = random_string(8);
@@ -86,7 +86,7 @@ namespace sbetool
         EXPECT_EQ(msg.cl_ord_id_string(), ClOrdId);
     }
 
-    TEST(string, set_from_string_view)
+    TEST(message_string, set_from_string_view)
     {
         {
             TestMessage msg{};
@@ -119,7 +119,60 @@ namespace sbetool
         }
     }
 
-    TEST(string_const, field_info)
+    // set_cl_ord_id(const char*, size): bounded setter - copy size bytes (capped
+    // at the field width) and NUL-pad the remainder.
+    TEST(message_string, set_sized_shorter_than_field_nul_pads)
+    {
+        TestMessage msg{};
+        msg.set_cl_ord_id("ABC", 3);
+        EXPECT_EQ(msg.cl_ord_id_string(), std::string("ABC"));
+        const auto view = msg.cl_ord_id_view();
+        EXPECT_EQ(view.size(), 8u);
+        for (std::size_t i = 3; i < view.size(); ++i)
+        {
+            EXPECT_EQ(view[i], '\0');
+        }
+    }
+
+    TEST(message_string, set_sized_equal_field_fills_exactly)
+    {
+        TestMessage msg{};
+        const auto value = random_string(8);
+        msg.set_cl_ord_id(value.data(), 8);
+        EXPECT_EQ(msg.cl_ord_id_view(), std::string_view(value));
+        EXPECT_EQ(msg.cl_ord_id_string(), value);
+    }
+
+    TEST(message_string, set_sized_larger_than_field_is_capped)
+    {
+        TestMessage msg{};
+        msg.set_cl_ord_id("ABCDEFGHIJKL", 12); // field holds 8: store first 8 only
+        EXPECT_EQ(msg.cl_ord_id_view(), std::string_view("ABCDEFGH"));
+        EXPECT_EQ(msg.cl_ord_id_string(), std::string("ABCDEFGH"));
+    }
+
+    TEST(message_string, set_sized_clears_previous_tail)
+    {
+        TestMessage msg{};
+        msg.set_cl_ord_id("ABCDEFGH", 8); // fill the field
+        msg.set_cl_ord_id("XY", 2);        // shorter: stale tail must clear
+        EXPECT_EQ(msg.cl_ord_id_string(), std::string("XY"));
+        const auto view = msg.cl_ord_id_view();
+        for (std::size_t i = 2; i < view.size(); ++i)
+        {
+            EXPECT_EQ(view[i], '\0');
+        }
+    }
+
+    TEST(message_string, setters_return_message_for_chaining)
+    {
+        TestMessage msg{};
+        EXPECT_EQ(&msg.set_cl_ord_id("ABCDEFGH"), &msg);
+        EXPECT_EQ(&msg.set_cl_ord_id("XY", 2), &msg);
+        EXPECT_EQ(&msg.set_cl_ord_id(std::string_view("ABCDEFGH")), &msg);
+    }
+
+    TEST(message_string_const, field_info)
     {
         TestMessage msg{};
         EXPECT_EQ(msg.const_cl_ord_id_size(), 0);
@@ -128,7 +181,7 @@ namespace sbetool
         EXPECT_EQ(msg.const_cl_ord_id_name(), "ConstClOrdId");
     }
 
-    TEST(string_const, field)
+    TEST(message_string_const, field)
     {
         TestMessage msg{};
         const char* ConstClOrdId = "ABCDEFGH";
@@ -138,7 +191,7 @@ namespace sbetool
         EXPECT_EQ(msg.const_cl_ord_id_string(), std::string(ConstClOrdId));
     }
 
-    TEST(string_const, field_const)
+    TEST(message_string_const, field_const)
     {
         const TestMessage msg{};
         const char* ConstClOrdId = "ABCDEFGH";
@@ -146,7 +199,8 @@ namespace sbetool
         EXPECT_EQ(msg.const_cl_ord_id(), ConstClOrdId);
         EXPECT_EQ(msg.const_cl_ord_id_view(), std::string_view(ConstClOrdId));
         EXPECT_EQ(msg.const_cl_ord_id_string(), std::string(ConstClOrdId));
-    }    
+    }
+
 }
 
 int main(int argc, char **argv)

@@ -12,8 +12,8 @@
 namespace sbetool
 {
 
-    // String fields are fixed-length and NUL-padded; the test uses length-1
-    // random strings so every value stays NUL-terminated.
+    // String fields are fixed-length and NUL-padded; random strings stay at
+    // most field_length-1 chars so every stored value keeps a NUL terminator.
     struct NewOrderSingleData
     {
         std::string ClOrdId{random_length_string(7).c_str()};
