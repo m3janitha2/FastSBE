@@ -458,7 +458,9 @@ class FieldGen:
 			.replace('S_FIELD_SIZE', field_size)
 		self.handler.content += self.indentation.indent(field_def)
 		self.gen_ostream_field_def(field_name, 'string')
-		self.handler.field_type_and_name.append([field_type, field_name])
+		# tag 'string': a char-array field needs a string_view ctor arg + copy(),
+		# unlike a bare char (single-char numeric), whose C++ type is also 'char'.
+		self.handler.field_type_and_name.append([field_type, field_name, 'string'])
 		logging.debug('gen_composite_string_field_def: %s', field_name)
 
 
@@ -611,9 +613,14 @@ class FieldGen:
 	def gen_constructor(self):
 		string_fields = []
 		ct_args_list = []
+		# A char-array (string) field is tagged 'string' on append and takes a
+		# string_view arg assigned via copy(); every other field - including a
+		# bare char, whose C++ type is also 'char' - is passed/initialized by value.
+		def is_string(type_and_name):
+			return len(type_and_name) > 2 and type_and_name[2] == 'string'
 		for type_and_name in self.handler.field_type_and_name:
 			field = to_snake_case(type_and_name[1])
-			if(type_and_name[0] == 'char'):
+			if(is_string(type_and_name)):
 				string_fields.append(field)
 				ct_args_list.append('std::string_view ' + field)
 			else:
@@ -621,7 +628,7 @@ class FieldGen:
 		initilizer_args_list = []
 		for type_and_name in self.handler.field_type_and_name:
 			field = to_snake_case(type_and_name[1])
-			if(type_and_name[0] != 'char'):
+			if(not is_string(type_and_name)):
 				initilizer_args_list.append(field + '_(' + field + ')')
 
 		ct_args = ', '.join(ct_args_list)
