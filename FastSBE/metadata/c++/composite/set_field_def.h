@@ -24,7 +24,7 @@ public:
 		return S_FIELD_NAME_;
 	}
 
-	constexpr S_MESSAGE_NAME& set_S_FIELD_NAME(S_FIELD_TYPE::value_type value) noexcept
+	constexpr auto& set_S_FIELD_NAME(S_FIELD_TYPE::value_type value) noexcept
 	{
 		S_FIELD_NAME_ = value;
 		return *this;
@@ -37,14 +37,14 @@ public:
 			== static_cast<S_FIELD_TYPE::value_type>(choice);
 	}
 
-	constexpr S_MESSAGE_NAME& set_S_FIELD_NAME(S_FIELD_TYPE::Choice choice) noexcept
+	constexpr auto& set_S_FIELD_NAME(S_FIELD_TYPE::Choice choice) noexcept
 	{
 		S_FIELD_NAME_ = static_cast<S_FIELD_TYPE::value_type>(
 			S_FIELD_NAME_ | static_cast<S_FIELD_TYPE::value_type>(choice));
 		return *this;
 	}
 
-	constexpr S_MESSAGE_NAME& clear_S_FIELD_NAME(S_FIELD_TYPE::Choice choice) noexcept
+	constexpr auto& clear_S_FIELD_NAME(S_FIELD_TYPE::Choice choice) noexcept
 	{
 		S_FIELD_NAME_ = static_cast<S_FIELD_TYPE::value_type>(
 			S_FIELD_NAME_ & ~static_cast<S_FIELD_TYPE::value_type>(choice));

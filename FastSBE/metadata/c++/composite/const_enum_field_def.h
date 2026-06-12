@@ -15,11 +15,6 @@ public:
 		return "S_FIELD_SCHEMA";
 	}
 
-	[[nodiscard]] constexpr S_FIELD_TYPE::Value S_FIELD_NAME() noexcept
-	{
-		return S_FIELD_TYPE::Value::S_CONST_FIELD_VALUE;
-	}
-
 	[[nodiscard]] constexpr S_FIELD_TYPE::Value S_FIELD_NAME() const noexcept
 	{
 		return S_FIELD_TYPE::Value::S_CONST_FIELD_VALUE;
