@@ -707,10 +707,13 @@ class Parser:
 
 		dimension_type_count = len(dimension)
 		if(dimension_type_count == 2):
+			# Resolve the count type from the dimension composite (e.g. a uint8
+			# numInGroup) so Append's signature states the wire contract; a
+			# hardcoded uint16 here silently truncated oversized counts.
 			msg_gen.field_gen.gen_group_def(group_name = group_name\
 				, previous_group_name = previous_field_name, group_id = group_id\
-				, dimension_type = to_pascal_case(dimension_type), block_length_name = 'blockLength'\
-				, num_in_group_name = 'numInGroup', num_in_group_type = 'std::uint16_t')
+				, dimension_type = to_pascal_case(dimension_type), block_length_name = dimension[0]['name']\
+				, num_in_group_name = dimension[1]['name'], num_in_group_type = dimension[1]['type'])
 		elif(dimension_type_count == 4):
 			msg_gen.field_gen.gen_group_def_extended(group_name = group_name
 				, previous_group_name = previous_field_name, group_id = group_id\
