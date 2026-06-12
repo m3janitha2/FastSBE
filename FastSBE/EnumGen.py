@@ -84,7 +84,9 @@ class EnumGen:
 			for value in values:
 				(enum_name, enum_value) = value
 				if (encoding_type == 'char'):
-					if(enum_name.lower() != 'nullvalue'):
+					# schema choice texts are raw characters and need quoting; the
+					# generated NULL_VALUE is already a numeric literal.
+					if(enum_name != 'NULL_VALUE'):
 						enum_value = "'" + str(enum_value) + "'"
 				enum_ct += self.enum_value_ct.format(S_ENUM_NAME = enum_name, S_ENUM_VALUE = enum_value)
 				logging.debug('enum_name: %s, enum_value: %s' , enum_name, enum_value)

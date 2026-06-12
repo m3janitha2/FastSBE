@@ -25,7 +25,7 @@ public:
 
 	[[nodiscard]] static constexpr S_FIELD_TYPE::Value S_FIELD_NAME_null_value() noexcept
 	{
-		return S_FIELD_TYPE::Value::nullValue;
+		return S_FIELD_TYPE::Value::NULL_VALUE;
 	}
 
 	[[nodiscard]] constexpr S_FIELD_TYPE::Value S_FIELD_NAME() const noexcept

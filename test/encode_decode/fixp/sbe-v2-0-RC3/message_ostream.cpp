@@ -66,13 +66,13 @@ namespace sbetool
         EXPECT_TRUE(contains(dump(msg), "\"ClOrdId\": \"ABCDEFGH\""));
     }
 
-    TEST(message_ostream, char_field_quoted_and_null_empty)
+    TEST(message_ostream, char_field_printable_quoted_non_printable_int)
     {
         TestMessage msg{};
         msg.set_event_char('A');
         EXPECT_TRUE(contains(dump(msg), "\"EventChar\": \"A\""));
-        msg.set_event_char('\0');
-        EXPECT_TRUE(contains(dump(msg), "\"EventChar\": \"\""));
+        msg.set_event_char('\0'); // NUL -> bare int
+        EXPECT_TRUE(contains(dump(msg), "\"EventChar\": 0,"));
     }
 
     TEST(message_ostream, enum_field_renders_name)

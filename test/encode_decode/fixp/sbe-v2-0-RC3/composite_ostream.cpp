@@ -78,12 +78,14 @@ namespace sbetool
         EXPECT_TRUE(contains(dump(c), "\"PartyChar\": \"A\""));
     }
 
-    TEST(composite_ostream, char_field_null_renders_empty_string)
+    TEST(composite_ostream, char_field_non_printable_renders_as_int)
     {
         TestMessage msg{};
         auto &c = msg.test_composite();
-        c.set_party_char('\0');
-        EXPECT_TRUE(contains(dump(c), "\"PartyChar\": \"\""));
+        c.set_party_char('\0'); // NUL -> bare int, not a control byte
+        EXPECT_TRUE(contains(dump(c), "\"PartyChar\": 0,"));
+        c.set_party_char('\x01'); // control byte -> bare int
+        EXPECT_TRUE(contains(dump(c), "\"PartyChar\": 1,"));
     }
 
     TEST(composite_ostream, enum_field_renders_name)

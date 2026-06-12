@@ -298,7 +298,7 @@ class Parser:
 		if 'nullValue' in field:
 			null_value = field['nullValue']
 
-		return 'nullValue', null_value
+		return 'NULL_VALUE', null_value
 
 	def generate_enum(self, type_node):
 		enum_values = []
@@ -475,7 +475,7 @@ class Parser:
 		handler = ContentHandler()
 		self.generate_composite_class(composite, handler)
 
-		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring"]
+		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring", "cctype"]
 		indentation = Indentation(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\
 			, file_name = to_pascal_case(composite_name), namespace = self.namespace\
@@ -810,7 +810,7 @@ class Parser:
 		handler = ContentHandler()
 		self.generate_message(message, handler)
 
-		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring"]
+		system_includes = ["cstdint", "string", "string_view", "ostream", "cstring", "cctype"]
 		indentation = Indentation(0)
 		FileGen(indentation = indentation, out_folder = self.out_folder\
 			, file_name = message_name, namespace = self.namespace\

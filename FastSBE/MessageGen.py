@@ -177,15 +177,18 @@ class FieldGen:
 		#   string - char-array field, quoted; must go through the _string()
 		#            accessor: the raw char* is not NUL-terminated when the
 		#            value fills the field, so operator<< would print past it
-		#   char   - single-char field, quoted; a NUL value renders as ""
-		#            instead of emitting a control byte
+		#   char   - single-char field: a printable char is quoted, a
+		#            non-printable one is rendered as a bare int, matching the
+		#            reference SBE tool
 		if(mode == 'cast'):
 			return '+' + accessor
 		if(mode == 'set'):
 			return set_type + '::to_string(' + accessor + ')'
 		if(mode == 'char'):
-			return ('"\\"" << (' + accessor + " == '\\0' ? std::string() : std::string(1, "
-				+ accessor + ')) << "\\""')
+			# isprint takes unsigned char to avoid UB on high (negative) bytes.
+			return ('(std::isprint(static_cast<unsigned char>(' + accessor
+				+ ')) ? ("\\"" + std::string(1, ' + accessor + ') + "\\"")'
+				+ ' : std::to_string(static_cast<int>(' + accessor + ')))')
 		if(mode in ('quoted', 'string')):
 			return '"\\"" << ' + accessor + ' << "\\""'
 		return accessor
