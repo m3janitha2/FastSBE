@@ -139,8 +139,37 @@ namespace sbetool
         }
     }
 
+    // The string_view overload shares the bounded setter's contract: cap at the
+    // field width, NULL-pad the tail.
+    TEST(composite_string, set_view_longer_than_field_is_capped)
+    {
+        TestMessage msg{};
+        auto &composite = msg.test_composite();
+
+        composite.set_cl_ord_id(std::string_view("ABCDEFGHIJKL")); // field holds 8: store first 8 only
+
+        EXPECT_EQ(composite.cl_ord_id_view(), std::string_view("ABCDEFGH"));
+        EXPECT_EQ(composite.cl_ord_id_string(), std::string("ABCDEFGH"));
+    }
+
+    TEST(composite_string, set_view_shorter_clears_previous_tail)
+    {
+        TestMessage msg{};
+        auto &composite = msg.test_composite();
+
+        composite.set_cl_ord_id(std::string_view("ABCDEFGH")); // fill the field
+        composite.set_cl_ord_id(std::string_view("XY"));        // shorter: stale tail must clear
+
+        EXPECT_EQ(composite.cl_ord_id_string(), std::string("XY"));
+        const auto view = composite.cl_ord_id_view();
+        for (std::size_t i = 2; i < view.size(); ++i)
+        {
+            EXPECT_EQ(view[i], '\0');
+        }
+    }
+
     // set_cl_ord_id(const char*, size): bounded setter - copy size bytes (capped
-    // at the field width) and NUL-pad the remainder.
+    // at the field width) and NULL-pad the remainder.
     TEST(composite_string, set_sized_shorter_than_field_nul_pads)
     {
         TestMessage msg{};

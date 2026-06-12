@@ -52,7 +52,7 @@ public:
 		return std::string(S_FIELD_NAME_, length);
 	}
 
-	// Copy size bytes (capped at the field width) and NUL-pad the remainder.
+	// Copy size bytes (capped at the field width) and NULL-pad the remainder.
 	auto& set_S_FIELD_NAME(const char* value, std::size_t size) noexcept
 	{
 		const auto length = size < S_FIELD_NAME_size() ? size : S_FIELD_NAME_size();
@@ -62,11 +62,19 @@ public:
 	}
 
 	// Fast path: copies the full field width verbatim - including the source's
-	// NUL and any bytes after it.
+	// NULL and any bytes after it.
 	auto& set_S_FIELD_NAME(const char* value) noexcept
 	{
+	#if defined(__GNUC__) && !defined(__clang__)
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wstringop-overflow"
+	#pragma GCC diagnostic ignored "-Wstringop-overread"
+	#endif
 		std::memcpy(S_FIELD_NAME_, value, S_FIELD_NAME_size());
 		return *this;
+	#if defined(__GNUC__) && !defined(__clang__)
+	#pragma GCC diagnostic pop
+	#endif
 	}
 
 	auto& set_S_FIELD_NAME(std::string_view value) noexcept
