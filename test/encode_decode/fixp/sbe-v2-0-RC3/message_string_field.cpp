@@ -99,7 +99,8 @@ namespace sbetool
         }
         {
             TestMessage msg{};
-            std::string_view ClOrdId(random_string(7).c_str());
+            const auto value = random_string(7); // keep the string alive for the view
+            std::string_view ClOrdId(value.c_str());
             msg.set_cl_ord_id(ClOrdId);
 
             EXPECT_EQ(std::string(msg.cl_ord_id()), ClOrdId);
@@ -111,7 +112,8 @@ namespace sbetool
         }
         {
             TestMessage msg{};
-            std::string_view ClOrdId(random_string(8).c_str());
+            const auto value = random_string(8); // keep the string alive for the view
+            std::string_view ClOrdId(value.c_str());
             msg.set_cl_ord_id(ClOrdId);
 
             EXPECT_EQ(msg.cl_ord_id_view(), std::string_view(ClOrdId));

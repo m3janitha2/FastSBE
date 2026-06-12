@@ -115,7 +115,8 @@ namespace sbetool
             TestMessage msg{};
             auto &composite = msg.test_composite();
 
-            std::string_view ClOrdId(random_string(7).c_str());
+            const auto value = random_string(7); // keep the string alive for the view
+            std::string_view ClOrdId(value.c_str());
             composite.set_cl_ord_id(ClOrdId);
 
             EXPECT_EQ(std::string(composite.cl_ord_id()), ClOrdId);
@@ -129,7 +130,8 @@ namespace sbetool
             TestMessage msg{};
             auto &composite = msg.test_composite();
 
-            std::string_view ClOrdId(random_string(8).c_str());
+            const auto value = random_string(8); // keep the string alive for the view
+            std::string_view ClOrdId(value.c_str());
             composite.set_cl_ord_id(ClOrdId);
 
             EXPECT_EQ(composite.cl_ord_id_view(), std::string_view(ClOrdId));
