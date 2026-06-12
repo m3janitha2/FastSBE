@@ -24,7 +24,7 @@ namespace sbetool
         TestMessage msg{};
         auto &composite = msg.test_composite();
 
-        composite.set_cl_ord_id("");
+        composite.set_cl_ord_id(std::string_view{});
         EXPECT_EQ(std::string(composite.cl_ord_id()), std::string(""));
         EXPECT_EQ(composite.cl_ord_id_view().at(0), '\0');
         EXPECT_EQ(composite.cl_ord_id_string(), std::string(""));
@@ -34,7 +34,7 @@ namespace sbetool
     {
         const TestMessage msg{};
         const auto &composite = msg.test_composite();
-        const_cast<TestComposite &>(composite).set_cl_ord_id("");
+        const_cast<TestComposite &>(composite).set_cl_ord_id(std::string_view{});
 
         EXPECT_EQ(std::string(composite.cl_ord_id()), std::string(""));
         EXPECT_EQ(composite.cl_ord_id_view().at(0), '\0');
@@ -197,6 +197,20 @@ namespace sbetool
         {
             EXPECT_EQ(view[i], '\0');
         }
+    }
+
+    // The single-arg setter is the fast path: one fixed-width copy with no
+    // length scan or padding; the source must span the full field width.
+    TEST(composite_string, set_fast_path_copies_full_width)
+    {
+        TestMessage msg{};
+        auto &composite = msg.test_composite();
+
+        const char scratch[8]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+        composite.set_cl_ord_id(scratch);
+
+        EXPECT_EQ(composite.cl_ord_id_view(), std::string_view(scratch, 8));
+        EXPECT_EQ(composite.cl_ord_id_string(), std::string("ABCDEFGH"));
     }
 
     TEST(composite_string, setters_return_composite_for_chaining)

@@ -21,7 +21,7 @@ namespace sbetool
     TEST(message_string, empty_string)
     {
         TestMessage msg{};
-        msg.set_cl_ord_id("");
+        msg.set_cl_ord_id(std::string_view{});
         EXPECT_EQ(std::string(msg.cl_ord_id()), std::string(""));
         EXPECT_EQ(msg.cl_ord_id_view().at(0), '\0');
         EXPECT_EQ(msg.cl_ord_id_string(), std::string(""));
@@ -30,7 +30,7 @@ namespace sbetool
     TEST(message_string, const_empty_string)
     {
         const TestMessage msg{};
-        const_cast<TestMessage<>&>(msg).set_cl_ord_id("");
+        const_cast<TestMessage<>&>(msg).set_cl_ord_id(std::string_view{});
 
         EXPECT_EQ(std::string(msg.cl_ord_id()), std::string(""));
         EXPECT_EQ(msg.cl_ord_id_view().at(0), '\0');
@@ -164,6 +164,17 @@ namespace sbetool
         {
             EXPECT_EQ(view[i], '\0');
         }
+    }
+
+    // The single-arg setter is the fast path: one fixed-width copy with no
+    // length scan or padding; the source must span the full field width.
+    TEST(message_string, set_fast_path_copies_full_width)
+    {
+        TestMessage msg{};
+        const char scratch[8]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+        msg.set_cl_ord_id(scratch);
+        EXPECT_EQ(msg.cl_ord_id_view(), std::string_view(scratch, 8));
+        EXPECT_EQ(msg.cl_ord_id_string(), std::string("ABCDEFGH"));
     }
 
     TEST(message_string, setters_return_message_for_chaining)
